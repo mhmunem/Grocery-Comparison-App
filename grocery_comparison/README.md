@@ -141,6 +141,9 @@ Use the following methods to test the application on web, simulators, emulators,
          ```
 Open the Android project in Android Studio and select your device to run the app.
 
+## Coding Best Practices
+[React Ionic Coding Standards](https://eng-git.canterbury.ac.nz/cosc680-2024/cosc680-2024-project/-/wikis/Coding-Style-Guidelines/React-Ionic-Coding-Standards)
+
 ## Troubleshooting 
 - [Android Errors - Native Run Wiki](https://github.com/ionic-team/native-run/wiki/Android-Errors)
 - [Android Errors - Capacitor Documentation](https://capacitorjs.com/docs/android/troubleshooting)
