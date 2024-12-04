@@ -1,40 +1,81 @@
-
 # Spike: [Topic]
 
-## Objective
+## Objective 
+[Briefly describe the purpose of this spike.]
 
-[Briefly describe the purpose of this spike]
+---
 
 ## Options Explored
 
 ### Option 1: [Name]
 
-- Advantages: 1. 2. 3.
-- Disadvantages: 1. 2. 3.
-- Compatibility: [List any compatibility considerations]
+- Advantages: 
+  1.  
+  2.  
+  3.  
 
-### Option 2: [Name]
+- Disadvantages: 
+  1.  
+  2.  
+  3.  
 
-[Repeat the structure from Option 1]
+- Compatibility: 
+  [List any compatibility considerations.]
 
-### Option 3: [Name]
+---
 
-[Repeat the structure from Option 1]
+### Option 2: [Name] 
 
-## Comparative Analysis
+- Advantages: 
+  1.  
+  2.  
+  3.  
 
-| Feature | Option 1 | Option 2 | Option 3 |
-|---------|----------|----------|----------|
-| [Feature 1] |  |  |  |
-| [Feature 2] |  |  |  |
-| [Feature 3] |  |  |  |
+- Disadvantages: 
+  1.  
+  2.  
+  3.  
 
-## Recommendation
+- Compatibility: 
+  [List any compatibility considerations.]
 
-[Provide a recommendation based on the analysis]
+---
 
-## Resources
+### Option 3: [Name] 
 
-- [List any relevant resources or references]
+- Advantages: 
+  1.  
+  2.  
+  3.  
 
-  References: [Prev Spike doc](https://typst.app/project/pHJMyIhH8RnUUtByZAWfZt)
+- Disadvantages: 
+  1.  
+  2.  
+  3.  
+
+- Compatibility: 
+  [List any compatibility considerations.]
+
+---
+
+## Comparative Analysis 
+
+| Feature| Option 1| Option 2| Option 3|  
+|-------------|--------------|--------------|--------------|  
+| [Feature1]  |              |              |              |  
+| [Feature2]  |              |              |              |  
+| [Feature3]  |              |              |              |  
+
+---
+
+## Recommendation 
+
+[Provide a recommendation based on the analysis.]
+
+---
+
+## Resources 
+
+- [List any relevant resources or references.]  
+
+References: [Prev Spike doc](https://typst.app/project/pHJMyIhH8RnUUtByZAWfZt)
