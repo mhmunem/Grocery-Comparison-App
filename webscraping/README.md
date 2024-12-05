@@ -7,8 +7,8 @@ Future iterations may include cloud deployment for enhanced scalability and stor
 
 ### Prerequisites
 
-- Node.js (v16.14 or newer)
-- npm (Node Package Manager) or yarn
+- Node.js (node -v)
+- npm (Node Package Manager) or yarn (npm -v)
 - A folder for the project is already created.
 
 
