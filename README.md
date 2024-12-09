@@ -22,6 +22,12 @@ We will develop a grocery price comparison app to help users find the best price
 
 Follow the instructions in the individual folder README files for setup.
 
+- `frontend/`:[Frontend Readme](frontend\README.md)
+- `backend/`:[Backend Readme](backend\Readme.md)
+- `db/`: [Database Readme](db\Readme.md)
+- `webscraping/`:[WebScraping Readme](webscraping\README.md)
+
+
 ## Development Team
 
 - Team Members: Anne-Jan Veendijk, Haosheng Ye, Mohammad Munem, Nandhini Sambasivam, Sam Williams, Yuchuan Jin
