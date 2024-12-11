@@ -1,4 +1,4 @@
-FROM node:12.18.1
+FROM node:22.12.0
  
 WORKDIR /backend
  
@@ -9,4 +9,4 @@ RUN npm install
  
 COPY . .
  
-CMD [ "node", "src/main.js" ]
+# CMD [ "node", "src/main.js" ]
