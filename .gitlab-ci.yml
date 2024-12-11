@@ -1,15 +1,20 @@
-#image: node
-
-#eslint:
-# stage: lint
- #script:
-  #  - npm i eslint
-   # - node_modules/eslint/bin/eslint.js .
 
 stages:
   - setup        # Initial stage: install dependencies
   - test         # Stage for unit and component integration tests
   - e2e          # Stage for end-to-end tests
+  - lint
+
+eslint:
+  stage: lint
+  image: node:latest
+  before_script:
+    - npm install
+  script:
+    - npm run lint
+  only:
+    - merge_requests
+    - branches
 
 # Step 1: Install dependencies
 setup:
