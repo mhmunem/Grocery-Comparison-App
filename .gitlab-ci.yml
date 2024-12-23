@@ -9,10 +9,7 @@ setup:
   stage: setup
   image: node:22.12.0
   script:
-    - cd frontend && npm install && cd ../backend && npm install && cd ../webscraping && npm install
-  artifacts:
-    paths:
-      - node_modules/
+    - cd frontend && npm install && cd ../backend && npm install && cd ../webscraping && npm install && cd ..
 
 # Step 2: Frontend Unit and Component Integration Tests with Jest
 frontend-jest:
@@ -22,7 +19,7 @@ frontend-jest:
     - cd frontend && npm run test
   artifacts:
     paths:
-      - coverage/frontend/
+      - frontend/
     when: always
 
 # Step 3: Backend Unit and Component Integration Tests with Jest and Supertest
