@@ -1,11 +1,11 @@
 {
   "name": "webscraping",
   "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
+  "description": "scrape the prices",
+  "main": "main.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "test"
   },
-  "author": "",
+  "author": "cosc680"",
   "license": "ISC"
 }
