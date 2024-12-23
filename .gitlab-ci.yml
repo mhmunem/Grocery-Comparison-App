@@ -1,7 +1,6 @@
 stages:
   - setup
-  - frontend-test
-  - backend-test
+  - test
   - e2e
   - lint
 
