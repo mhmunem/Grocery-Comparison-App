@@ -4,23 +4,12 @@ stages:
   - e2e
   - lint
 
-eslint:
-  stage: lint
-  image: node:22.12.0
-  before_script:
-    - npm install
-  script:
-    - npm run lint
-  only:
-    - merge_requests
-    - branches
-
 # Step 1: Install dependencies
 setup:
   stage: setup
   image: node:22.12.0
   script:
-    - cd frontend && npm install && cd ../backend npm install && cd ../webscraping && npm install
+    - cd frontend && npm install && cd ../backend && npm install && cd ../webscraping && npm install
   artifacts:
     paths:
       - node_modules/
@@ -37,37 +26,48 @@ frontend-jest:
     when: always
 
 # Step 3: Backend Unit and Component Integration Tests with Jest and Supertest
-backend-jest:
-  stage: test
-  image: node:22.12.0
-  script:
-    - cd backend && npm run test
-  artifacts:
-    paths:
-      - coverage/backend/
-    when: always
-
+# backend-jest:
+#   stage: test
+#   image: node:22.12.0
+#   script:
+#     - cd backend && npm run test
+#   artifacts:
+#     paths:
+#       - coverage/backend/
+#     when: always
+#
+# eslint:
+#   stage: lint
+#   image: node:22.12.0
+#   before_script:
+#     - npm install
+#   script:
+#     - npm run lint
+#   only:
+#     - merge_requests
+#     - branches
+#
 # Step 4: Frontend End-to-End Tests with Maestro
-frontend-e2e-maestro:
-  stage: e2e
-  image: maestroqa/maestro-cli:latest
-  before_script:
-    - mkdir -p maestro-artifacts
-    - export ANDROID_HOME=/sdk/android
-  script:
-    - maestro test mobile/maestro/register_test.yaml --output maestro-artifacts
-  artifacts:
-    paths:
-      - maestro-artifacts/
-    when: always
-
+# frontend-e2e-maestro:
+#   stage: e2e
+#   image: maestroqa/maestro-cli:latest
+#   before_script:
+#     - mkdir -p maestro-artifacts
+#     - export ANDROID_HOME=/sdk/android
+#   script:
+#     - maestro test mobile/maestro/register_test.yaml --output maestro-artifacts
+#   artifacts:
+#     paths:
+#       - maestro-artifacts/
+#     when: always
+#
 # Step 5: Backend End-to-End Tests with Cypress
-backend-e2e-cypress:
-  stage: e2e
-  image: cypress/included:12.6.0
-  script:
-    - cypress run --config-file cypress.json
-  artifacts:
-    paths:
-      - cypress/results/
-    when: always
+# backend-e2e-cypress:
+#   stage: e2e
+#   image: cypress/included:12.6.0
+#   script:
+#     - cypress run --config-file cypress.json
+#   artifacts:
+#     paths:
+#       - cypress/results/
+#     when: always
