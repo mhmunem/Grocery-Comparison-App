@@ -1,6 +1,7 @@
 stages:
   - setup
-  - test
+  - frontend-test
+  - backend-test
   - e2e
   - lint
 
@@ -12,7 +13,7 @@ setup:
     - cd frontend && npm install && cd ../backend && npm install && cd ../webscraping && npm install && cd ..
 
 # Step 2: Frontend Unit and Component Integration Tests with Jest
-frontend-jest:
+frontend-test:
   stage: test
   image: node:22.12.0
   script:
@@ -23,7 +24,7 @@ frontend-jest:
     when: always
 
 # Step 3: Backend Unit and Component Integration Tests with Jest and Supertest
-# backend-jest:
+# backend-test:
 #   stage: test
 #   image: node:22.12.0
 #   script:
