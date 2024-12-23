@@ -1,6 +1,9 @@
 {
   "dependencies": {
-    "express": "^4.21.1"
+    "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.38.2",
+    "express": "^4.21.1",
+    "pg": "^8.13.1"
   },
   "name": "backend",
   "version": "1.0.0",
@@ -11,5 +14,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "The backend of the grocery comparison app"
+  "description": "The backend of the grocery comparison app",
+  "devDependencies": {
+    "@types/pg": "^8.11.10",
+    "drizzle-kit": "^0.30.1",
+    "tsx": "^4.19.2"
+  }
 }
