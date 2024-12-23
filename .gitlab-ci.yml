@@ -20,7 +20,7 @@ setup:
   stage: setup
   image: node:22.12.0
   script:
-    - npm install
+    - cd frontend && npm install && cd ../backend npm install && cd ../webscraping && npm install
   artifacts:
     paths:
       - node_modules/
@@ -30,7 +30,7 @@ frontend-jest:
   stage: test
   image: node:22.12.0
   script:
-    - npm run test:frontend
+    - cd frontend && npm run test
   artifacts:
     paths:
       - coverage/frontend/
@@ -41,7 +41,7 @@ backend-jest:
   stage: test
   image: node:22.12.0
   script:
-    - npm run test:backend
+    - cd backend && npm run test
   artifacts:
     paths:
       - coverage/backend/
