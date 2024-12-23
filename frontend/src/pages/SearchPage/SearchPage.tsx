@@ -131,13 +131,6 @@ const SearchPage: React.FC = () => {
     }));
   };
 
-  const handleRemoveFromCart = (productId: string) => {
-    setAddedToCart((prevAddedToCart) => ({
-      ...prevAddedToCart,
-      [productId]: false,
-    }));
-  };
-
   const increaseQuantity = (productId: string) => {
     setQuantities((prevQuantities) => ({
       ...prevQuantities,
@@ -269,7 +262,7 @@ const SearchPage: React.FC = () => {
                           </div>
 
                           <IonLabel className="priceLabel">$10.00</IonLabel>
-                          {addedToCart[product.id] ? (
+                          {quantities[product.id] > 0 ? (
                             <div className="quantityControls">
                               <IonButton
                                 shape="round"
@@ -293,7 +286,7 @@ const SearchPage: React.FC = () => {
                               </IonButton>
                             </div>
                           ) : (
-                            <IonButton onClick={() => handleAddToCart(product.id)} className="controlButton">
+                            <IonButton onClick={() => increaseQuantity(product.id)} className="controlButton">
                               Add to Cart
                             </IonButton>
 
@@ -353,7 +346,7 @@ const SearchPage: React.FC = () => {
 
                     <IonLabel className="priceLabel">$10.00</IonLabel>
 
-                    {addedToCart[selectedProduct.id] ? (
+                    {quantities[selectedProduct.id] > 0 ? (
                       <div className="quantityControls">
                         <IonButton
                           shape="round"
@@ -377,7 +370,7 @@ const SearchPage: React.FC = () => {
                         </IonButton>
                       </div>
                     ) : (
-                      <IonButton onClick={() => handleAddToCart(selectedProduct.id)} className="controlButton">
+                      <IonButton onClick={() => increaseQuantity(selectedProduct.id)} className="controlButton">
                         Add to Cart
                       </IonButton>
 
