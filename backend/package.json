@@ -99,7 +99,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "test"
+    "test": "npm test"
   },
   "repository": {
     "type": "git",
