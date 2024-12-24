@@ -1,8 +1,8 @@
 stages:
   - setup
   - test
-  # - e2e
   # - lint
+  # - e2e
 
 # Step 1: Install dependencies
 setup:
@@ -39,16 +39,16 @@ test-backend:
     - cd backend
     - npm run test
 
-eslint:
-  stage: lint
-  image: node:22.12.0
-  before_script:
-    - npm install
-  script:
-    - npm run lint
-  only:
-    - merge_requests
-    - branches
+# eslint:
+#   stage: lint
+#   image: node:22.12.0
+#   before_script:
+#     - npm install
+#   script:
+#     - npm run lint
+#   only:
+#     - merge_requests
+#     - branches
 
 # Step 4: Frontend End-to-End Tests with Maestro
 # frontend-e2e-maestro:
@@ -63,7 +63,7 @@ eslint:
 #     paths:
 #       - maestro-artifacts/
 #     when: always
-#
+
 # Step 5: Backend End-to-End Tests with Cypress
 # backend-e2e-cypress:
 #   stage: e2e
