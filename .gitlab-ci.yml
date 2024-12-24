@@ -12,29 +12,31 @@ setup:
     - cd frontend && npm install && cd ../backend && npm install && cd ../webscraping && npm install && cd ..
 
 # Step 2: Frontend Unit and Component Integration Tests with Jest
-frontend-test:
-  # variables:
-  #   PATH: "./node_modules/.bin:$PATH"
-  stage: test
-  image: node:22.12.0
-  script:
-    - cd frontend && npm run test
-  artifacts:
-    paths:
-      - frontend/
-    when: always
-
-# Step 3: Backend Unit and Component Integration Tests with Jest and Supertest
-# backend-test:
+# frontend-test:
+#   # variables:
+#   #   PATH: "./node_modules/.bin:$PATH"
 #   stage: test
 #   image: node:22.12.0
 #   script:
-#     - cd backend && npm run test
+#     - cd frontend && npm run test
 #   artifacts:
 #     paths:
-#       - backend/
+#       - frontend/
 #     when: always
 #
+# Step 3: Backend Unit and Component Integration Tests with Jest and Supertest
+backend-test:
+  variables:
+    PATH: "./node_modules/.bin:$PATH"
+  stage: test
+  image: node:22.12.0
+  script:
+    - cd backend && npm run test
+  artifacts:
+    paths:
+      - backend/
+    when: always
+
 # eslint:
 #   stage: lint
 #   image: node:22.12.0
