@@ -1,12 +1,13 @@
 FROM node:22.12.0
  
-WORKDIR /backend
+WORKDIR /frontend
  
-COPY package.json package.json
-COPY package-lock.json package-lock.json
+COPY package*.json ./
  
 RUN npm install
  
 COPY . .
+
+EXPOSE 5173
  
-# CMD [ "node", "src/main.js" ]
+CMD ["npm", "run", "dev"]

@@ -1,33 +1,63 @@
-version: '3.8'
 services:
-  postgres:
-    image: postgres:17.2
-    container_name: postgres_dev
-    environment:
-      POSTGRES_USER: dev_user
-      POSTGRES_PASSWORD: dev_password
-      POSTGRES_DB: dev_db
-    ports:
-      - "5432:5432" # Expose PostgreSQL on localhost:5432
+  # Fullstack Frontend
+  fullstack_frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: fullstack_frontend
+    restart: unless-stopped
     volumes:
-      - postgres_data:/var/lib/postgresql/data # Persist PostgreSQL data
+      - ./frontend/src:/frontend/src
+    ports:
+      - "5173:5173"
+    depends_on:
+      - fullstack_backend
+    networks:
+      - project_network
+    environment:
+      - VITE_EXPRESS_API_URL=http://host.docker.internal:3000
+      # - VITE_EXPRESS_API_URL=http://192.168.x.x:5000
 
-  express:
+  # Fullstack Backend
+  fullstack_backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile # Dockerfile for the Express.js app
-    container_name: express_app
-    environment:
-      DB_HOST: postgres
-      DB_USER: dev_user
-      DB_PASSWORD: dev_password
-      DB_NAME: dev_db
-      DB_PORT: 5432
+      dockerfile: Dockerfile
+    container_name: fullstack_backend
+    restart: unless-stopped
+    volumes:
+      - ./backend/src:/backend/src
     ports:
-      - "3000:3000" # Expose Express.js on localhost:3000
+      - "${PORT}:${PORT}"
+    env_file:
+      - .env
     depends_on:
-      - postgres # Ensure PostgreSQL starts before Express.js
+      - fullstack_db
+    networks:
+      - project_network
 
+  # Fullstack Database (PostgreSQL)
+  fullstack_db:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    container_name: fullstack_db
+    env_file:
+      - .env
+    volumes:
+      - fullstack-postgres-data:/var/lib/postgresql/data  # Shared volume
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - project_network
+    
 volumes:
-  postgres_data:
+  fullstack-postgres-data:  # Shared volume
 
+networks:
+  project_network:
