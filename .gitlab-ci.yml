@@ -26,8 +26,8 @@ setup:
 #
 # Step 3: Backend Unit and Component Integration Tests with Jest and Supertest
 backend-test:
-  variables:
-    PATH: "./node_modules/.bin:$PATH"
+  # variables:
+  #   PATH: "./node_modules/.bin:$PATH"
   stage: test
   image: node:22.12.0
   script:
