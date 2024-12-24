@@ -99,7 +99,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "test"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
