@@ -23,16 +23,16 @@ frontend-test:
     when: always
 
 # Step 3: Backend Unit and Component Integration Tests with Jest and Supertest
-# backend-test:
-#   stage: test
-#   image: node:22.12.0
-#   script:
-#     - cd backend && npm run test
-#   artifacts:
-#     paths:
-#       - coverage/backend/
-#     when: always
-#
+backend-test:
+  stage: test
+  image: node:22.12.0
+  script:
+    - cd backend && npm run test
+  artifacts:
+    paths:
+      - backend/
+    when: always
+
 # eslint:
 #   stage: lint
 #   image: node:22.12.0
