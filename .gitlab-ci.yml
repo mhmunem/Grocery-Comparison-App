@@ -1,8 +1,8 @@
 stages:
   - setup
   - test
-  - e2e
-  - lint
+  # - e2e
+  # - lint
 
 # Step 1: Install dependencies
 setup:
@@ -10,6 +10,12 @@ setup:
   image: node:22.12.0
   script:
     - cd frontend && npm install && cd ../backend && npm install && cd ../webscraping && npm install && cd ..
+  artifacts:
+    paths:
+      - backend/
+      - frontend/
+      - webscraping/
+    when: always
 
 # Step 2: Frontend Unit and Component Integration Tests with Jest
 # frontend-test:
@@ -23,15 +29,15 @@ setup:
 #     paths:
 #       - frontend/
 #     when: always
-#
+
 # Step 3: Backend Unit and Component Integration Tests with Jest and Supertest
-backend-test:
-  # variables:
-  #   PATH: "./node_modules/.bin:$PATH"
+test-backend:
   stage: test
   image: node:22.12.0
   script:
-    - cd backend && npm run test
+    - cd backend
+    # - npm install
+    - npm run test
   artifacts:
     paths:
       - backend/
