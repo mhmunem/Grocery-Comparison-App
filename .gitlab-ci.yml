@@ -9,26 +9,27 @@ setup:
   stage: setup
   image: node:22.12.0
   script:
-    - cd frontend && npm install && cd ../backend && npm install && cd ../webscraping && npm install && cd ..
+    - cd frontend
+    - npm install
+    - cd ../backend
+    - npm install
+    - cd ../webscraping
+    - npm install
+    - cd ..
   artifacts:
     paths:
       - backend/
       - frontend/
       - webscraping/
-    when: always
+    when: on_success
 
 # Step 2: Frontend Unit and Component Integration Tests with Jest
-# frontend-test:
-#   # variables:
-#   #   PATH: "./node_modules/.bin:$PATH"
-#   stage: test
-#   image: node:22.12.0
-#   script:
-#     - cd frontend && npm run test
-#   artifacts:
-#     paths:
-#       - frontend/
-#     when: always
+frontend-test:
+  stage: test
+  image: node:22.12.0
+  script:
+    - cd frontend
+    - npm run test
 
 # Step 3: Backend Unit and Component Integration Tests with Jest and Supertest
 test-backend:
@@ -36,24 +37,19 @@ test-backend:
   image: node:22.12.0
   script:
     - cd backend
-    # - npm install
     - npm run test
-  artifacts:
-    paths:
-      - backend/
-    when: always
 
-# eslint:
-#   stage: lint
-#   image: node:22.12.0
-#   before_script:
-#     - npm install
-#   script:
-#     - npm run lint
-#   only:
-#     - merge_requests
-#     - branches
-#
+eslint:
+  stage: lint
+  image: node:22.12.0
+  before_script:
+    - npm install
+  script:
+    - npm run lint
+  only:
+    - merge_requests
+    - branches
+
 # Step 4: Frontend End-to-End Tests with Maestro
 # frontend-e2e-maestro:
 #   stage: e2e
