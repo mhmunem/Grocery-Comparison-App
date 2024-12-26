@@ -1,36 +1,17 @@
-const express = require('express');
-const { Pool } = require('pg');
+import express from 'express';
+import cors from 'cors';
+import productsRouter from './api/products';
 
 const app = express();
-const port = 3000;
+app.use(cors());
+app.use(express.json());
 
-// PostgreSQL connection pool
-const pool = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT,
-});
-
-// Test route to check database connection
-app.get('/db-test', async (req, res) => {
-    try {
-        const result = await pool.query('SELECT NOW()');
-        res.json({ success: true, time: result.rows[0].now });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ success: false, error: err.message });
-    }
-});
-
-// Default route
-app.get('/', (req, res) => {
-    res.send('Hello from Express.js!');
-});
+// Register the product API
+app.use('/api/products', productsRouter);
 
 // Start the server
-app.listen(port, () => {
-    console.log(`Express.js app running at http://localhost:${port}`);
+const PORT = 5000;
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
 
