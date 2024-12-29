@@ -1,0 +1,15 @@
+{
+  "name": "cosc680-2024-project",
+  "version": "1.0.0",
+  "description": "## Overview",
+  "main": "index.js",
+  "scripts": {
+    "commitlint": "./node_modules/.bin/commitlint"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.6.1",
+    "@commitlint/config-conventional": "^19.6.0"
+  },
+  "author": "",
+  "license": "ISC"
+}
