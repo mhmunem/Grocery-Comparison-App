@@ -4,15 +4,17 @@
   "description": "scrape the prices",
   "main": "main.ts",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "commitlint": "./node_modules/.bin/commitlint"
   },
   "author": "cosc680",
   "license": "ISC",
   "dependencies": {
-    "glob": "^11.0.0"
   },
   "devDependencies": {
-    "jest": "^29.7.0",
-    "glob": "^10.3.10"
+    "@commitlint/cli": "^19.6.1",
+    "@commitlint/config-conventional": "^19.6.0",
+    "glob": "^10.3.10",
+    "jest": "^29.7.0"
   }
 }
