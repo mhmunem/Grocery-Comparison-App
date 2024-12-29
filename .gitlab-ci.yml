@@ -4,7 +4,6 @@ stages:
   # - lint
   # - e2e
 
-# Step 1: Install dependencies
 setup:
   stage: setup
   image: node:22.12.0
@@ -23,7 +22,6 @@ setup:
       - webscraping/
     when: on_success
 
-# Step 2: Frontend Unit and Component Integration Tests with Jest
 frontend-test:
   stage: test
   image: node:22.12.0
@@ -31,7 +29,6 @@ frontend-test:
     - cd frontend
     - npm run test
 
-# Step 3: Backend Unit and Component Integration Tests with Jest and Supertest
 test-backend:
   stage: test
   image: node:22.12.0
