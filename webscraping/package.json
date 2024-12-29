@@ -1,11 +1,20 @@
 {
   "name": "webscraping",
   "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
+  "description": "scrape the prices",
+  "main": "main.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "commitlint": "./node_modules/.bin/commitlint"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "cosc680",
+  "license": "ISC",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.6.1",
+    "@commitlint/config-conventional": "^19.6.0",
+    "glob": "^10.3.10",
+    "jest": "^29.7.0"
+  }
 }

@@ -1,7 +1,7 @@
 {
   "name": "cosc680-2024-project",
   "version": "1.0.0",
-  "description": "To make it easy for you to get started with GitLab, here's a list of recommended next steps.",
+  "description": "## Overview",
   "main": "index.js",
   "scripts": {
     "lint": "eslint",
@@ -9,11 +9,11 @@
     "dev": "concurrently \"npm run start:frontend\" \"npm run start:backend\"",
     "start:frontend": "cd frontend && ionic serve --external",
     "start:backend": "cd backend && nodemon",
-    "ionic:serve": "npm run start"
+    "ionic:serve": "npm run start",
+    "commitlint": "commitlint --edit",
+    "commit": "commit",
+    "prepare": "husky"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@eslint/js": "^9.16.0",
     "@types/pg": "^8.11.10",
@@ -23,13 +23,12 @@
     "eslint-plugin-react": "^7.37.2",
     "globals": "^15.13.0",
     "tsx": "^4.19.2",
-    "typescript-eslint": "^8.17.0"
+    "typescript-eslint": "^8.17.0",
+    "@commitlint/cli": "^19.6.1",
+    "@commitlint/config-conventional": "^19.6.0",
+    "@commitlint/prompt-cli": "^19.6.1",
+    "husky": "^9.1.7"
   },
-  "dependencies": {
-    "@capacitor/android": "^6.2.0",
-    "@capacitor/cli": "^6.2.0",
-    "@capacitor/core": "^6.2.0",
-    "@capacitor/ios": "^6.2.0",
-    "zustand": "^5.0.2"
-  }
+  "author": "",
+  "license": "ISC"
 }
