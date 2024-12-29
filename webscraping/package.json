@@ -7,5 +7,12 @@
     "test": "jest"
   },
   "author": "cosc680",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "glob": "^11.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "glob": "^10.3.10"
+  }
 }
