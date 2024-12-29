@@ -29,7 +29,7 @@ frontend-test:
     - cd frontend
     - npm run test
 
-test-backend:
+backend-test:
   stage: test
   image: node:22.12.0
   script:
