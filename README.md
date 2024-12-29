@@ -102,3 +102,8 @@ Use descriptive branch names, such as `feature/<feature_name>` or `bug/<bug_name
 ```
 git push origin <branch-name>
 ```
+
+## Run the frontend and backend
+```
+npm run dev (check the package.json scripts)
+```

@@ -44,7 +44,7 @@ To start the Express server:
 
 1. Navigate to the project directory:
    ```
-   cd my-express-app
+   cd backend
    ```
 
 2. Run the server: (file can index/app/main) check the package.json main field then use that name for file. 
@@ -52,13 +52,17 @@ To start the Express server:
    node <file.js>
 
    ```
-   if the file name is server.js then run 
+   if the file name is server.ts then run 
    ```
-   node server.js
+   node src/server.ts
 
    ```
+      or    
 
-   You should see the some output in your terminal based on js file. For eg:
+      ```
+      npm start or npm run dev (check the scripts in package.json)
+      ```
+   You should see the some output in your terminal based on ts file. For eg:
    ```
    Server is running on http://localhost:3000
    ```
@@ -76,7 +80,7 @@ To automatically restart the server whenever changes are made:
 
 2. Start the server using nodemon:
    ```
-   nodemon 
+   nodemon src/server.js or npm run dev
    ```
    Nodemon will watch for changes in your files and restart the server automatically.
 

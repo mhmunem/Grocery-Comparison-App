@@ -1,8 +1,24 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../../components/SharedComponents/ExploreContainer';
 import './HomePage.css';
+import { useEffect, useState } from 'react';
+import { getInitialSetupMessage } from '../../services/InitialSetupService';
 
 function HomePage() {
+
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+
+    // BAckend connection Testing using GET on initial load
+    getInitialSetupMessage().then(response => {
+        setData(response);
+      })
+      .catch(error => {
+        console.error('Error fetching GET data:', error);
+      });
+  }, []);
+
+
   return (
     <IonPage>
       <IonHeader>
@@ -16,9 +32,13 @@ function HomePage() {
             <IonTitle size="large">Home</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ExploreContainer name="Home page" />
-      </IonContent>
-    </IonPage>
+        <div className="container">
+          <div>
+              <div>{JSON.stringify(data)}</div>
+          </div>
+        </div>
+    </IonContent>
+    </IonPage >
   );
 };
 
