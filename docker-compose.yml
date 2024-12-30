@@ -1,5 +1,4 @@
 services:
-  # Fullstack Frontend
   fullstack_frontend:
     build:
       context: ./frontend
@@ -16,9 +15,7 @@ services:
       - project_network
     environment:
       - VITE_EXPRESS_API_URL=http://host.docker.internal:3000
-      # - VITE_EXPRESS_API_URL=http://192.168.x.x:5000
 
-  # Fullstack Backend
   fullstack_backend:
     build:
       context: ./backend
@@ -36,7 +33,6 @@ services:
     networks:
       - project_network
 
-  # Fullstack Database (PostgreSQL)
   fullstack_db:
     build:
       context: ./db
@@ -57,7 +53,7 @@ services:
       - project_network
     
 volumes:
-  fullstack-postgres-data:  # Shared volume
+  fullstack-postgres-data:
 
 networks:
   project_network:
