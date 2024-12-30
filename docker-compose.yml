@@ -35,11 +35,12 @@ services:
 
   fullstack_db:
     image: postgres
-    container_name: fullstack_db
+    # container_name: fullstack_db
     env_file:
       - .env
     volumes:
-      - fullstack-postgres-data:/var/lib/postgresql/data  
+      # - fullstack-postgres-data:/var/lib/postgresql/data  
+      - cosc680-db:/var/lib/postgresql/data  
     ports:
       - "${DB_PORT}:${DB_PORT}"
     healthcheck:
@@ -51,7 +52,8 @@ services:
       - project_network
     
 volumes:
-  fullstack-postgres-data:
+  # fullstack-postgres-data:
+  cosc680-db:
 
 networks:
   project_network:
