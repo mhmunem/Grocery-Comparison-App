@@ -34,7 +34,7 @@ services:
       - project_network
 
   fullstack_db:
-    image: postgres:17.2
+    image: postgres
     container_name: fullstack_db
     env_file:
       - .env
