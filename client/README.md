@@ -1,6 +1,6 @@
-# Grocery Price Comparison - cilent Setup
+# Grocery Price Comparison - client Setup
 
-This README provides instructions for setting up the cilent using Ionic React and Capacitor.
+This README provides instructions for setting up the client using Ionic React and Capacitor.
 
 ## Project Structure
 
@@ -51,7 +51,7 @@ grocery_comparison/
 
 1. Navigate to the project directory:
    ```
-   cd grocery_comparison / cd cilent
+   cd grocery_comparison / cd client
    ```
 
 2. Install dependencies:

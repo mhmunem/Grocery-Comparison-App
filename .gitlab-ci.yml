@@ -8,7 +8,7 @@ setup:
   stage: setup
   image: node:22.12.0
   script:
-    - cd cilent
+    - cd client
     - npm install
     - cd ../server
     - npm install
@@ -18,15 +18,15 @@ setup:
   artifacts:
     paths:
       - server/
-      - cilent/
+      - client/
       - webscraping/
     when: on_success
 
-cilent-test:
+client-test:
   stage: test
   image: node:22.12.0
   script:
-    - cd cilent
+    - cd client
     - npm run test
 
 server-test:
@@ -47,8 +47,8 @@ server-test:
 #     - merge_requests
 #     - branches
 
-# Step 4: cilent End-to-End Tests with Maestro
-# cilent-e2e-maestro:
+# Step 4: client End-to-End Tests with Maestro
+# client-e2e-maestro:
 #   stage: e2e
 #   image: maestroqa/maestro-cli:latest
 #   before_script:

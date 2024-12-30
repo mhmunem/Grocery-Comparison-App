@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint",
-    "start": "concurrently \"npm run start:cilent\" \"npm run start:server\"",
-    "dev": "concurrently \"npm run start:cilent\" \"npm run start:server\"",
-    "start:cilent": "cd cilent && ionic serve --external",
+    "start": "concurrently \"npm run start:client\" \"npm run start:server\"",
+    "dev": "concurrently \"npm run start:client\" \"npm run start:server\"",
+    "start:client": "cd client && ionic serve --external",
     "start:server": "cd server && nodemon",
     "ionic:serve": "npm run start",
     "commitlint": "commitlint --edit",

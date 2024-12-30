@@ -6,14 +6,14 @@ We will develop a grocery price comparison app to help users find the best price
 
 ## Folder Structure
 
-- `cilent/`: Mobile application using React and Ionic.
+- `client/`: Mobile application using React and Ionic.
 - `server/`: API and server-side logic with Express.js.
 - `db/`: PostgreSQL database schema and scripts.
 - `webscraping/`: Crawlee-based web scraping scripts to fetch grocery data.
 
 ## Tech Stack
 
-- **cilent**: React, Ionic, Capacitor
+- **client**: React, Ionic, Capacitor
 - **server**: Node.js, Express.js
 - **Database**: PostgreSQL
 - **Web Scraping**: Crawlee
@@ -22,7 +22,7 @@ We will develop a grocery price comparison app to help users find the best price
 
 Follow the instructions in the individual folder README files for setup.
 
-- `cilent/`:[cilent Readme](cilent\README.md)
+- `client/`:[client Readme](client\README.md)
 - `server/`:[server Readme](server\Readme.md)
 - `db/`: [Database Readme](db\Readme.md)
 - `webscraping/`:[WebScraping Readme](webscraping\README.md)
@@ -103,7 +103,7 @@ Use descriptive branch names, such as `feature/<feature_name>` or `bug/<bug_name
 git push origin <branch-name>
 ```
 
-## Run the cilent and server
+## Run the client and server
 ```
 npm run dev (check the package.json scripts)
 ```

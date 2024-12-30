@@ -1,6 +1,6 @@
 FROM node:22.12.0
  
-WORKDIR /cilent
+WORKDIR /client
  
 COPY package*.json ./
  
