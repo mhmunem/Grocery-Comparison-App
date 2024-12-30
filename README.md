@@ -6,15 +6,15 @@ We will develop a grocery price comparison app to help users find the best price
 
 ## Folder Structure
 
-- `frontend/`: Mobile application using React and Ionic.
-- `backend/`: API and server-side logic with Express.js.
+- `cilent/`: Mobile application using React and Ionic.
+- `server/`: API and server-side logic with Express.js.
 - `db/`: PostgreSQL database schema and scripts.
 - `webscraping/`: Crawlee-based web scraping scripts to fetch grocery data.
 
 ## Tech Stack
 
-- **Frontend**: React, Ionic, Capacitor
-- **Backend**: Node.js, Express.js
+- **cilent**: React, Ionic, Capacitor
+- **server**: Node.js, Express.js
 - **Database**: PostgreSQL
 - **Web Scraping**: Crawlee
 
@@ -22,8 +22,8 @@ We will develop a grocery price comparison app to help users find the best price
 
 Follow the instructions in the individual folder README files for setup.
 
-- `frontend/`:[Frontend Readme](frontend\README.md)
-- `backend/`:[Backend Readme](backend\Readme.md)
+- `cilent/`:[cilent Readme](cilent\README.md)
+- `server/`:[server Readme](server\Readme.md)
 - `db/`: [Database Readme](db\Readme.md)
 - `webscraping/`:[WebScraping Readme](webscraping\README.md)
 
@@ -103,7 +103,7 @@ Use descriptive branch names, such as `feature/<feature_name>` or `bug/<bug_name
 git push origin <branch-name>
 ```
 
-## Run the frontend and backend
+## Run the cilent and server
 ```
 npm run dev (check the package.json scripts)
 ```

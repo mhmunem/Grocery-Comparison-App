@@ -11,7 +11,7 @@ const router = express.Router();
  *         description: Welcome to the Grocery Comparison
  */
 router.get('/', (req, res) => {
-  res.send('Welcome to the Grocery Comparison from Backend!');
+  res.send('Welcome to the Grocery Comparison from server!');
 });
 
 /**

@@ -1,5 +1,4 @@
 import express, { Request, Response } from 'express';
-import pool from '../../../db/pool'; // Adjust relative path to DB folder
 import { Product } from '../types/product'; // Import the Product type
 
 const router = express.Router();
@@ -30,10 +29,10 @@ router.get('/sort-by-price', async (req: Request, res: Response) => {
     }
 
     // Execute the query
-    const result = await pool.query<Product>(query, values);
+    //const result = await pool.query<Product>(query, values);
 
     // Send the response
-    res.status(200).json(result.rows);
+    //res.status(200).json(result.rows);
   } catch (error) {
     console.error('Error fetching products:', error);
     res.status(500).json({ error: 'Internal Server Error' });

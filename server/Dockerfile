@@ -1,6 +1,6 @@
 FROM node:latest
 
-WORKDIR /backend
+WORKDIR /server
 
 COPY package*.json ./
 

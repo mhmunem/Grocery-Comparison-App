@@ -5,7 +5,8 @@ import corsMiddleware from './middlewares/corsMiddleware';
 import bodyParserMiddleware from './middlewares/bodyParserMiddleware';
 import errorHandler from './middlewares/errorHandler';
 import routes from './routes/initialsetup';
-import db from './dbconnection/pool';
+import db from '../database/connection/pool';
+import productsRouter from './api/products';
 
 const app = express();
 
@@ -16,7 +17,7 @@ const options = {
     info: {
       title: 'Grocery Comparison API',
       version: '1.0.0',
-      description: 'API documentation for the Grocery Comparison backend',
+      description: 'API documentation for the Grocery Comparison server',
     },
   },
   apis: ['./src/routes/initialsetup.ts'], 
@@ -36,8 +37,12 @@ db.execute('SELECT NOW()')
 // Setup Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
+
 // Routes
 app.use('/', routes);
+
+// Register the product API
+app.use('/api/products', productsRouter);
 
 // Error handling
 app.use(errorHandler);

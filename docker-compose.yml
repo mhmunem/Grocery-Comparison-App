@@ -1,29 +1,29 @@
 services:
-  fullstack_frontend:
+  fullstack_cilent:
     build:
-      context: ./frontend
+      context: ./cilent
       dockerfile: Dockerfile
-    container_name: fullstack_frontend
+    container_name: fullstack_cilent
     restart: unless-stopped
     volumes:
-      - ./frontend/src:/frontend/src
+      - ./cilent/src:/cilent/src
     ports:
       - "5173:5173"
     depends_on:
-      - fullstack_backend
+      - fullstack_server
     networks:
       - project_network
     environment:
       - VITE_EXPRESS_API_URL=http://host.docker.internal:3000
 
-  fullstack_backend:
+  fullstack_server:
     build:
-      context: ./backend
+      context: ./server
       dockerfile: Dockerfile
-    container_name: fullstack_backend
+    container_name: fullstack_server
     restart: unless-stopped
     volumes:
-      - ./backend/src:/backend/src
+      - ./server/src:/server/src
     ports:
       - "${PORT}:${PORT}"
     env_file:
@@ -34,14 +34,12 @@ services:
       - project_network
 
   fullstack_db:
-    build:
-      context: ./db
-      dockerfile: Dockerfile
+    image: postgres:17.2
     container_name: fullstack_db
     env_file:
       - .env
     volumes:
-      - fullstack-postgres-data:/var/lib/postgresql/data  # Shared volume
+      - fullstack-postgres-data:/var/lib/postgresql/data  
     ports:
       - "${DB_PORT}:${DB_PORT}"
     healthcheck:

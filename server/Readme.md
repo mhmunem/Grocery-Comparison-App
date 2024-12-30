@@ -26,7 +26,7 @@ Verify the installation:
    ```
 2.  Navigate to the project directory:
     ```
-    cd backend
+    cd server
     ```
 3. Install Express: (if not in `package.json` file)
    ```
@@ -44,7 +44,7 @@ To start the Express server:
 
 1. Navigate to the project directory:
    ```
-   cd backend
+   cd server
    ```
 
 2. Run the server: (file can index/app/main) check the package.json main field then use that name for file. 

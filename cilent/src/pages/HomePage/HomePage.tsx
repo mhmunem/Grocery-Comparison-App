@@ -9,7 +9,7 @@ function HomePage() {
 
   useEffect(() => {
 
-    // BAckend connection Testing using GET on initial load
+    // server connection Testing using GET on initial load
     getInitialSetupMessage().then(response => {
         setData(response);
       })

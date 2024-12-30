@@ -1,6 +1,6 @@
-# Grocery Price Comparison - Frontend Setup
+# Grocery Price Comparison - cilent Setup
 
-This README provides instructions for setting up the frontend using Ionic React and Capacitor.
+This README provides instructions for setting up the cilent using Ionic React and Capacitor.
 
 ## Project Structure
 
@@ -51,7 +51,7 @@ grocery_comparison/
 
 1. Navigate to the project directory:
    ```
-   cd grocery_comparison / cd frontend
+   cd grocery_comparison / cd cilent
    ```
 
 2. Install dependencies:
