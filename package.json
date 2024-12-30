@@ -12,7 +12,8 @@
     "ionic:serve": "npm run start",
     "commitlint": "commitlint --edit",
     "commit": "commit",
-    "prepare": "husky"
+    "prepare": "husky",
+    "install-everything": "npm i && cd client && npm i && cd ../server  && npm i"
   },
   "devDependencies": {
     "@eslint/js": "^9.16.0",

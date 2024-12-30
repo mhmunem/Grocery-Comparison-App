@@ -35,7 +35,7 @@ services:
 
   fullstack_db:
     image: postgres
-    # container_name: fullstack_db
+    container_name: fullstack_db
     env_file:
       - .env
     volumes:
