@@ -26,11 +26,11 @@ eslint:
     - merge_requests
     - branches
 
-test_coverage_frontend:
+test_coverage_client:
   stage: test-coverage-frontend
   image: node:22.12.0
   script:
-    - cd frontend
+    - cd client
     # If using Jest for the React + Ionic project:
     - npm run test -- --coverage --coverageReporters=cobertura
     # Make sure jest.config.js is configured to output to coverage/
@@ -43,11 +43,11 @@ test_coverage_frontend:
     paths:
       - frontend/coverage/
 
-test_coverage_backend:
+test_coverage_server:
   stage: test-coverage-backend
   image: node:22.12.0
   script:
-    - cd backend
+    - cd server
     # If using Jest for the Node.js + Express.js project:
     - npm run test -- --coverage --coverageReporters=cobertura
     # Or Mocha + nyc, as long as the output is in Cobertura XML format
