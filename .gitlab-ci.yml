@@ -32,8 +32,9 @@ test_coverage_client:
   script:
     - cd client
     # If using Jest for the React + Ionic project:
-    - npm run test -- --coverage --coverageReporters=cobertura
+    - npx jest --ci --coverage
     # Make sure jest.config.js is configured to output to coverage/
+  coverage: '/All files[^\|]*\|[^\|]*\s+([\d\.]+)/'
   artifacts:
     reports:
       coverage_report:
@@ -49,8 +50,9 @@ test_coverage_server:
   script:
     - cd server
     # If using Jest for the Node.js + Express.js project:
-    - npm run test -- --coverage --coverageReporters=cobertura
+    - npx jest --ci --coverage
     # Or Mocha + nyc, as long as the output is in Cobertura XML format
+  coverage: '/All files[^\|]*\|[^\|]*\s+([\d\.]+)/'
   artifacts:
     reports:
       coverage_report:
