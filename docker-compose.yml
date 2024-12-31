@@ -1,134 +1,33 @@
-stages:
-  - setup
-  - test
-  - test-coverage-frontend
-  - test-coverage-backend
-  - code-quality
-  # - lint
-  # - e2e
+version: '3.8'
+services:
+  postgres:
+    image: postgres:17.2
+    container_name: postgres_dev
+    environment:
+      POSTGRES_USER: dev_user
+      POSTGRES_PASSWORD: dev_password
+      POSTGRES_DB: dev_db
+    ports:
+      - "5432:5432" # Expose PostgreSQL on localhost:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persist PostgreSQL data
 
-setup:
-  stage: setup
-  image: node:22.12.0
-  script:
-    - cd frontend
-    - npm install
-    - cd ../backend
-    - npm install
-    - cd ../webscraping
-    - npm install
-    - cd ..
-  artifacts:
-    paths:
-      - backend/
-      - frontend/
-      - webscraping/
-    when: on_success
+  express:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile # Dockerfile for the Express.js app
+    container_name: express_app
+    environment:
+      DB_HOST: postgres
+      DB_USER: dev_user
+      DB_PASSWORD: dev_password
+      DB_NAME: dev_db
+      DB_PORT: 5432
+    ports:
+      - "3000:3000" # Expose Express.js on localhost:3000
+    depends_on:
+      - postgres # Ensure PostgreSQL starts before Express.js
 
-frontend-test:
-  stage: test
-  image: node:22.12.0
-  script:
-    - cd frontend
-    - npm run test
+volumes:
+  postgres_data:
 
-backend-test:
-  stage: test
-  image: node:22.12.0
-  script:
-    - cd backend
-    - npm run test
-
-
-
-# 3) Test and Generate Coverage Reports
-test_coverage_frontend:
-  stage: test-coverage-frontend
-  image: node:22.12.0
-  needs:
-    - setup
-  script:
-    - cd frontend
-    # If using Jest for the React + Ionic project:
-    - npm run test -- --coverage --coverageReporters=cobertura
-    # Make sure jest.config.js is configured to output to coverage/
-  artifacts:
-    reports:
-      coverage_report:
-        coverage_format: cobertura
-        # Path to the Cobertura file. Adjust if needed.
-        path: frontend/coverage/cobertura-coverage.xml
-    paths:
-      - frontend/coverage/
-
-test_coverage_backend:
-  stage: test-coverage-backend
-  image: node:22.12.0
-  needs:
-    - setup
-  script:
-    - cd backend
-    # If using Jest for the Node.js + Express.js project:
-    - npm run test -- --coverage --coverageReporters=cobertura
-    # Or Mocha + nyc, as long as the output is in Cobertura XML format
-  artifacts:
-    reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: backend/coverage/cobertura-coverage.xml
-    paths:
-      - backend/coverage/
-
-# 4) Code Quality Scan
-code_quality:
-  stage: code-quality
-  image: docker:stable
-  services:
-    - docker:dind
-  needs:
-    - setup
-  script:
-    # Using the official GitLab Code Quality image, which runs basic static checks
-    - docker run --rm \
-        -v "$CI_PROJECT_DIR":/code \
-        registry.gitlab.com/gitlab-org/ci-cd/codequality:latest /code
-  artifacts:
-    reports:
-      codequality: gl-code-quality-report.json
-    paths:
-      - gl-code-quality-report.json
-# eslint:
-#   stage: lint
-#   image: node:22.12.0
-#   before_script:
-#     - npm install
-#   script:
-#     - npm run lint
-#   only:
-#     - merge_requests
-#     - branches
-
-# Step 4: Frontend End-to-End Tests with Maestro
-# frontend-e2e-maestro:
-#   stage: e2e
-#   image: maestroqa/maestro-cli:latest
-#   before_script:
-#     - mkdir -p maestro-artifacts
-#     - export ANDROID_HOME=/sdk/android
-#   script:
-#     - maestro test mobile/maestro/register_test.yaml --output maestro-artifacts
-#   artifacts:
-#     paths:
-#       - maestro-artifacts/
-#     when: always
-
-# Step 5: Backend End-to-End Tests with Cypress
-# backend-e2e-cypress:
-#   stage: e2e
-#   image: cypress/included:12.6.0
-#   script:
-#     - cypress run --config-file cypress.json
-#   artifacts:
-#     paths:
-#       - cypress/results/
-#     when: always
