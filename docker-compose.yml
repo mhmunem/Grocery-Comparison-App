@@ -1,7 +1,6 @@
 stages:
   - setup
   - test
-  - quality
   - test-coverage-frontend
   - test-coverage-backend
   - code-quality
