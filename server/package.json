@@ -125,7 +125,6 @@
     "start": "node src/server.ts",
     "dev": "nodemon src/server.ts",
     "test": "./node_modules/.bin/jest",
-    "commitlint": "./node_modules/.bin/commitlint"
   },
   "repository": {
     "type": "git",
