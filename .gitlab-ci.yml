@@ -10,13 +10,7 @@ setup:
   stage: setup
   image: node:22.12.0
   script:
-    - cd frontend
-    - npm install
-    - cd ../backend
-    - npm install
-    - cd ../webscraping
-    - npm install
-    - cd ..
+    - npm run install-everything
   artifacts:
     paths:
       - backend/
@@ -27,8 +21,6 @@ setup:
 eslint:
   stage: lint
   image: node:22.12.0
-  before_script:
-    - npm install
   script:
     - npm run lint
     - npm ci
