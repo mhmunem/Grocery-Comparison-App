@@ -18,7 +18,7 @@ setup:
   artifacts:
     expire_in: 1 days
     paths:
-      - './**/node_module/'
+      - './**/node_modules/'
     when: on_success
 
 eslint:
