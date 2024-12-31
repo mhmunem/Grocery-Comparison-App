@@ -39,9 +39,9 @@ test_coverage_client:
       coverage_report:
         coverage_format: cobertura
         # Path to the Cobertura file. Adjust if needed.
-        path: frontend/coverage/cobertura-coverage.xml
+        path: client/coverage/cobertura-coverage.xml
     paths:
-      - frontend/coverage/
+      - client/coverage/
 
 test_coverage_server:
   stage: test-coverage
@@ -55,9 +55,9 @@ test_coverage_server:
     reports:
       coverage_report:
         coverage_format: cobertura
-        path: backend/coverage/cobertura-coverage.xml
+        path: server/coverage/cobertura-coverage.xml
     paths:
-      - backend/coverage/
+      - server/coverage/
 
 client-test:
   stage: test
