@@ -11,10 +11,12 @@ services:
       - "5173:5173"
     depends_on:
       - fullstack_server
+      - fullstack_db
     networks:
       - project_network
-    environment:
-      - VITE_EXPRESS_API_URL=http://host.docker.internal:3000
+    env_file:
+      - .env
+
 
   fullstack_server:
     build:
