@@ -2,6 +2,9 @@ stages:
   - setup
   - test
   - quality
+  - test-coverage-frontend
+  - test-coverage-backend
+  - code-quality
   # - lint
   # - e2e
 
@@ -40,8 +43,8 @@ backend-test:
 
 
 # 3) Test and Generate Coverage Reports
-test_frontend:
-  stage: test
+test_coverage_frontend:
+  stage: test-coverage-frontend
   image: node:22.12.0
   needs:
     - setup
@@ -59,8 +62,8 @@ test_frontend:
     paths:
       - frontend/coverage/
 
-test_backend:
-  stage: test
+test_coverage_backend:
+  stage: test-coverage-backend
   image: node:22.12.0
   needs:
     - setup
@@ -79,7 +82,7 @@ test_backend:
 
 # 4) Code Quality Scan
 code_quality:
-  stage: quality
+  stage: code-quality
   image: docker:stable
   services:
     - docker:dind
