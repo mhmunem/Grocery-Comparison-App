@@ -8,13 +8,19 @@ stages:
 setup:
   stage: setup
   image: node:22.12.0
+  cache:
+    paths:
+      - node_modules/
+      - server/node_modules/
+      - client/node_modules/
   script:
     - npm run install-everything
   artifacts:
+    expire_in: 1 days
     paths:
       - node_module/
-      - server/
-      - client/
+      - server/node_modules/
+      - client/node_modules/
     when: on_success
 
 eslint:
