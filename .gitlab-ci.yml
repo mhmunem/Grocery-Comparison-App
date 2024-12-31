@@ -29,25 +29,9 @@ eslint:
     - merge_requests
     - branches
 
-client-test:
-  stage: test
-  image: node:22.12.0
-  script:
-    - cd client
-    - npm run test
-
-server-test:
-  stage: test
-  image: node:22.12.0
-  script:
-    - cd server
-    - npm run test
-
 test_coverage_frontend:
   stage: test-coverage-frontend
   image: node:22.12.0
-  needs:
-    - setup
   script:
     - cd frontend
     # If using Jest for the React + Ionic project:
@@ -65,8 +49,6 @@ test_coverage_frontend:
 test_coverage_backend:
   stage: test-coverage-backend
   image: node:22.12.0
-  needs:
-    - setup
   script:
     - cd backend
     # If using Jest for the Node.js + Express.js project:
@@ -79,6 +61,20 @@ test_coverage_backend:
         path: backend/coverage/cobertura-coverage.xml
     paths:
       - backend/coverage/
+
+client-test:
+  stage: test
+  image: node:22.12.0
+  script:
+    - cd client
+    - npm run test
+
+server-test:
+  stage: test
+  image: node:22.12.0
+  script:
+    - cd server
+    - npm run test
 
 # Step 4: client End-to-End Tests with Maestro
 # client-e2e-maestro:
