@@ -45,9 +45,6 @@ server-test:
     - cd server
     - npm run test
 
-
-
-# 3) Test and Generate Coverage Reports
 test_coverage_frontend:
   stage: test-coverage-frontend
   image: node:22.12.0
