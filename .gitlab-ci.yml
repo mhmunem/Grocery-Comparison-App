@@ -2,8 +2,7 @@ stages:
   - setup
   - lint
   - test
-  - test-coverage-frontend
-  - test-coverage-backend
+  - test-coverage
   # - e2e
 
 setup:
@@ -13,6 +12,7 @@ setup:
     - npm run install-everything
   artifacts:
     paths:
+      - /
       - server/
       - client/
     when: on_success
@@ -27,7 +27,7 @@ eslint:
     - branches
 
 test_coverage_client:
-  stage: test-coverage-frontend
+  stage: test-coverage
   image: node:22.12.0
   script:
     - cd client
@@ -44,7 +44,7 @@ test_coverage_client:
       - frontend/coverage/
 
 test_coverage_server:
-  stage: test-coverage-backend
+  stage: test-coverage
   image: node:22.12.0
   script:
     - cd server
