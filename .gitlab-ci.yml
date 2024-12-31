@@ -12,7 +12,7 @@ setup:
     - npm run install-everything
   artifacts:
     paths:
-      - "*"
+      - node_module/
       - server/
       - client/
     when: on_success
