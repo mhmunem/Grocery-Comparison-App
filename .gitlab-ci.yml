@@ -13,9 +13,8 @@ setup:
     - npm run install-everything
   artifacts:
     paths:
-      - backend/
-      - frontend/
-      - webscraping/
+      - server/
+      - client/
     when: on_success
 
 eslint:
@@ -32,18 +31,18 @@ eslint:
     - merge_requests
     - branches
 
-frontend-test:
+client-test:
   stage: test
   image: node:22.12.0
   script:
-    - cd frontend
+    - cd client
     - npm run test
 
-backend-test:
+server-test:
   stage: test
   image: node:22.12.0
   script:
-    - cd backend
+    - cd server
     - npm run test
 
 
@@ -86,8 +85,8 @@ test_coverage_backend:
     paths:
       - backend/coverage/
 
-# Step 4: Frontend End-to-End Tests with Maestro
-# frontend-e2e-maestro:
+# Step 4: client End-to-End Tests with Maestro
+# client-e2e-maestro:
 #   stage: e2e
 #   image: maestroqa/maestro-cli:latest
 #   before_script:
@@ -100,8 +99,8 @@ test_coverage_backend:
 #       - maestro-artifacts/
 #     when: always
 
-# Step 5: Backend End-to-End Tests with Cypress
-# backend-e2e-cypress:
+# Step 5: server End-to-End Tests with Cypress
+# server-e2e-cypress:
 #   stage: e2e
 #   image: cypress/included:12.6.0
 #   script:
