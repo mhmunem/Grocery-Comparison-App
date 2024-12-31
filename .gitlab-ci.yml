@@ -58,13 +58,13 @@ test_coverage_server:
     # If using Jest for the Node.js + Express.js project:
     - npm run test:ci
     # Or Mocha + nyc, as long as the output is in Cobertura XML format
-  coverage: '/All files[^\|]*\|[^\|]*\s+([\d\.]+)/'
+  # coverage: '/All files[^\|]*\|[^\|]*\s+([\d\.]+)/'
+  coverage: '/All\sfiles.*?\s+(\d+.\d+)/'
   artifacts:
     when: always
     reports:
       junit:
         - junit.xml
-      cobertura: coverage/cobertura-coverage.xml
     paths:
       - server/coverage/
 
