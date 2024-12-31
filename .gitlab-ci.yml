@@ -1,9 +1,9 @@
 stages:
   - setup
+  - lint
   - test
   - test-coverage-frontend
   - test-coverage-backend
-  - lint
   # - e2e
 
 setup:
@@ -23,6 +23,22 @@ setup:
       - frontend/
       - webscraping/
     when: on_success
+
+eslint:
+  stage: lint
+  image: node:22.12.0
+  before_script:
+    - npm install
+  script:
+    - npm run lint
+    - npm ci
+    - npx eslint --format gitlab .
+  artifacts:
+    reports:
+      codequality: gl-codequality.json
+  only:
+    - merge_requests
+    - branches
 
 frontend-test:
   stage: test
@@ -77,22 +93,6 @@ test_coverage_backend:
         path: backend/coverage/cobertura-coverage.xml
     paths:
       - backend/coverage/
-
-eslint:
-  stage: lint
-  image: node:22.12.0
-  before_script:
-    - npm install
-  script:
-    - npm run lint
-    - npm ci
-    - npx eslint --format gitlab .
-  artifacts:
-    reports:
-      codequality: gl-codequality.json
-  only:
-    - merge_requests
-    - branches
 
 # Step 4: Frontend End-to-End Tests with Maestro
 # frontend-e2e-maestro:
