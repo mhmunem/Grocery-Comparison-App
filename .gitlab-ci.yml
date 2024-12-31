@@ -85,6 +85,9 @@ code_quality:
   image: docker:stable
   services:
     - docker:dind
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
   script:
     # Using the official GitLab Code Quality image, which runs basic static checks
     - docker run --rm -v "$CI_PROJECT_DIR":/code registry.gitlab.com/gitlab-org/ci-cd/codequality:latest /code
