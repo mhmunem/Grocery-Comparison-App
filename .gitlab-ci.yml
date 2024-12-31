@@ -90,6 +90,9 @@ code_quality:
     DOCKER_TLS_CERTDIR: ""
   script:
     # Using the official GitLab Code Quality image, which runs basic static checks
+    - docker info  # 测试能否连接到 Docker Daemon
+    - docker build -t my-image .
+    - docker run --rm my-image echo "Hello from Docker!"
     - docker run --rm -v "$CI_PROJECT_DIR":/code registry.gitlab.com/gitlab-org/ci-cd/codequality:latest /code
   artifacts:
     reports:
