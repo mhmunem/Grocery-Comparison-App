@@ -12,15 +12,15 @@ const app = express();
 
 // Swagger definition
 const options = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'Grocery Comparison API',
-      version: '1.0.0',
-      description: 'API documentation for the Grocery Comparison server',
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'Grocery Comparison API',
+            version: '1.0.0',
+            description: 'API documentation for the Grocery Comparison server',
+        },
     },
-  },
-  apis: ['./src/routes/initialsetup.ts'], 
+    apis: ['./src/routes/initialsetup.ts'],
 };
 
 const specs = swaggerJsdoc(options);
@@ -31,8 +31,8 @@ bodyParserMiddleware(app);
 
 // Database connection check
 db.execute('SELECT NOW()')
-  .then(() => console.log('Database connection is working'))
-  .catch((err) => console.error('Database connection check failed:', err));
+    .then(() => console.log('Database connection is working'))
+    .catch((err) => console.error('Database connection check failed:', err));
 
 // Setup Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
