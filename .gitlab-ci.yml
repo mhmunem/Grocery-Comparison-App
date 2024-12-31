@@ -22,8 +22,6 @@ eslint:
   image: node:22.12.0
   script:
     - npm run lint
-    - npm ci
-    - npx eslint --format gitlab .
   artifacts:
     reports:
       codequality: gl-codequality.json
