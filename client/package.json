@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "test:e2e": "cypress run",
     "test:unit": "vitest",
+    "test:ci": "jest --config ./jest.config.js --collectCoverage --coverageDirectory=\"./coverage\" --ci --reporters=default --reporters=jest-junit --watchAll=false | perl -pe 's/\\e\\[?.*?[\\@-~]//g'",
     "lint": "eslint",
     "start": "ionic serve",
     "start:server": "cd ../server && nodemon",
