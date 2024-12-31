@@ -8,32 +8,32 @@ setup:
   stage: setup
   image: node:22.12.0
   script:
-    - cd frontend
+    - cd client
     - npm install
-    - cd ../backend
+    - cd ../server
     - npm install
     - cd ../webscraping
     - npm install
     - cd ..
   artifacts:
     paths:
-      - backend/
-      - frontend/
+      - server/
+      - client/
       - webscraping/
     when: on_success
 
-frontend-test:
+client-test:
   stage: test
   image: node:22.12.0
   script:
-    - cd frontend
+    - cd client
     - npm run test
 
-backend-test:
+server-test:
   stage: test
   image: node:22.12.0
   script:
-    - cd backend
+    - cd server
     - npm run test
 
 # eslint:
@@ -47,8 +47,8 @@ backend-test:
 #     - merge_requests
 #     - branches
 
-# Step 4: Frontend End-to-End Tests with Maestro
-# frontend-e2e-maestro:
+# Step 4: client End-to-End Tests with Maestro
+# client-e2e-maestro:
 #   stage: e2e
 #   image: maestroqa/maestro-cli:latest
 #   before_script:
@@ -61,8 +61,8 @@ backend-test:
 #       - maestro-artifacts/
 #     when: always
 
-# Step 5: Backend End-to-End Tests with Cypress
-# backend-e2e-cypress:
+# Step 5: server End-to-End Tests with Cypress
+# server-e2e-cypress:
 #   stage: e2e
 #   image: cypress/included:12.6.0
 #   script:
