@@ -1,26 +1,62 @@
 stages:
   - setup
+  - lint
   - test
-  # - lint
+  - test-coverage
   # - e2e
 
 setup:
   stage: setup
   image: node:22.12.0
+  cache:
+    paths:
+      - './**/node_modules/'
+  script:
+    - npm run install-everything
+  artifacts:
+    expire_in: 1 days
+    paths:
+      - './**/node_modules/'
+    when: on_success
+
+eslint:
+  stage: lint
+  image: node:22.12.0
+  script:
+    - npm run lint
+  only:
+    - merge_requests
+    - branches
+
+test_coverage_client:
+  stage: test-coverage
+  image: node:22.12.0
   script:
     - cd client
-    - npm install
-    - cd ../server
-    - npm install
-    - cd ../webscraping
-    - npm install
-    - cd ..
+    - npm run test:ci
+  coverage: '/All\sfiles.*?\s+(\d+.\d+)/'
   artifacts:
+    reports:
+      coverage_report:
+        junit:
+          - junit.xml
     paths:
-      - server/
-      - client/
-      - webscraping/
-    when: on_success
+      - client/coverage/
+
+test_coverage_server:
+  stage: test-coverage
+  image: node:22.12.0
+  script:
+    - cd server
+    - npm run test:ci
+  coverage: '/All\sfiles.*?\s+(\d+.\d+)/'
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - junit.xml
+    paths:
+      - server/coverage/
 
 client-test:
   stage: test
@@ -35,17 +71,6 @@ server-test:
   script:
     - cd server
     - npm run test
-
-# eslint:
-#   stage: lint
-#   image: node:22.12.0
-#   before_script:
-#     - npm install
-#   script:
-#     - npm run lint
-#   only:
-#     - merge_requests
-#     - branches
 
 # Step 4: client End-to-End Tests with Maestro
 # client-e2e-maestro:
