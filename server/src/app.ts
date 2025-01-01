@@ -11,7 +11,8 @@ import { chains } from './db/schema/chains';
 
 const app = express();
 
-const swagger_options = {
+// Swagger definition
+const options = {
     definition: {
         openapi: '3.0.0',
         info: {
@@ -30,16 +31,8 @@ bodyParserMiddleware(app);
 
 // Database connection check
 db.execute('SELECT NOW()')
-    .then(() => console.log('Database connection succesful'))
+    .then(() => console.log('Database connection is working'))
     .catch((err) => console.error('Database connection check failed:', err));
-
-// NOTE: debugging code REMOVE BEFORE MERGE
-const output = async () => {
-    console.log(await db.select().from(chains))
-    // console.log(result);
-};
-
-// output()
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
