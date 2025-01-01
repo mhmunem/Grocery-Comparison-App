@@ -1,5 +1,8 @@
 import { serial, integer, text, pgTable, numeric, uuid } from "drizzle-orm/pg-core";
 
+// TODO: add junction tables
+// put schema in thier own files
+// add some mock data for testing purposes
 export const chains = pgTable('chains', {
   id: serial().primaryKey(),
   name: text().notNull(),
