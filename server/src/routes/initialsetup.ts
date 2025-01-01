@@ -1,4 +1,6 @@
 import express from 'express';
+import db from '../db/connection/pool';
+import { chains } from '../db/schema/products';
 const router = express.Router();
 
 /**
@@ -11,7 +13,7 @@ const router = express.Router();
  *         description: Welcome to the Grocery Comparison
  */
 router.get('/', (req, res) => {
-    res.send('Welcome to the Grocery Comparison from server!');
+  res.send('Welcome to the Grocery Comparison from server!');
 });
 
 /**
@@ -24,7 +26,7 @@ router.get('/', (req, res) => {
  *         description: GET is working.
  */
 router.get('/initialSetup', (req, res) => {
-    res.send('GET is working.');
+  res.send('GET is working.');
 });
 
 /**
@@ -37,7 +39,7 @@ router.get('/initialSetup', (req, res) => {
  *         description: POST is working.
  */
 router.post('/initialSetup', (req, res) => {
-    res.send('POST is working.');
+  res.send('POST is working.');
 });
 
 /**
@@ -57,7 +59,7 @@ router.post('/initialSetup', (req, res) => {
  *         description: PUT is working for the specified ID
  */
 router.put('/initialSetup/:id', (req, res) => {
-    res.send(`PUT is working for ID: ${req.params.id}`);
+  res.send(`PUT is working for ID: ${req.params.id} `);
 });
 
 /**
@@ -77,7 +79,7 @@ router.put('/initialSetup/:id', (req, res) => {
  *         description: DELETE is working for the specified ID
  */
 router.delete('/initialSetup/:id', (req, res) => {
-    res.send(`DELETE is working for ID: ${req.params.id}`);
+  res.send(`DELETE is working for ID: ${req.params.id} `);
 });
 
 export default router;

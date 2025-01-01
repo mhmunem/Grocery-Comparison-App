@@ -7,44 +7,45 @@ import errorHandler from './middlewares/errorHandler';
 import routes from './routes/initialsetup';
 import db from './db/connection/pool';
 import productsRouter from './api/products';
+import { chains } from './db/schema/products';
 
 const app = express();
 
-// Swagger definition
-const options = {
-    definition: {
-        openapi: '3.0.0',
-        info: {
-            title: 'Grocery Comparison API',
-            version: '1.0.0',
-            description: 'API documentation for the Grocery Comparison server',
-        },
+const swagger_options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Grocery Comparison API',
+      version: '1.0.0',
+      description: 'API documentation for the Grocery Comparison server',
     },
-    apis: ['./src/routes/initialsetup.ts'],
+  },
+  apis: ['./src/routes/initialsetup.ts'],
 };
 
-const specs = swaggerJsdoc(options);
+const specs = swaggerJsdoc(swagger_options);
 
-// Middleware
 corsMiddleware(app);
 bodyParserMiddleware(app);
 
 // Database connection check
 db.execute('SELECT NOW()')
-    .then(() => console.log('Database connection is working'))
-    .catch((err) => console.error('Database connection check failed:', err));
+  .then(() => console.log('Database connection is working'))
+  .catch((err) => console.error('Database connection check failed:', err));
 
-// Setup Swagger UI
+const output = async () => {
+  console.log(await db.select().from(chains))
+  // console.log(result);
+};
+
+output()
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
-
-// Routes
 app.use('/', routes);
 
-// Register the product API
 app.use('/api/products', productsRouter);
 
-// Error handling
 app.use(errorHandler);
 
 export default app;
