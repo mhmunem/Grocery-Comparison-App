@@ -7,11 +7,9 @@ import productsRouter from './api/products';
 import routes from './routes/initialsetup';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { chains } from './db/schema/chains';
 
 const app = express();
 
-// Swagger definition
 const options = {
     definition: {
         openapi: '3.0.0',
