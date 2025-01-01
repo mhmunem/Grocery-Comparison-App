@@ -1,13 +1,13 @@
+import bodyParserMiddleware from './middlewares/bodyParserMiddleware';
+import corsMiddleware from './middlewares/corsMiddleware';
+import db from './db/connection/pool';
+import errorHandler from './middlewares/errorHandler';
 import express from 'express';
+import productsRouter from './api/products';
+import routes from './routes/initialsetup';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import corsMiddleware from './middlewares/corsMiddleware';
-import bodyParserMiddleware from './middlewares/bodyParserMiddleware';
-import errorHandler from './middlewares/errorHandler';
-import routes from './routes/initialsetup';
-import db from './db/connection/pool';
-import productsRouter from './api/products';
-import { chains } from './db/schema/products';
+import { chains } from './db/schema/chains';
 
 const app = express();
 
@@ -30,7 +30,7 @@ bodyParserMiddleware(app);
 
 // Database connection check
 db.execute('SELECT NOW()')
-    .then(() => console.log('Database connection is working'))
+    .then(() => console.log('Database connection succesful'))
     .catch((err) => console.error('Database connection check failed:', err));
 
 const output = async () => {
@@ -38,7 +38,7 @@ const output = async () => {
     // console.log(result);
 };
 
-output()
+// output()
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
