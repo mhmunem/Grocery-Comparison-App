@@ -13,7 +13,10 @@
     "commitlint": "commitlint --edit",
     "commit": "commit",
     "prepare": "husky",
-    "install-everything": "npm i && cd client && npm i && cd ../server  && npm i"
+    "install-everything": "npm i && cd client && npm i && cd ../server  && npm i",
+    "db:generate": "npx drizzle-kit generate --config=./drizzle.config.ts",
+    "db:push": "npx drizzle-kit push --config=./drizzle.config.ts",
+    "db:pull": "npx drizzle-kit pull --config=./drizzle.config.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.16.0",
