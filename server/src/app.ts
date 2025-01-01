@@ -5,7 +5,7 @@ import corsMiddleware from './middlewares/corsMiddleware';
 import bodyParserMiddleware from './middlewares/bodyParserMiddleware';
 import errorHandler from './middlewares/errorHandler';
 import routes from './routes/initialsetup';
-import db from '../db/connection/pool';
+import db from './db/connection/pool';
 import productsRouter from './api/products';
 
 const app = express();
