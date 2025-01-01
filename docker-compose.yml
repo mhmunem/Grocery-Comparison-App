@@ -15,8 +15,7 @@ services:
     networks:
       - project_network
     env_file:
-      - .env
-
+      - ./client/.env
 
   fullstack_server:
     build:
@@ -29,17 +28,18 @@ services:
     ports:
       - "${PORT}:${PORT}"
     env_file:
-      - .env
+      - ./server/.env
     depends_on:
       - fullstack_db
     networks:
       - project_network
 
   fullstack_db:
-    image: postgres # FIX: add version :17.2
+    image: postgres:17.2
     container_name: fullstack_db
+    restart: always
     env_file:
-      - .env
+      - ./server/.env
     volumes:
       - cosc680-db:/var/lib/postgresql/data  
     ports:
