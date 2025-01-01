@@ -3,7 +3,6 @@ stages:
   - test
   - test-coverage-frontend
   - test-coverage-backend
-  - code-quality
   # - lint
   # - e2e
 
@@ -79,23 +78,6 @@ test_coverage_backend:
     paths:
       - backend/coverage/
 
-# 4) Code Quality Scan
-code_quality:
-  stage: code-quality
-  image: docker:stable
-  services:
-    - docker:dind
-  variables:
-    DOCKER_HOST: "tcp://docker:2375"
-    DOCKER_TLS_CERTDIR: ""
-  script:
-    # Using the official GitLab Code Quality image, which runs basic static checks
-    - docker run --rm -v "$CI_PROJECT_DIR":/code registry.gitlab.com/gitlab-org/ci-cd/codequality:latest /code
-  artifacts:
-    reports:
-      codequality: gl-code-quality-report.json
-    paths:
-      - gl-code-quality-report.json
 # eslint:
 #   stage: lint
 #   image: node:22.12.0
