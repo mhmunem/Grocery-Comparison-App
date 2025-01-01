@@ -1,4 +1,5 @@
 import express from 'express';
+
 const router = express.Router();
 
 /**
@@ -57,7 +58,7 @@ router.post('/initialSetup', (req, res) => {
  *         description: PUT is working for the specified ID
  */
 router.put('/initialSetup/:id', (req, res) => {
-    res.send(`PUT is working for ID: ${req.params.id}`);
+    res.send(`PUT is working for ID: ${req.params.id} `);
 });
 
 /**
@@ -77,7 +78,7 @@ router.put('/initialSetup/:id', (req, res) => {
  *         description: DELETE is working for the specified ID
  */
 router.delete('/initialSetup/:id', (req, res) => {
-    res.send(`DELETE is working for ID: ${req.params.id}`);
+    res.send(`DELETE is working for ID: ${req.params.id} `);
 });
 
 export default router;

@@ -1,4 +1,4 @@
 .vs
 **/node_modules/
 **/package-lock.json
-**/coverage/
+**/drizzle/
