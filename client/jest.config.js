@@ -7,4 +7,6 @@ export default {
     },
     testMatch: ['**/?(*.)+(spec|test).[tj]s'], // Match test files
     watchman: false,
+    collectCoverageFrom: ["src/**/*.js", "!**/node_modules/**"],
+    coverageReporters: ["html", "text", "text-summary", "cobertura"],
 };
