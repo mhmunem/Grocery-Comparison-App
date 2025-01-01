@@ -3,7 +3,8 @@ import { stores } from "./stores";
 import { units } from "./unit";
 
 // TODO: add junction tables
-// add some mock data for testing purposes
+// add mock data for testing purposes
+// write drizzle tutorial in wiki
 
 export const products = pgTable('products', {
     id: serial().primaryKey(),

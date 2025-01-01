@@ -33,6 +33,7 @@ db.execute('SELECT NOW()')
     .then(() => console.log('Database connection succesful'))
     .catch((err) => console.error('Database connection check failed:', err));
 
+// NOTE: debugging code REMOVE BEFORE MERGE
 const output = async () => {
     console.log(await db.select().from(chains))
     // console.log(result);
