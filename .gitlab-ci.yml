@@ -1,6 +1,9 @@
 stages:
   - setup
   - test
+  - test-coverage-frontend
+  - test-coverage-backend
+  - code-quality
   # - lint
   # - e2e
 
@@ -36,6 +39,63 @@ backend-test:
     - cd backend
     - npm run test
 
+
+
+# 3) Test and Generate Coverage Reports
+test_coverage_frontend:
+  stage: test-coverage-frontend
+  image: node:22.12.0
+  needs:
+    - setup
+  script:
+    - cd frontend
+    # If using Jest for the React + Ionic project:
+    - npm run test -- --coverage --coverageReporters=cobertura
+    # Make sure jest.config.js is configured to output to coverage/
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        # Path to the Cobertura file. Adjust if needed.
+        path: frontend/coverage/cobertura-coverage.xml
+    paths:
+      - frontend/coverage/
+
+test_coverage_backend:
+  stage: test-coverage-backend
+  image: node:22.12.0
+  needs:
+    - setup
+  script:
+    - cd backend
+    # If using Jest for the Node.js + Express.js project:
+    - npm run test -- --coverage --coverageReporters=cobertura
+    # Or Mocha + nyc, as long as the output is in Cobertura XML format
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: backend/coverage/cobertura-coverage.xml
+    paths:
+      - backend/coverage/
+
+# 4) Code Quality Scan
+code_quality:
+  stage: code-quality
+  image: docker:stable
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+  script:
+    # Using the official GitLab Code Quality image, which runs basic static checks
+    - docker run --rm -v "$CI_PROJECT_DIR":/code registry.gitlab.com/gitlab-org/ci-cd/codequality:latest /code
+  artifacts:
+    reports:
+      codequality: gl-code-quality-report.json
+    paths:
+      - gl-code-quality-report.json
 # eslint:
 #   stage: lint
 #   image: node:22.12.0

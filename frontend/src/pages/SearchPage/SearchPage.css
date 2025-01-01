@@ -16,14 +16,11 @@ ion-header {
   margin: 0 auto;
   padding: 0;
   box-sizing: border-box;
-  
 }
 
 ion-grid {
   width: 100%;
 }
-
-
 
 /* Card Styling */
 .listCard {
@@ -84,8 +81,6 @@ ion-grid {
   margin: 0 10px;
 }
 
-
-
 /* Quantity Controls */
 .quantityControls {
   display: flex;
@@ -115,8 +110,6 @@ ion-grid {
   font-weight: bold;
 }
 
-
-
 /* Pagination */
 .pagination {
   display: flex;
@@ -126,8 +119,6 @@ ion-grid {
   margin-top: 20px;
   margin-bottom: 20px;
 }
-
-
 
 /* Container for loading dialogue */
 .loading-container {
@@ -162,7 +153,6 @@ ion-grid {
   }
 }
 
-
 /* error message */
 .error-message {
   color: var(--ion-color-danger);
@@ -179,11 +169,107 @@ ion-grid {
   height: 50px;
 }
 
+/* --- 下拉框容器（包裹按钮 + 下拉菜单）--- */
+/* 修改重点：让它固定在右上角(可根据需求改动top/right值) */
+.sortDropdown-container {
+  position: fixed;   /* 固定定位，相对于浏览器窗口 */
+  top: 90px;         /* 根据需要微调，让它在搜索栏下方 */
+  right: 30px;       /* 靠屏幕右侧 */
+  z-index: 9999;     /* 确保浮在搜索结果等之上 */
+  width: fit-content;
+  margin: 0;         /* 去掉auto居中和上下间距 */
+}
 
-/* Media Queries */
+/* 下拉按钮本身 */
+.sortDropdown-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 160px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.sortDropdown-toggle:hover,
+.sortDropdown-toggle:focus {
+  background-color: #f5f5f5;
+}
+
+/* 当下拉展开时给 toggle 一个 open 类 */
+.sortDropdown-toggle.open {
+  background-color: #f8f8f8;
+}
+
+.sortDropdown-selectedLabel {
+  margin-right: 8px;
+}
+
+/* Chevron 图标 */
+.sortDropdown-chevron {
+  font-size: 12px; /* 也可使用 IonIcon */
+  transition: transform 0.2s;
+  margin-left: auto;
+}
+
+/* 下拉展开时翻转图标 */
+.sortDropdown-toggle.open .sortDropdown-chevron {
+  transform: rotate(180deg);
+}
+
+/* 下拉菜单 */
+.sortDropdown-menu {
+  position: static; /* 在容器内相对布局即可，也可absolute若想离按钮稍远 */
+  width: 180px;
+  max-height: 0;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  opacity: 0;
+  transition: max-height 0.2s ease, opacity 0.2s ease;
+  z-index: 9999;
+  margin-top: 4px;  /* 若想菜单和按钮之间留点缝 */
+}
+
+/* 菜单展开时 */
+.sortDropdown-menu.open {
+  max-height: 300px; /* 足够容纳选项 */
+  opacity: 1;
+  overflow: auto;
+}
+
+/* 每个选项 */
+.sortDropdown-item {
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.sortDropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+.sortDropdown-item.selected {
+  background-color: #e6f7ff;
+  font-weight: bold;
+}
+
+/* Media Queries (响应式适配) */
 @media (max-width: 761px) {
   .listCard {
     height: 400px;
+  }
+
+  /* 移动端可调小下拉宽度 */
+  .sortDropdown-toggle,
+  .sortDropdown-menu {
+    width: 150px;
   }
 }
 
@@ -209,20 +295,15 @@ ion-grid {
       height: 400px;
     }
   }
-
   .listCard {
     height: 400px;
   }
-
   .priceAndQuantity {
     display: flex;
     flex-direction: column;
-
   }
-
   .quantityControls {
     display: flex;
     justify-content: center;
   }
 }
-
