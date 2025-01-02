@@ -1,14 +1,14 @@
-import bodyParserMiddleware from './middlewares/bodyParserMiddleware';
-import corsMiddleware from './middlewares/corsMiddleware';
-import db from './db/connection/pool';
-import errorHandler from './middlewares/errorHandler';
-import express from 'express';
-import productsRouter from './api/products';
-import routes from './routes/initialsetup';
-import swaggerJsdoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
+import bodyParserMiddleware from './middlewares/bodyParserMiddleware'
+import corsMiddleware from './middlewares/corsMiddleware'
+import db from './db/connection/pool'
+import errorHandler from './middlewares/errorHandler'
+import express from 'express'
+import productsRouter from './api/products'
+import routes from './routes/initialsetup'
+import swaggerJsdoc from 'swagger-jsdoc'
+import swaggerUi from 'swagger-ui-express'
 
-const app = express();
+const app = express()
 
 const options = {
     definition: {
@@ -20,24 +20,25 @@ const options = {
         },
     },
     apis: ['./src/routes/initialsetup.ts'],
-};
+}
 
-const specs = swaggerJsdoc(options);
+const specs = swaggerJsdoc(options)
 
-corsMiddleware(app);
-bodyParserMiddleware(app);
+corsMiddleware(app)
+bodyParserMiddleware(app)
 
 // Database connection check
 db.execute('SELECT NOW()')
     .then(() => console.log('Database connection is working'))
-    .catch((err) => console.error('Database connection check failed:', err));
+    .catch((err) => console.error('Database connection check failed:', err))
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+// BUG: page is empty
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs))
 
-app.use('/', routes);
+app.use('/', routes)
 
-app.use('/api/products', productsRouter);
+app.use('/api/products', productsRouter)
 
-app.use(errorHandler);
+app.use(errorHandler)
 
-export default app;
+export default app
