@@ -19,12 +19,6 @@ setup:
       - './**/node_modules/'
     when: on_success
 
-eslint:
-  stage: lint
-  image: node:22.12.0
-  script:
-    - npm run lint
-
 test_coverage_client:
   stage: test-coverage
   image: node:22.12.0
