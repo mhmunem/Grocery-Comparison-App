@@ -88,10 +88,19 @@ const SearchPage: React.FC = () => {
   const [sortValue, setSortValue] = useState('relevance'); // 默认 "Most relevant"
   // 下拉选项
   const sortOptions = [
+        // TODO: change value
     { label: 'Most relevant', value: 'relevance' },
     { label: 'Most recent', value: 'recent' },
     { label: 'Alphabetical A-Z', value: 'az' },
     { label: 'Alphabetical Z-A', value: 'za' },
+    { label: 'discounts L-H', value: 'low to high' },
+    { label: 'discounts H-L', value: 'high to low' },
+    { label: 'popularity L-H', value: 'low to high' },
+    { label: 'popularity H-L', value: 'high to low' },
+    { label: 'distance L-H', value: 'low to high' },
+    { label: 'distance H-L', value: 'high to low' },
+    { label: 'weight or volume L-H', value: 'low to high' },
+    { label: 'weight or volume H-L', value: 'high to low' },
     { label: 'Lowest to highest unit price', value: 'lowest-highest' }, // 新增选项
     { label: 'Highest to lowest unit price', value: 'highest-lowest' }, // 新增选项
   ];
