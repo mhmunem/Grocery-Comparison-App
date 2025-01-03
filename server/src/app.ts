@@ -24,7 +24,7 @@ const options = {
     apis: ['./src/routes/initialsetup.ts'],
 };
 
-const specs = swaggerJsdoc(swagger_options);
+const specs = swaggerJsdoc(options);
 
 corsMiddleware(app);
 bodyParserMiddleware(app);

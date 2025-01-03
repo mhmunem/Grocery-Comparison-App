@@ -1,7 +1,31 @@
-import { IonContent, IonHeader, IonPage, IonList, IonTitle, IonToolbar, IonSearchbar, IonCard, IonCardContent, IonLabel, IonItem, IonIcon, IonImg, IonModal, IonThumbnail, useIonViewWillEnter, IonChip, IonGrid, IonCol, IonRow, IonCardTitle, IonButtons, IonButton } from '@ionic/react';
+import { 
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonList,
+  IonTitle,
+  IonToolbar,
+  IonSearchbar,
+  IonCard,
+  IonCardContent,
+  IonLabel,
+  IonItem,
+  IonIcon,
+  IonImg,
+  IonModal,
+  IonThumbnail,
+  useIonViewWillEnter,
+  IonChip,
+  IonGrid,
+  IonCol,
+  IonRow,
+  IonCardTitle,
+  IonButtons,
+  IonButton 
+} from '@ionic/react';
 import ExploreContainer from '../../components/SharedComponents/ExploreContainer';
 import './SearchPage.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { add, remove, arrowForward, arrowBack, syncOutline } from 'ionicons/icons';
 import {
   Chart as ChartJS,
@@ -54,10 +78,25 @@ const SearchPage: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [showProductDetails, setShowProductDetails] = useState(false);
 
+  // 价格历史
   const [dailyPriceHistory, setDailyPriceHistory] = useState<PriceHistory[]>([]);
   const [filteredPriceHistory, setFilteredPriceHistory] = useState<PriceHistory[]>([]);
   const [timeRange, setTimeRange] = useState('3M');
 
+  // ========== 新增: 下拉框状态 ==========
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [sortValue, setSortValue] = useState('relevance'); // 默认 "Most relevant"
+  // 下拉选项
+  const sortOptions = [
+    { label: 'Most relevant', value: 'relevance' },
+    { label: 'Most recent', value: 'recent' },
+    { label: 'Alphabetical A-Z', value: 'az' },
+    { label: 'Alphabetical Z-A', value: 'za' },
+    { label: 'Lowest to highest unit price', value: 'lowest-highest' }, // 新增选项
+    { label: 'Highest to lowest unit price', value: 'highest-lowest' }, // 新增选项
+  ];
+  // 用 ref 检测点击外部
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useIonViewWillEnter(async () => {
     setLoading(true);
@@ -88,17 +127,29 @@ const SearchPage: React.FC = () => {
     return products;
   };
 
+  // 点击外部收起下拉
+  const handleClickOutside = useCallback((e: MouseEvent) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      setIsDropdownOpen(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [handleClickOutside]);
+
   const handleSearch = () => {
     setSearchAttempted(true);
-
     if (query.length < 3 || query.length > 50) {
       setError('Search query must be between 3 and 50 characters.');
       return;
     }
-
     setError('');
     console.log('Performing search for:', query);
-    // Perform search logic here
+    // 真实搜索逻辑可写在这里
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -111,6 +162,22 @@ const SearchPage: React.FC = () => {
     handleSearch();
   };
 
+  // 切换下拉
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev);
+  };
+
+  // 选中某个排序选项
+  const selectSortOption = (value: string) => {
+    setSortValue(value);
+    setIsDropdownOpen(false);
+    console.log('You selected sort:', value);
+    // TODO: 在此编写真正的排序逻辑
+    // if (value === 'recent') {...}
+    // if (value === 'az') {...}
+    // if (value === 'za') {...}
+    // etc.
+  };
 
   const openProductDetails = (product: any) => {
     setSelectedProduct(product);
@@ -122,12 +189,10 @@ const SearchPage: React.FC = () => {
     setSelectedProduct(null);
   };
 
-
-
   const handleAddToCart = (productId: string) => {
-    setAddedToCart((prevAddedToCart) => ({
-      ...prevAddedToCart,
-      [productId]: true
+    setAddedToCart((prev) => ({
+      ...prev,
+      [productId]: true,
     }));
   };
 
@@ -145,6 +210,7 @@ const SearchPage: React.FC = () => {
     }));
   };
 
+  // 生成假数据的价格历史
   useEffect(() => {
     const generateDummyData = () => {
       const today = new Date();
@@ -158,9 +224,9 @@ const SearchPage: React.FC = () => {
     generateDummyData();
   }, []);
 
+  // 根据 timeRange 筛选 dailyPriceHistory
   useEffect(() => {
     const filterDataByRange = () => {
-      const today = new Date();
       const ranges: Record<string, number> = {
         '1M': 30,
         '3M': 90,
@@ -189,15 +255,11 @@ const SearchPage: React.FC = () => {
     ],
   };
 
-
-
-
-
   return (
     <IonPage>
       <IonHeader>
-
         <IonToolbar color="primary">
+          {/* 搜索栏 */}
           <IonSearchbar
             value={query}
             onIonChange={(e) => setQuery(e.detail.value!)}
@@ -205,12 +267,42 @@ const SearchPage: React.FC = () => {
             onIonBlur={handleBlur}
             placeholder="Search for products..."
             debounce={300}
-            className="searchbar" />
+            className="searchbar"
+          />
         </IonToolbar>
-
       </IonHeader>
 
       <IonContent>
+        {/* 下拉容器（在搜索栏下方） */}
+        <div className="sortDropdown-container" ref={dropdownRef}>
+          <button
+            type="button"
+            className={`sortDropdown-toggle ${isDropdownOpen ? 'open' : ''}`}
+            onClick={toggleDropdown}
+          >
+            <span className="sortDropdown-selectedLabel">
+              {sortOptions.find((opt) => opt.value === sortValue)?.label ?? 'Most relevant'}
+            </span>
+            <span className="sortDropdown-chevron">&#9662;</span>
+          </button>
+          <div
+            className={`sortDropdown-menu ${isDropdownOpen ? 'open' : ''}`}
+            tabIndex={-1}
+          >
+            {sortOptions.map((opt) => (
+              <div
+                key={opt.value}
+                className={`sortDropdown-item ${opt.value === sortValue ? 'selected' : ''}`}
+                onClick={() => selectSortOption(opt.value)}
+                role="button"
+                tabIndex={0}
+              >
+                {opt.label}
+              </div>
+            ))}
+          </div>
+        </div>
+
         {searchAttempted && error && (
           <div className="error-container">
             <IonLabel className="error-message">{error}</IonLabel>
@@ -223,12 +315,10 @@ const SearchPage: React.FC = () => {
             <IonLabel className="loading-message">Fetching results...</IonLabel>
           </div>
         ) : products.length === 0 ? (
-          // Show "No results found" message if no products are returned
           <div className="no-results-container">
             <IonLabel>No results found</IonLabel>
           </div>
         ) : (
-          // Display the grid of products if results exist
           <div className="grid-container">
             <IonGrid>
               <IonRow>
@@ -246,16 +336,17 @@ const SearchPage: React.FC = () => {
                         src={product.thumbnailUrl}
                         alt={product.title}
                         className="productImage"
-                        onClick={() => openProductDetails(product)} />
-
+                        onClick={() => openProductDetails(product)}
+                      />
                       <IonCardContent>
-
-                        <IonCardTitle className="one-line-title" onClick={() => openProductDetails(product)}>
+                        <IonCardTitle
+                          className="one-line-title"
+                          onClick={() => openProductDetails(product)}
+                        >
                           {product.title}
                         </IonCardTitle>
 
                         <div className="productDetails">
-
                           <div>
                             <IonLabel className="brandSize">Brand</IonLabel>
                             <IonLabel className="brandSize">100g</IonLabel>
@@ -269,13 +360,11 @@ const SearchPage: React.FC = () => {
                                 className="controlButton"
                                 aria-label="Decrease quantity"
                                 onClick={() => decreaseQuantity(product.id)}
-                                disabled={quantities[product.id] === 0} // Disable if quantity is 0
+                                disabled={quantities[product.id] === 0}
                               >
                                 <IonIcon slot="icon-only" icon={remove} />
                               </IonButton>
-
                               <p className="quantityText">{quantities[product.id]}</p>
-
                               <IonButton
                                 shape="round"
                                 className="controlButton"
@@ -286,12 +375,13 @@ const SearchPage: React.FC = () => {
                               </IonButton>
                             </div>
                           ) : (
-                            <IonButton onClick={() => increaseQuantity(product.id)} className="controlButton">
+                            <IonButton
+                              onClick={() => increaseQuantity(product.id)}
+                              className="controlButton"
+                            >
                               Add to Cart
                             </IonButton>
-
                           )}
-
                         </div>
                       </IonCardContent>
                     </IonCard>
@@ -304,21 +394,17 @@ const SearchPage: React.FC = () => {
 
         {!loading && products.length > 0 && (
           <div className="pagination">
-
             <IonButton shape="round" className="controlButton">
-              <IonIcon slot="icon-only" icon={arrowBack}></IonIcon>
+              <IonIcon slot="icon-only" icon={arrowBack} />
             </IonButton>
-
             <span>Page 1 of 5</span>
-
             <IonButton shape="round" className="controlButton">
-              <IonIcon slot="icon-only" icon={arrowForward}></IonIcon>
+              <IonIcon slot="icon-only" icon={arrowForward} />
             </IonButton>
-
           </div>
         )}
-        <IonModal isOpen={showProductDetails} onDidDismiss={closeProductDetails}>
 
+        <IonModal isOpen={showProductDetails} onDidDismiss={closeProductDetails}>
           <IonHeader>
             <IonToolbar color="primary">
               <IonButtons slot="start">
@@ -334,18 +420,14 @@ const SearchPage: React.FC = () => {
                 <IonRow>
                   <h2>{selectedProduct.title}</h2>
                 </IonRow>
-
                 <IonRow>
                   <IonImg src={selectedProduct.thumbnailUrl} />
                   <div className="productDetails">
-
                     <div>
                       <IonLabel className="brandSize">Brand</IonLabel>
                       <IonLabel className="brandSize">100g</IonLabel>
                     </div>
-
                     <IonLabel className="priceLabel">$10.00</IonLabel>
-
                     {quantities[selectedProduct.id] > 0 ? (
                       <div className="quantityControls">
                         <IonButton
@@ -353,13 +435,11 @@ const SearchPage: React.FC = () => {
                           className="controlButton"
                           aria-label="Decrease quantity"
                           onClick={() => decreaseQuantity(selectedProduct.id)}
-                          disabled={quantities[selectedProduct.id] === 0} // Disable if quantity is 0
+                          disabled={quantities[selectedProduct.id] === 0}
                         >
                           <IonIcon slot="icon-only" icon={remove} />
                         </IonButton>
-
                         <p className="quantityText">{quantities[selectedProduct.id]}</p>
-
                         <IonButton
                           shape="round"
                           className="controlButton"
@@ -370,54 +450,55 @@ const SearchPage: React.FC = () => {
                         </IonButton>
                       </div>
                     ) : (
-                      <IonButton onClick={() => increaseQuantity(selectedProduct.id)} className="controlButton">
+                      <IonButton
+                        onClick={() => increaseQuantity(selectedProduct.id)}
+                        className="controlButton"
+                      >
                         Add to Cart
                       </IonButton>
-
                     )}
                   </div>
                 </IonRow>
+
                 <IonRow>
                   <Line data={priceHistoryData} />
-
                 </IonRow>
+
                 <IonRow style={{ justifyContent: 'center', marginBottom: '16px' }}>
-                  {['1M', '3M', '6M', '12M'].map(range => (
+                  {['1M', '3M', '6M', '12M'].map((range) => (
                     <IonButton
                       key={range}
                       color={timeRange === range ? 'primary' : 'medium'}
-                      onClick={() => setTimeRange(range)}>
+                      onClick={() => setTimeRange(range)}
+                    >
                       {range}
                     </IonButton>
                   ))}
                 </IonRow>
+
                 <IonRow>
                   <IonList style={{ width: '100%' }}>
-                    {products.map((product, index) => (
-                      <IonItem>
-                        <IonCol size="11">
-                          {product.title}
-
-                        </IonCol>
-                        <IonCol size="1">
-                          ${index}
-                        </IonCol>
+                    {products.map((p, idx) => (
+                      <IonItem key={idx}>
+                        <IonCol size="11">{p.title}</IonCol>
+                        <IonCol size="1">${idx}</IonCol>
                       </IonItem>
                     ))}
                   </IonList>
                 </IonRow>
 
-                <IonLabel >
+                <IonLabel>
                   <h1>Description</h1>
-                  <p>Paragraph Paragraph Paragraph Paragraph ParagraphParagraph Paragraph Paragraph Paragraph Paragraph</p>
+                  <p>
+                    Paragraph Paragraph Paragraph Paragraph Paragraph Paragraph Paragraph Paragraph
+                    Paragraph Paragraph
+                  </p>
                 </IonLabel>
-
               </div>
             ) : (
               <p>Loading...</p>
             )}
           </IonContent>
-
         </IonModal>
       </IonContent>
     </IonPage>
