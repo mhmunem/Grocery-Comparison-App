@@ -1,96 +1,79 @@
 stages:
   - setup
+  - lint
   - test
-  - test-coverage-frontend
-  - test-coverage-backend
-  # - lint
+  - test-coverage
   # - e2e
 
 setup:
   stage: setup
   image: node:22.12.0
-  script:
-    - cd frontend
-    - npm install
-    - cd ../backend
-    - npm install
-    - cd ../webscraping
-    - npm install
-    - cd ..
-  artifacts:
+  cache:
     paths:
-      - backend/
-      - frontend/
-      - webscraping/
+      - './**/node_modules/'
+  script:
+    - npm run install-everything
+  artifacts:
+    expire_in: 1 days
+    paths:
+      - './**/node_modules/'
     when: on_success
 
-frontend-test:
-  stage: test
+eslint:
+  stage: lint
   image: node:22.12.0
   script:
-    - cd frontend
-    - npm run test
+    - npm run lint
+  only:
+    - merge_requests
+    - branches
 
-backend-test:
-  stage: test
+test_coverage_client:
+  stage: test-coverage
   image: node:22.12.0
   script:
-    - cd backend
-    - npm run test
-
-
-
-# 3) Test and Generate Coverage Reports
-test_coverage_frontend:
-  stage: test-coverage-frontend
-  image: node:22.12.0
-  needs:
-    - setup
-  script:
-    - cd frontend
-    # If using Jest for the React + Ionic project:
-    - npm run test -- --coverage --coverageReporters=cobertura
-    # Make sure jest.config.js is configured to output to coverage/
+    - cd client
+    - npm run test:ci
+  coverage: '/All\sfiles.*?\s+(\d+.\d+)/'
   artifacts:
     reports:
       coverage_report:
-        coverage_format: cobertura
-        # Path to the Cobertura file. Adjust if needed.
-        path: frontend/coverage/cobertura-coverage.xml
+        junit:
+          - junit.xml
     paths:
-      - frontend/coverage/
+      - client/coverage/
 
-test_coverage_backend:
-  stage: test-coverage-backend
+test_coverage_server:
+  stage: test-coverage
   image: node:22.12.0
-  needs:
-    - setup
   script:
-    - cd backend
-    # If using Jest for the Node.js + Express.js project:
-    - npm run test -- --coverage --coverageReporters=cobertura
-    # Or Mocha + nyc, as long as the output is in Cobertura XML format
+    - cd server
+    - npm run test:ci
+  coverage: '/All\sfiles.*?\s+(\d+.\d+)/'
   artifacts:
+    when: always
     reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: backend/coverage/cobertura-coverage.xml
+      junit:
+        - junit.xml
     paths:
-      - backend/coverage/
+      - server/coverage/
 
-# eslint:
-#   stage: lint
-#   image: node:22.12.0
-#   before_script:
-#     - npm install
-#   script:
-#     - npm run lint
-#   only:
-#     - merge_requests
-#     - branches
+client-test:
+  stage: test
+  image: node:22.12.0
+  script:
+    - cd client
+    - npm run test
 
-# Step 4: Frontend End-to-End Tests with Maestro
-# frontend-e2e-maestro:
+server-test:
+  stage: test
+  image: node:22.12.0
+  script:
+    - cd server
+    - npm run test
+
+# Step 4: client End-to-End Tests with Maestro
+# client-e2e-maestro:
 #   stage: e2e
 #   image: maestroqa/maestro-cli:latest
 #   before_script:
@@ -103,8 +86,8 @@ test_coverage_backend:
 #       - maestro-artifacts/
 #     when: always
 
-# Step 5: Backend End-to-End Tests with Cypress
-# backend-e2e-cypress:
+# Step 5: server End-to-End Tests with Cypress
+# server-e2e-cypress:
 #   stage: e2e
 #   image: cypress/included:12.6.0
 #   script:

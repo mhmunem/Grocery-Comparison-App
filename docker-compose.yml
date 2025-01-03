@@ -1,33 +1,59 @@
-version: '3.8'
 services:
-  postgres:
-    image: postgres:17.2
-    container_name: postgres_dev
-    environment:
-      POSTGRES_USER: dev_user
-      POSTGRES_PASSWORD: dev_password
-      POSTGRES_DB: dev_db
-    ports:
-      - "5432:5432" # Expose PostgreSQL on localhost:5432
-    volumes:
-      - postgres_data:/var/lib/postgresql/data # Persist PostgreSQL data
-
-  express:
+  fullstack_client:
     build:
-      context: ./backend
-      dockerfile: Dockerfile # Dockerfile for the Express.js app
-    container_name: express_app
-    environment:
-      DB_HOST: postgres
-      DB_USER: dev_user
-      DB_PASSWORD: dev_password
-      DB_NAME: dev_db
-      DB_PORT: 5432
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: fullstack_client
+    restart: unless-stopped
+    volumes:
+      - ./client/src:/client/src
     ports:
-      - "3000:3000" # Expose Express.js on localhost:3000
+      - "5173:5173"
     depends_on:
-      - postgres # Ensure PostgreSQL starts before Express.js
+      - fullstack_server
+      - fullstack_db
+    networks:
+      - project_network
+    env_file:
+      - ./client/.env
 
+  fullstack_server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: fullstack_server
+    restart: unless-stopped
+    volumes:
+      - ./server/src:/server/src
+    ports:
+      - "${PORT}:${PORT}"
+    env_file:
+      - ./server/.env
+    depends_on:
+      - fullstack_db
+    networks:
+      - project_network
+
+  fullstack_db:
+    image: postgres:17.2
+    container_name: fullstack_db
+    restart: always
+    env_file:
+      - ./server/.env
+    volumes:
+      - cosc680-db:/var/lib/postgresql/data  
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - project_network
+    
 volumes:
-  postgres_data:
+  cosc680-db:
 
+networks:
+  project_network:
