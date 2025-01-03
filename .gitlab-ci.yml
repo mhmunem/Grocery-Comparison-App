@@ -35,13 +35,6 @@ test_coverage_client:
     - cd client
     - npm run test:ci
   coverage: '/All\sfiles.*?\s+(\d+.\d+)/'
-  artifacts:
-    reports:
-      coverage_report:
-        junit:
-          - junit.xml
-    paths:
-      - client/coverage/
 
 test_coverage_server:
   stage: test-coverage
@@ -50,13 +43,6 @@ test_coverage_server:
     - cd server
     - npm run test:ci
   coverage: '/All\sfiles.*?\s+(\d+.\d+)/'
-  artifacts:
-    when: always
-    reports:
-      junit:
-        - junit.xml
-    paths:
-      - server/coverage/
 
 client-test:
   stage: test
