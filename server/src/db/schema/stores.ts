@@ -1,5 +1,6 @@
-import { serial, integer, text, pgTable } from "drizzle-orm/pg-core";
 import { chains } from './chains';
+import { serial, integer, text, pgTable } from "drizzle-orm/pg-core";
+
 
 export const stores = pgTable('stores', {
     id: serial().primaryKey(),

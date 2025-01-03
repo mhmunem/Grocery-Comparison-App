@@ -97,4 +97,15 @@ To automatically restart the server whenever changes are made:
   ```
 
 ## Coding Best Practices
+
 [Express.js Coding Stadards](https://eng-git.canterbury.ac.nz/cosc680-2024/cosc680-2024-project/-/wikis/Coding-Style-Guidelines/Express.js-Coding-Standards-)
+
+# Drizzle
+
+After changing the schema for the database do the following:
+
+1. from root: `cd server/`
+2. `npx drizzle-kit generate`
+3. `npx drizzle-kit push`
+
+If there are problems, the last push can be undone with `npx drizzle-kit drop`

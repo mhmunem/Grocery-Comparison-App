@@ -1,6 +1,6 @@
-import { serial, integer, text, pgTable, numeric } from "drizzle-orm/pg-core";
-import { stores } from "./stores";
-import { units } from "./unit";
+import { serial, integer, text, pgTable, numeric } from "drizzle-orm/pg-core"
+import { stores } from "./stores"
+import { units } from "./unit"
 
 // TODO: add junction tables
 // add mock data for testing purposes

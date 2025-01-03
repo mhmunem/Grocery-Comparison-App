@@ -20,6 +20,7 @@
     "depd": "^2.0.0",
     "destroy": "^1.2.0",
     "drizzle-orm": "^0.38.3",
+    "drizzle-seed": "^0.3.0",
     "ee-first": "^1.1.1",
     "encodeurl": "^2.0.0",
     "es-define-property": "^1.0.0",
