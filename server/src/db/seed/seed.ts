@@ -3,7 +3,6 @@ import { reset, seed } from "drizzle-seed"
 
 export async function seed_db(db: NodePgDatabase, tables: Object) {
     try {
-        // await reset(db, tables)
         await seed(db, tables).refine(f => ({
             products: {
                 count: 500,
