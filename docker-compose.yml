@@ -1,51 +1,47 @@
 services:
-  # Fullstack Frontend
-  fullstack_frontend:
+  fullstack_client:
     build:
-      context: ./frontend
+      context: ./client
       dockerfile: Dockerfile
-    container_name: fullstack_frontend
+    container_name: fullstack_client
     restart: unless-stopped
     volumes:
-      - ./frontend/src:/frontend/src
+      - ./client/src:/client/src
     ports:
       - "5173:5173"
     depends_on:
-      - fullstack_backend
+      - fullstack_server
+      - fullstack_db
     networks:
       - project_network
-    environment:
-      - VITE_EXPRESS_API_URL=http://host.docker.internal:3000
-      # - VITE_EXPRESS_API_URL=http://192.168.x.x:5000
+    env_file:
+      - ./client/.env
 
-  # Fullstack Backend
-  fullstack_backend:
+  fullstack_server:
     build:
-      context: ./backend
+      context: ./server
       dockerfile: Dockerfile
-    container_name: fullstack_backend
+    container_name: fullstack_server
     restart: unless-stopped
     volumes:
-      - ./backend/src:/backend/src
+      - ./server/src:/server/src
     ports:
       - "${PORT}:${PORT}"
     env_file:
-      - .env
+      - ./server/.env
     depends_on:
       - fullstack_db
     networks:
       - project_network
 
-  # Fullstack Database (PostgreSQL)
   fullstack_db:
-    build:
-      context: ./db
-      dockerfile: Dockerfile
+    image: postgres:17.2
     container_name: fullstack_db
+    restart: always
     env_file:
-      - .env
+      - ./server/.env
     volumes:
-      - fullstack-postgres-data:/var/lib/postgresql/data  # Shared volume
+      - cosc680-db:/var/lib/postgresql/data  
     ports:
       - "${DB_PORT}:${DB_PORT}"
     healthcheck:
@@ -57,7 +53,7 @@ services:
       - project_network
     
 volumes:
-  fullstack-postgres-data:  # Shared volume
+  cosc680-db:
 
 networks:
   project_network:

@@ -11,13 +11,13 @@ The project is organized as follows:
 
 ```
 cosc680-2024-project/
-├── backend/
+├── server/
 │   ├── Dockerfile
 │   ├── .env
 ├── db/
 │   ├── Dockerfile
 │   ├── .env
-├── frontend/
+├── client/
 │   ├── Dockerfile
 │   ├── .env
 ├── docker-compose.yml  # Root compose for fullstack setup
@@ -45,15 +45,15 @@ POSTGRES_DB={db_name}
 VITE_EXPRESS_API_URL=http://localhost:5000
 ```
 
-### `frontend/.env`:
-Used by the frontend service. Update the `VITE_EXPRESS_API_URL` for mobile testing as needed.
+### `client/.env`:
+Used by the client service. Update the `VITE_EXPRESS_API_URL` for mobile testing as needed.
 
 ```env
 VITE_EXPRESS_API_URL=http://localhost:5000  # Replace with 192.168.x.x for mobile testing
 ```
 
-### `backend/.env`:
-Used by the backend service.
+### `server/.env`:
+Used by the server service.
 
 ```env
 PORT=5000
@@ -89,20 +89,20 @@ docker-compose up --build
 ```
 
 This will start:
-- The frontend service (`fullstack_frontend`) on port `5173`.
-- The backend service (`fullstack_backend`) on port `3000`.
+- The client service (`fullstack_client`) on port `5173`.
+- The server service (`fullstack_server`) on port `3000`.
 - The PostgreSQL database service (`fullstack_db`) on port `5432`.
 
 
 ## Replacing Environment Variables
 
-- Replace `VITE_EXPRESS_API_URL` in `frontend/.env` with your computer's local IP (e.g., `192.168.x.x`) for mobile devices to access the backend.
-- Update `DB varibales` in `backend/.env` and root `.env` for your database configuration.
+- Replace `VITE_EXPRESS_API_URL` in `client/.env` with your computer's local IP (e.g., `192.168.x.x`) for mobile devices to access the server.
+- Update `DB varibales` in `server/.env` and root `.env` for your database configuration.
 
 
 ## Testing the Application
 
-1. **Web Browser**: Open [http://localhost:5173](http://localhost:5173) to access the frontend.
+1. **Web Browser**: Open [http://localhost:5173](http://localhost:5173) to access the client.
 2. **Mobile**: Use the local IP address (e.g., `http://192.168.x.x:5173`) to access the app from a mobile browser or device.
 
 
@@ -119,5 +119,5 @@ docker-compose down
 ## Troubleshooting
 
 1. **Database Connection Issues**: Ensure the `DB_HOST` and `DB_PORT` in `.env` match the service name and port in the Compose file.
-2. **Frontend-Backend Communication**: Verify that `VITE_EXPRESS_API_URL` is set correctly in `frontend/.env`.
+2. **client-server Communication**: Verify that `VITE_EXPRESS_API_URL` is set correctly in `client/.env`.
 3. **Mobile Testing**: Ensure your local IP address is accessible on the same network as your mobile device.

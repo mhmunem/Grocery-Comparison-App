@@ -1,54 +1,56 @@
 stages:
   - setup
+  - lint
   - test
-  # - lint
+  - test-coverage
   # - e2e
 
 setup:
   stage: setup
   image: node:22.12.0
-  script:
-    - cd frontend
-    - npm install
-    - cd ../backend
-    - npm install
-    - cd ../webscraping
-    - npm install
-    - cd ..
-  artifacts:
+  cache:
     paths:
-      - backend/
-      - frontend/
-      - webscraping/
+      - './**/node_modules/'
+  script:
+    - npm run install-everything
+  artifacts:
+    expire_in: 1 days
+    paths:
+      - './**/node_modules/'
     when: on_success
 
-frontend-test:
+test_coverage_client:
+  stage: test-coverage
+  image: node:22.12.0
+  script:
+    - cd client
+    - npm run test:ci
+  coverage: '/All\sfiles.*?\s+(\d+.\d+)/'
+
+test_coverage_server:
+  stage: test-coverage
+  image: node:22.12.0
+  script:
+    - cd server
+    - npm run test:ci
+  coverage: '/All\sfiles.*?\s+(\d+.\d+)/'
+
+client-test:
   stage: test
   image: node:22.12.0
   script:
-    - cd frontend
+    - cd client
     - npm run test
 
-backend-test:
+server-test:
   stage: test
   image: node:22.12.0
   script:
-    - cd backend
+    - cd server
     - npm run test
 
-# eslint:
-#   stage: lint
-#   image: node:22.12.0
-#   before_script:
-#     - npm install
-#   script:
-#     - npm run lint
-#   only:
-#     - merge_requests
-#     - branches
-
-# Step 4: Frontend End-to-End Tests with Maestro
-# frontend-e2e-maestro:
+# Step 4: client End-to-End Tests with Maestro
+# client-e2e-maestro:
 #   stage: e2e
 #   image: maestroqa/maestro-cli:latest
 #   before_script:
@@ -61,8 +63,8 @@ backend-test:
 #       - maestro-artifacts/
 #     when: always
 
-# Step 5: Backend End-to-End Tests with Cypress
-# backend-e2e-cypress:
+# Step 5: server End-to-End Tests with Cypress
+# server-e2e-cypress:
 #   stage: e2e
 #   image: cypress/included:12.6.0
 #   script:
