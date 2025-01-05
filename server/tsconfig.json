@@ -11,6 +11,6 @@
       "*": ["node_modules/*"]
     }
   },
-  "include": ["src/**/*.ts", "test/**/*.ts"], // Include source and test files
+  "include": ["src/**/*.ts", "tests/**/*.ts"], // Include source and test files
   "exclude": ["node_modules"] // Exclude node_modules
 }
