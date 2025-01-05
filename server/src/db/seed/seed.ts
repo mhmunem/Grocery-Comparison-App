@@ -1,8 +1,9 @@
 import { NodePgDatabase } from "drizzle-orm/node-postgres"
-import { seed } from "drizzle-seed"
+import { reset, seed } from "drizzle-seed"
 
 export async function seed_db(db: NodePgDatabase, tables: Object) {
     try {
+        // await reset(db, tables)
         await seed(db, tables).refine(f => ({
             products: {
                 count: 500,
@@ -16,7 +17,7 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                             1,
                             100,
                             500,
-                        ]
+                        ],
                     }),
                     name: f.valuesFromArray({
                         values: [
@@ -97,53 +98,58 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
             },
             stores: {
                 count: 47,
-                name: f.valuesFromArray({
-                    values: [
-                        "Woolworths Amberley", "Woolworths Andersons Bay", "Woolworths Aotea",
-                        "Woolworths Ashburton", "Woolworths Ashburton South", "Woolworths Auckland Airport",
-                        "Woolworths Auckland Quay Street", "Woolworths Auckland Victoria Street West", "Woolworths Avonhead",
-                        "Woolworths Awapuni", "New World Alexandra", "New World Aokautere",
-                        "New World Ashburton", "New World Balclutha", "New World Birkenhead",
-                        "New World Bishopdale", "New World Blenheim", "New World Botany",
-                        "PAK'nSAVE Albany", "PAK'nSAVE Alderman Dr Hen", "PAK'nSAVE Blenheim",
-                        "PAK'nSAVE Botany", "PAK'nSAVE Cameron Road", "PAK'nSAVE Clarence St",
-                        "PAK'nSAVE Clendon", "PAK'nSAVE Dunedin", "PAK'nSAVE Glen Innes",
-                        "PAK'nSAVE Hastings", "PAK'nSAVE Hawera", "The Warehouse",
-                        "Fresh Choice Avondale", "Fresh Choice Flat Bush", "Fresh Choice Geraldine",
-                        "Fresh Choice Glen Eden", "Fresh Choice Green Island", "Fresh Choice Greerton",
-                        "Fresh Choice Greytown", "Fresh Choice Half Moon Bay", "Fresh Choice Huntly",
-                        "Fresh Choice Kelly Road", "Super Value Bell Block", "Super Value Milton",
-                        "Super Value Pauanui", "Super Value Plaza", "Super Value Reefton",
-                        "Super Value Tinwald", "Super Value Wanganuik",
-                    ],
-                }),
+                columns: {
+                    name: f.valuesFromArray({
+                        values: [
+                            "Woolworths Amberley", "Woolworths Andersons Bay", "Woolworths Aotea",
+                            "Woolworths Ashburton", "Woolworths Ashburton South", "Woolworths Auckland Airport",
+                            "Woolworths Auckland Quay Street", "Woolworths Auckland Victoria Street West", "Woolworths Avonhead",
+                            "Woolworths Awapuni", "New World Alexandra", "New World Aokautere",
+                            "New World Ashburton", "New World Balclutha", "New World Birkenhead",
+                            "New World Bishopdale", "New World Blenheim", "New World Botany",
+                            "PAK\'nSAVE Albany", "PAK\'nSAVE Alderman Dr Hen", "PAK\'nSAVE Blenheim",
+                            "PAK\'nSAVE Botany", "PAK\'nSAVE Cameron Road", "PAK\'nSAVE Clarence St",
+                            "PAK\'nSAVE Clendon", "PAK\'nSAVE Dunedin", "PAK\'nSAVE Glen Innes",
+                            "PAK\'nSAVE Hastings", "PAK\'nSAVE Hawera", "The Warehouse",
+                            "Fresh Choice Avondale", "Fresh Choice Flat Bush", "Fresh Choice Geraldine",
+                            "Fresh Choice Glen Eden", "Fresh Choice Green Island", "Fresh Choice Greerton",
+                            "Fresh Choice Greytown", "Fresh Choice Half Moon Bay", "Fresh Choice Huntly",
+                            "Fresh Choice Kelly Road", "Super Value Bell Block", "Super Value Milton",
+                            "Super Value Pauanui", "Super Value Plaza", "Super Value Reefton",
+                            "Super Value Tinwald", "Super Value Wanganuik",
+                        ],
+                    }),
+                },
             },
             chains: {
                 count: 5,
-                name: f.valuesFromArray({
-                    values: [
-                        "New World",
-                        "Pak'n Save",
-                        "Wools Worth",
-                        "The Warehouse",
-                        "Fresh Choice",
-                        "Super Value",
-                    ],
-                }),
+                columns: {
+                    name: f.valuesFromArray({
+                        values: [
+                            "New World",
+                            "Pak'n Save",
+                            "Wools Worth",
+                            "The Warehouse",
+                            "Fresh Choice",
+                            "Super Value",
+                        ],
+                    }),
+                },
             },
             store_products: {
                 count: 1000,
             },
             units: {
                 count: 3,
-                name: f.valuesFromArray({
-                    values: [
-                        "l",
-                        "kg",
-                        "ea",
-                    ],
-                }),
-
+                columns: {
+                    name: f.valuesFromArray({
+                        values: [
+                            "l",
+                            "kg",
+                            "ea",
+                        ],
+                    }),
+                },
             },
             shopping_list: {
                 count: 10,
