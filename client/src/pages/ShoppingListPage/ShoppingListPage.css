@@ -1,0 +1,196 @@
+/* ShoppingListPage.css */
+
+/* 页面整体样式 */
+ion-header {
+    --opacity: 0.9;
+  }
+  
+  ion-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  /* 购物车项目 */
+  .cart-item {
+    --padding-start: 16px;
+    --padding-end: 16px;
+  }
+  
+  .cart-item h2 {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .cart-item p {
+    font-size: 0.9rem;
+    color: #666666;
+    margin: 4px 0;
+  }
+  
+  /* 商品图片点击效果 */
+  .cart-product-image {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  
+  .cart-product-image:hover {
+    transform: scale(1.05);
+  }
+  
+  /* 数量控制按钮 */
+  .quantityControls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  
+  .controlButton {
+    --background: #f5f5f5;
+    --border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .controlButton:hover {
+    --background: #A594F9;
+  }
+  
+  .quantityText {
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  
+  /* 总价卡片 */
+  ion-card {
+    margin-top: 16px;
+  }
+  
+  ion-card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  ion-button {
+    margin-top: 12px;
+  }
+  
+  /* 价格历史图表 */
+  ion-card:last-child {
+    margin-top: 16px;
+  }
+  
+  /* 加载和无购物车提示 */
+  .loading-container, .no-results-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+  }
+  
+  .loading-spinner {
+    font-size: 48px;
+    animation: spin 1.5s linear infinite;
+    color: var(--ion-color-primary);
+  }
+  
+  .loading-message {
+    margin-top: 16px;
+    font-size: 1.2rem;
+    color: #444444;
+  }
+  
+  .no-results-container {
+    font-size: 1.2rem;
+    color: #444444;
+  }
+  
+  /* 模态框内容样式 */
+  .modal-content {
+    padding: 16px;
+  }
+  
+  .modal-image-container {
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  
+  .modal-product-image {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .modal-actions {
+    margin-top: 16px;
+  }
+  
+  /* 响应式设计 */
+  @media (max-width: 768px) {
+    .quantityControls {
+      gap: 4px;
+    }
+  
+    .controlButton {
+      width: 28px;
+      height: 28px;
+    }
+  
+    .quantityText {
+      font-size: 0.9rem;
+    }
+  
+    ion-card-title {
+      font-size: 1rem;
+    }
+  
+    ion-button {
+      font-size: 0.9rem;
+    }
+  
+    .modal-product-image {
+      max-height: 200px;
+    }
+  }
+  
+  @media (min-width: 769px) {
+    .quantityControls {
+      gap: 8px;
+    }
+  
+    .controlButton {
+      width: 32px;
+      height: 32px;
+    }
+  
+    .quantityText {
+      font-size: 1rem;
+    }
+  
+    ion-card-title {
+      font-size: 1.2rem;
+    }
+  
+    ion-button {
+      font-size: 1rem;
+    }
+  
+    .modal-product-image {
+      max-height: 300px;
+    }
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
