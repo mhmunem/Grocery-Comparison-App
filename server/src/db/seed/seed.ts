@@ -1,5 +1,5 @@
 import { NodePgDatabase } from "drizzle-orm/node-postgres"
-import { reset, seed } from "drizzle-seed"
+import { seed } from "drizzle-seed"
 
 export async function seed_db(db: NodePgDatabase, tables: Object) {
     try {
@@ -150,11 +150,12 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                     }),
                 },
             },
+            // TODO: min max values
             shopping_list: {
                 count: 10,
             },
         }))
     } catch (error) {
-        console.error("WARNING: found deplicate keys while trying to seed the database. Remove the duplicate keys first. You can reset the database with `reset()` from drizzle-seed.");
+        console.log("WARNING: found deplicate keys while trying to seed the database. Remove the duplicate keys first. You can reset the database with `reset()` from drizzle-seed.");
     }
 }
