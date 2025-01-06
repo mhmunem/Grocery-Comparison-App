@@ -3,15 +3,15 @@ import { API_URL, API_ENDPOINTS } from '../utils/constants';
 
 
 // Helper function to handle all requests
-const request = async (method: string, url: string, data = null) => {
+async function request(method: 'get' | 'post' | 'put' | 'delete', url: string) {
     try {
-        const response = await axios({ method, url, data });
+        const response = await axios({ method, url });
         return response.data;
     } catch (error) {
         console.error(`${method.toUpperCase()} request error:`, error);
         throw error;
     }
-};
+}
 
 // GET home data
 export const getInitialSetupMessage = () => request('get', `${API_URL}${API_ENDPOINTS.WELCOME_API}`);
@@ -28,6 +28,6 @@ export const putInitialSetup = (id: string) => request('put', `${API_URL}${API_E
 // DELETE initial setup data
 export const deleteInitialSetup = (id: string) => request('delete', `${API_URL}${API_ENDPOINTS.DELETE_DATA.replace(':id', id)}`);
 
-export const search = (name: string, sort_by: string, sort_direction: string) => request(
-    'get', `${API_URL}${API_ENDPOINTS.SEARCH.replace(':name', name).replace(':sort_by', sort_by).replace(':sort_direction', sort_direction)}`
+export const getSearch = (name: string, sort_by: string, sort_direction: string) => request(
+    'get', `${API_URL}${API_ENDPOINTS.SEARCH_PRODUCT}?name=${name}&sort_by=${sort_by}&sort_direction=${sort_direction}`
 );

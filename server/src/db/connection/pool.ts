@@ -19,6 +19,6 @@ const config = {
 const pool = new Pool(config);
 const db = drizzle(pool);
 
-seed_db(db, { products, stores, store_products, chains, units, shopping_list })
+// seed_db(db, { products, stores, store_products, chains, units, shopping_list })
 
 export default db;

@@ -48,7 +48,7 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-import { search } from "../../services/InitialSetupService.ts"
+import { getSearch } from "../../services/InitialSetupService.ts"
 
 interface PriceHistory {
   date: Date;
@@ -90,23 +90,29 @@ const SearchPage: React.FC = () => {
   // 下拉选项
   const sortOptions = [
         // TODO: change value
-    { label: 'Most relevant', value: 'relevance' },
-    { label: 'Most recent', value: 'recent' },
-    { label: 'Alphabetical A-Z', value: 'az' },
-    { label: 'Alphabetical Z-A', value: 'za' },
-    { label: 'discounts L-H', value: 'low to high' },
-    { label: 'discounts H-L', value: 'high to low' },
-    { label: 'popularity L-H', value: 'low to high' },
-    { label: 'popularity H-L', value: 'high to low' },
-    { label: 'distance L-H', value: 'low to high' },
-    { label: 'distance H-L', value: 'high to low' },
-    { label: 'weight or volume L-H', value: 'low to high' },
-    { label: 'weight or volume H-L', value: 'high to low' },
-    { label: 'Lowest to highest unit price', value: 'lowest-highest' }, // 新增选项
-    { label: 'Highest to lowest unit price', value: 'highest-lowest' }, // 新增选项
+    { label: 'name', value: 'a' },
+    { label: 'name', value: 'b' },
+    { label: 'price', value: 'c' },
+    { label: 'price', value: 'd' },
+    { label: 'amount', value: 'e' },
+    { label: 'amount', value: 'f' },
+    // { label: 'Most relevant', value: 'relevance' },
+    // { label: 'Most recent', value: 'recent' },
+    // { label: 'Alphabetical A-Z', value: 'az' },
+    // { label: 'Alphabetical Z-A', value: 'za' },
+    // { label: 'discounts L-H', value: 'a' },
+    // { label: 'discounts H-L', value: 'high to low' },
+    // { label: 'popularity L-H', value: 'b' },
+    // { label: 'popularity H-L', value: 'high to low' },
+    // { label: 'distance L-H', value: 'c' },
+    // { label: 'distance H-L', value: 'high to low' },
+    // { label: 'weight or volume L-H', value: 'low to high' },
+    // { label: 'weight or volume H-L', value: 'high to low' },
+    // { label: 'Lowest to highest unit price', value: 'lowest-highest' }, // 新增选项
+    // { label: 'Highest to lowest unit price', value: 'highest-lowest' }, // 新增选项
   ];
   // 用 ref 检测点击外部
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>();
 
   useIonViewWillEnter(async () => {
     setLoading(true);
@@ -151,25 +157,16 @@ const SearchPage: React.FC = () => {
     };
   }, [handleClickOutside]);
 
-  useEffect(() => {
-    // server connection Testing using GET on initial load
-    getInitialSetupMessage().then(response => {
-        setData(response);
-      })
-      .catch(error => {
-        console.error('Error fetching GET data:', error);
-      });
-  }, []);
-
   const handleSearch = () => {
     setSearchAttempted(true);
-    if (query.length < 3 || query.length > 50) {
-      setError('Search query must be between 3 and 50 characters.');
-      return;
-    }
-    search(query, "name", "ASC")
+    // if (query.length < 3 || query.length > 50) {
+        // BUG: it always gives this error on the first search
+    //   setError('Search query must be between 3 and 50 characters.');
+    //   return;
+    // }
+    getSearch(query, "name", "ASC")
     setError('');
-    console.log('Performing search for:', query);
+    console.log('Performing search for:', query, );
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {

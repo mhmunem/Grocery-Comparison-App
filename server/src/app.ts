@@ -36,6 +36,10 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs))
 
 app.use('/', routes)
 
+// TODO: get search working
+// https://expressjs.com/en/guide/routing.html#route-parameters
+// https://stackoverflow.com/questions/69185028/how-to-send-url-params-from-react-to-express-api-call
+// SEARCH_PRODUCT: "/search_product?name=:name",
 app.use('/search_product', routes)
 
 app.use(errorHandler)

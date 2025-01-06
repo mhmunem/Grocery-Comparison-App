@@ -3,9 +3,8 @@ export const API_URL = import.meta.env.VITE_EXPRESS_API_URL
 // ;
 
 export const API_ENDPOINTS = {
-
     WELCOME_API: "/",
-    SEARCH: "/search_product:name:sort_by:sort_direction",
+    SEARCH_PRODUCT: "/search_product/",
     // Initital Setup Endpoints from server
     GET_DATA: "/initialSetup",
     POST_DATA: "/initialSetup",
