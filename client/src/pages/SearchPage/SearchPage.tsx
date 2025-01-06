@@ -48,6 +48,7 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+import { search } from "../../services/InitialSetupService.ts"
 
 interface PriceHistory {
   date: Date;
@@ -150,15 +151,25 @@ const SearchPage: React.FC = () => {
     };
   }, [handleClickOutside]);
 
+  useEffect(() => {
+    // server connection Testing using GET on initial load
+    getInitialSetupMessage().then(response => {
+        setData(response);
+      })
+      .catch(error => {
+        console.error('Error fetching GET data:', error);
+      });
+  }, []);
+
   const handleSearch = () => {
     setSearchAttempted(true);
     if (query.length < 3 || query.length > 50) {
       setError('Search query must be between 3 and 50 characters.');
       return;
     }
+    search(query, "name", "ASC")
     setError('');
     console.log('Performing search for:', query);
-    // 真实搜索逻辑可写在这里
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {

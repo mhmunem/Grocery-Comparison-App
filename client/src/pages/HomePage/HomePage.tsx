@@ -8,7 +8,6 @@ function HomePage() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-
     // server connection Testing using GET on initial load
     getInitialSetupMessage().then(response => {
         setData(response);

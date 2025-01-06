@@ -3,7 +3,6 @@ import corsMiddleware from './middlewares/corsMiddleware'
 import db from './db/connection/pool'
 import errorHandler from './middlewares/errorHandler'
 import express from 'express'
-import productsRouter from './api/products'
 import routes from './routes/initialsetup'
 import swaggerJsdoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
@@ -37,7 +36,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs))
 
 app.use('/', routes)
 
-app.use('/api/products', productsRouter)
+app.use('/search_product', routes)
 
 app.use(errorHandler)
 

@@ -25,5 +25,5 @@ export async function search_product(db: NodePgDatabase, user_query: string, sor
         .where(ilike(products.name, `%${user_query}%`))
         .orderBy(sort(column))
 
-    return search_results.map(r => r.name);
+    return search_results
 }
