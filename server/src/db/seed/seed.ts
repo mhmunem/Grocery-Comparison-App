@@ -1,5 +1,5 @@
 import { NodePgDatabase } from "drizzle-orm/node-postgres"
-import { seed } from "drizzle-seed"
+import { reset, seed } from "drizzle-seed"
 
 export async function seed_db(db: NodePgDatabase, tables: Object) {
     try {
@@ -150,9 +150,14 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                     }),
                 },
             },
-            // TODO: min max values
             shopping_list: {
                 count: 10,
+                columns: {
+                    amount: f.int({
+                        minValue: 1,
+                        maxValue: 10,
+                    }),
+                }
             },
         }))
     } catch (error) {
