@@ -1,16 +1,16 @@
 {
   "compilerOptions": {
-    "target": "ES6", // Target ES6 or later
-    "module": "commonjs", // Use CommonJS modules for Jest compatibility
+    "target": "ES6",
+    "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "outDir": "./dist", // Optional: Output directory for compiled files
-    "baseUrl": ".", // Optional: Base URL for module resolution
+    "outDir": "./dist",
+    "baseUrl": ".",
     "paths": {
       "*": ["node_modules/*"]
     }
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts"], // Include source and test files
-  "exclude": ["node_modules"] // Exclude node_modules
+  "include": ["src/**/*.ts", "tests/**/*.ts"],
+  "exclude": ["node_modules"]
 }

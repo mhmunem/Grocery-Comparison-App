@@ -1,11 +1,8 @@
-// server connection
 export const API_URL = import.meta.env.VITE_EXPRESS_API_URL
-// ;
 
 export const API_ENDPOINTS = {
     WELCOME_API: "/",
     SEARCH_PRODUCT: "/search_product/",
-    // Initital Setup Endpoints from server
     GET_DATA: "/initialSetup",
     POST_DATA: "/initialSetup",
     PUT_DATA: "/initialSetup/:id",

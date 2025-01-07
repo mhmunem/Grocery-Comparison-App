@@ -29,7 +29,6 @@ interface PriceHistoryData {
 const SearchPage: React.FC = () => {
     const [products, setProducts] = useState<any[]>([]);
     const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
-    const [addedToCart, setAddedToCart] = useState<{ [key: string]: boolean }>({});
 
     const [loading, setLoading] = useState<boolean>(true);
     const [query, setQuery] = useState<string>('');
@@ -39,12 +38,8 @@ const SearchPage: React.FC = () => {
     const [selectedProduct, setSelectedProduct] = useState<any>(null);
     const [showProductDetails, setShowProductDetails] = useState(false);
 
-    const [dailyPriceHistory, setDailyPriceHistory] = useState<PriceHistory[]>([]);
-    const [filteredPriceHistory, setFilteredPriceHistory] = useState<PriceHistory[]>([]);
-    const [timeRange, setTimeRange] = useState('3M');
-
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [sortValue, setSortValue] = useState('relevance'); // 默认 "Most relevant"
+    const [sortValue, setSortValue] = useState('relevance');
 
     const sortOptions = [
         // TODO: change value
@@ -66,8 +61,8 @@ const SearchPage: React.FC = () => {
         // { label: 'distance H-L', value: 'high to low' },
         // { label: 'weight or volume L-H', value: 'low to high' },
         // { label: 'weight or volume H-L', value: 'high to low' },
-        // { label: 'Lowest to highest unit price', value: 'lowest-highest' }, // 新增选项
-        // { label: 'Highest to lowest unit price', value: 'highest-lowest' }, // 新增选项
+        // { label: 'Lowest to highest unit price', value: 'lowest-highest' },
+        // { label: 'Highest to lowest unit price', value: 'highest-lowest' },
     ];
 
     const dropdownRef = useRef<HTMLDivElement>();
@@ -75,7 +70,6 @@ const SearchPage: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // todo: change this
                 let results = await getSearch("", "name", "ASC").then(re => re.data.slice(0, 20))
                 setProducts(results);
 
@@ -94,7 +88,6 @@ const SearchPage: React.FC = () => {
         fetchData();
     }, []);
 
-    // 点击外部收起下拉
     const handleClickOutside = useCallback((e: MouseEvent) => {
         if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
             setIsDropdownOpen(false);
@@ -110,11 +103,11 @@ const SearchPage: React.FC = () => {
 
     const handleSearch = async () => {
         setSearchAttempted(true);
-        // if (query.length < 3 || query.length > 50) {
-        // BUG: it always gives this error on the first search
-        //   setError('Search query must be between 3 and 50 characters.');
-        //   return;
-        // }
+        if (query.length < 3 || query.length > 50) {
+            // BUG: it always gives this error on the first search
+            setError('Search query must be between 3 and 50 characters.');
+            return;
+        }
 
         let results = await getSearch(query, "name", "ASC").then(re => re.data)
         setProducts(results);
@@ -143,7 +136,7 @@ const SearchPage: React.FC = () => {
         setSortValue(value);
         setIsDropdownOpen(false);
         console.log('You selected sort:', value);
-        // TODO: 在此编写真正的排序逻辑
+        // TODO: implement sort logic here
         // if (value === 'recent') {...}
         // if (value === 'az') {...}
         // if (value === 'za') {...}
