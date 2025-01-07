@@ -2,7 +2,7 @@ import { IonContent, IonHeader, IonPage, IonList, IonTitle, IonToolbar, IonSearc
 import { ProductDetails } from '../../components/ProductPage/ProductDetails';
 import { PriceHistory } from '../../components/ProductPage/PriceHistory';
 
-export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quantities, selectedProduct, showProductDetails, closeProductDetails }:any) {
+export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quantities, selectedProduct, showProductDetails, closeProductDetails }: any) {
     return (
 
         <IonModal isOpen={showProductDetails} onDidDismiss={closeProductDetails}>
@@ -18,7 +18,7 @@ export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quanti
                 {selectedProduct ? (
                     <div style={{ padding: '16px' }}>
                         <IonRow>
-                            <h2>{selectedProduct.title}</h2>
+                            <h2>{selectedProduct.name}</h2>
                         </IonRow>
                         <ProductDetails
                             decreaseQuantity={decreaseQuantity}

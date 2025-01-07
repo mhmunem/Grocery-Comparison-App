@@ -123,10 +123,9 @@ const SearchPage: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('https://jsonplaceholder.typicode.com/photos?albumId=2');
-                const products = await response.json();
-                console.log(products);
-                setProducts(products);
+                // todo: change this
+                let results = await getSearch("", "name", "ASC").then(re => re.data.slice(0, 20))
+                setProducts(results);
 
                 const initialQuantities = products.reduce((acc: { [key: string]: number }, product: any) => {
                     acc[product.id] = 0;
@@ -143,8 +142,6 @@ const SearchPage: React.FC = () => {
         fetchData();
     }, []);
 
-
-
     // 点击外部收起下拉
     const handleClickOutside = useCallback((e: MouseEvent) => {
         if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -159,16 +156,20 @@ const SearchPage: React.FC = () => {
         };
     }, [handleClickOutside]);
 
-    const handleSearch = () => {
+    const handleSearch = async () => {
         setSearchAttempted(true);
         // if (query.length < 3 || query.length > 50) {
         // BUG: it always gives this error on the first search
         //   setError('Search query must be between 3 and 50 characters.');
         //   return;
         // }
-        getSearch(query, "name", "ASC")
+
+        let results = await getSearch(query, "name", "ASC").then(re => re.data)
+        setProducts(results);
+        console.log(products);
+
+        console.log("getSearch call api:", results);
         setError('');
-        console.log('Performing search for:', query,);
     };
 
     const handleKeyDown = (event: React.KeyboardEvent) => {

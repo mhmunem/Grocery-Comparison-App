@@ -89,10 +89,18 @@ router.delete('/initialSetup/:id', (req, res) => {
 
 router.get('/search_product', (req: Request<{ name: string, sort_by: "name" | "price" | "amount", sort_direction: "ASC" | "DESC" }>, res: Response) => {
     console.log('doing get search!!!!!')
-
-    res.send(
-        search_product(db, req.params.name, req.params.sort_by, req.params.sort_direction)
-    )
+    // console.log(req.query)
+    // console.log(res.json())
+    async function f() {
+        const results = await search_product(db, String(req.query.name), 'name', 'ASC')
+        res.send(
+            results
+        )
+    }
+    f()
+    // res.json(
+    //     search_product(db, String(req.query.name), 'name', 'ASC')
+    // )
 });
 
 export default router;

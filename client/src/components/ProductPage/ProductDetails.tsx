@@ -5,14 +5,14 @@ export function ProductDetails({ decreaseQuantity, increaseQuantity, quantities,
 
     return (
         <IonRow>
-            <IonImg src={selectedProduct.thumbnailUrl} />
+            <IonImg src={selectedProduct.image} />
             <div className="productDetails">
                 <div>
                     <IonLabel className="brandSize">Brand</IonLabel>
                     <IonLabel className="brandSize">100g</IonLabel>
                 </div>
 
-                <IonLabel className="priceLabel">$10.00</IonLabel>
+                <IonLabel className="priceLabel">{selectedProduct.price}</IonLabel>
 
                 {quantities[selectedProduct.id] > 0 ? (
                     <QuantityControls
