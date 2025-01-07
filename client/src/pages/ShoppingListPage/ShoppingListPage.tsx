@@ -286,7 +286,7 @@ const ShoppingListPage: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar color="primary">
-          <IonTitle>Shopping Cart</IonTitle>
+          <IonTitle>Shopping List</IonTitle>
         </IonToolbar>
       </IonHeader>
 
@@ -361,22 +361,22 @@ const ShoppingListPage: React.FC = () => {
                 <IonCard>
                   <IonCardContent>
                     <IonCardTitle>Total: ${totalPrice.toFixed(2)}</IonCardTitle>
-                    <IonButton
+                    {/* <IonButton
                       expand="block"
                       color="primary"
-                      onClick={() => alert('Proceeding to checkout...')}
+                      //onClick={() => alert('Proceeding to checkout...')}
                     >
                       Proceed to Checkout
-                    </IonButton>
+                    </IonButton> */}
                   </IonCardContent>
                 </IonCard>
 
                 {/* 这里依旧保留一个示例图表 */}
-                <IonCard>
+                {/* <IonCard>
                   <IonCardContent>
                     <Line data={priceHistoryData} />
                   </IonCardContent>
-                </IonCard>
+                </IonCard> */}
               </IonCol>
             </IonRow>
           </IonGrid>
