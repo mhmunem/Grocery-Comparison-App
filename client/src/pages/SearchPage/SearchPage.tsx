@@ -42,13 +42,12 @@ const SearchPage: React.FC = () => {
     const [sortValue, setSortValue] = useState('relevance');
 
     const sortOptions = [
-        // TODO: change value
-        { label: 'name', value: 'a' },
-        { label: 'name', value: 'b' },
-        { label: 'price', value: 'c' },
-        { label: 'price', value: 'd' },
-        { label: 'amount', value: 'e' },
-        { label: 'amount', value: 'f' },
+        { label: 'Name A to Z', value: 'a' },
+        { label: 'Name Z to A', value: 'b' },
+        { label: 'Price Low to High', value: 'c' },
+        { label: 'Price High to Low', value: 'd' },
+        { label: 'Amount Low to High', value: 'e' },
+        { label: 'Amount High to Low', value: 'f' },
         // { label: 'Most relevant', value: 'relevance' },
         // { label: 'Most recent', value: 'recent' },
         // { label: 'Alphabetical A-Z', value: 'az' },
@@ -70,7 +69,7 @@ const SearchPage: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                let results = await getSearch("", "name", "ASC").then(re => re.data.slice(0, 20))
+                let results = await getSearch("", "name", "ASC").then(re => re.slice(0, 20))
                 setProducts(results);
 
                 const initialQuantities = products.reduce((acc: { [key: string]: number }, product: any) => {
@@ -109,7 +108,7 @@ const SearchPage: React.FC = () => {
             return;
         }
 
-        let results = await getSearch(query, "name", "ASC").then(re => re.data)
+        let results = await getSearch(query, "name", "ASC").then(re => re)
         setProducts(results);
         console.log(products);
 

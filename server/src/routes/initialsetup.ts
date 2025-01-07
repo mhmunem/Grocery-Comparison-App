@@ -15,9 +15,7 @@ const router = express.Router();
  *       200:
  *         description: Welcome to the Grocery Comparison
  */
-router.get('/', (req, res) => {
-    console.log('welcome');
-
+router.get('/', (_, res) => {
     res.send('Welcome to the Grocery Comparison from server!');
 });
 
@@ -30,7 +28,7 @@ router.get('/', (req, res) => {
  *       200:
  *         description: GET is working.
  */
-router.get('/initialSetup', (req, res) => {
+router.get('/initialSetup', (_, res) => {
     res.send('GET is working.');
 });
 
@@ -43,7 +41,7 @@ router.get('/initialSetup', (req, res) => {
  *       200:
  *         description: POST is working.
  */
-router.post('/initialSetup', (req, res) => {
+router.post('/initialSetup', (_, res) => {
     res.send('POST is working.');
 });
 

@@ -4,8 +4,7 @@ import { API_URL, API_ENDPOINTS } from '../utils/constants';
 
 async function request(method: 'get' | 'post' | 'put' | 'delete', url: string, data?: null) {
     try {
-        const response = await axios({ method, url, data });
-        return response;
+        return (await axios({ method, url, data })).data
     } catch (error) {
         console.error(`${method.toUpperCase()} request error:`, error);
         throw error;
