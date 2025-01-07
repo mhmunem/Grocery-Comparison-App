@@ -1,23 +1,25 @@
-import { 
-  IonContent, 
-  IonHeader, 
-  IonPage, 
-  IonTitle, 
-  IonToolbar, 
-  IonList, 
-  IonItem, 
-  IonThumbnail, 
-  IonImg, 
-  IonLabel, 
-  IonButton, 
-  IonIcon, 
-  IonCard, 
-  IonCardContent, 
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  IonList,
+  IonItem,
+  IonThumbnail,
+  IonImg,
+  IonLabel,
+  IonButton,
+  IonIcon,
+  IonCard,
+  IonCardContent,
   IonCardTitle,
   IonGrid,
   IonRow,
   IonCol,
   IonBadge,
+  IonModal,
+  IonButtons,
 } from '@ionic/react';
 import './ShoppingListPage.css';
 import React, { useState, useEffect } from 'react';
@@ -70,6 +72,10 @@ const ShoppingListPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [totalPrice, setTotalPrice] = useState<number>(0);
 
+  // 点击商品后显示详情的相关 state
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [showProductDetails, setShowProductDetails] = useState(false);
+
   // 价格历史数据
   const [priceHistoryData, setPriceHistoryData] = useState<PriceHistoryData>({
     labels: [],
@@ -78,7 +84,7 @@ const ShoppingListPage: React.FC = () => {
 
   // 从 localStorage 加载购物车数据
   useEffect(() => {
-     const loadCart = async () => {
+    const loadCart = async () => {
       setLoading(true);
       try {
         const addedToCart = localStorage.getItem('addedToCart');
@@ -99,13 +105,12 @@ const ShoppingListPage: React.FC = () => {
         // 获取商品详情（假设与 SearchPage 使用相同的 API）
         const response = await fetch('https://jsonplaceholder.typicode.com/photos?albumId=2');
         if (!response.ok) {
-          // 修复这里的语法：用反引号
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const products = await response.json();
 
         // 过滤出购物车中的商品
-        const filteredProducts = products.filter((product: any) => 
+        const filteredProducts = products.filter((product: any) =>
           productIds.includes(product.id.toString())
         );
 
@@ -207,7 +212,8 @@ const ShoppingListPage: React.FC = () => {
       const today = new Date();
       const labels: string[] = [];
       const data: number[] = [];
-      for (let i = 0; i < 30; i++) { // 最近30天
+      for (let i = 0; i < 30; i++) {
+        // 最近30天
         const date = new Date(today);
         date.setDate(today.getDate() - i);
         labels.unshift(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
@@ -232,6 +238,18 @@ const ShoppingListPage: React.FC = () => {
 
     generateDummyPriceHistory();
   }, []);
+
+  // 打开商品详情
+  const openProductDetails = (product: any) => {
+    setSelectedProduct(product);
+    setShowProductDetails(true);
+  };
+
+  // 关闭商品详情
+  const closeProductDetails = () => {
+    setShowProductDetails(false);
+    setSelectedProduct(null);
+  };
 
   return (
     <IonPage>
@@ -258,8 +276,16 @@ const ShoppingListPage: React.FC = () => {
                 <IonList>
                   {cartItems.map((item) => (
                     <IonItem key={item.product.id} className="cart-item">
-                      <IonThumbnail slot="start">
-                        <IonImg src={item.product.thumbnailUrl} alt={item.product.title} />
+                      {/* 点击图片时打开详情 */}
+                      <IonThumbnail
+                        slot="start"
+                        onClick={() => openProductDetails(item.product)}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <IonImg
+                          src={item.product.thumbnailUrl}
+                          alt={item.product.title}
+                        />
                       </IonThumbnail>
                       <IonLabel>
                         <h2>{item.product.title}</h2>
@@ -269,7 +295,9 @@ const ShoppingListPage: React.FC = () => {
                             shape="round"
                             className="controlButton"
                             aria-label="Decrease quantity"
-                            onClick={() => updateQuantity(item.product.id.toString(), item.quantity - 1)}
+                            onClick={() =>
+                              updateQuantity(item.product.id.toString(), item.quantity - 1)
+                            }
                             disabled={item.quantity === 1}
                           >
                             <IonIcon slot="icon-only" icon={remove} />
@@ -279,7 +307,9 @@ const ShoppingListPage: React.FC = () => {
                             shape="round"
                             className="controlButton"
                             aria-label="Increase quantity"
-                            onClick={() => updateQuantity(item.product.id.toString(), item.quantity + 1)}
+                            onClick={() =>
+                              updateQuantity(item.product.id.toString(), item.quantity + 1)
+                            }
                           >
                             <IonIcon slot="icon-only" icon={add} />
                           </IonButton>
@@ -300,7 +330,11 @@ const ShoppingListPage: React.FC = () => {
                 <IonCard>
                   <IonCardContent>
                     <IonCardTitle>Total: ${totalPrice.toFixed(2)}</IonCardTitle>
-                    <IonButton expand="block" color="primary" onClick={() => alert('Proceeding to checkout...')}>
+                    <IonButton
+                      expand="block"
+                      color="primary"
+                      onClick={() => alert('Proceeding to checkout...')}
+                    >
                       Proceed to Checkout
                     </IonButton>
                   </IonCardContent>
@@ -314,6 +348,39 @@ const ShoppingListPage: React.FC = () => {
             </IonRow>
           </IonGrid>
         )}
+
+        {/* 商品详情弹窗 Modal */}
+        <IonModal isOpen={showProductDetails} onDidDismiss={closeProductDetails}>
+          <IonHeader>
+            <IonToolbar color="primary">
+              <IonButtons slot="start">
+                <IonButton onClick={closeProductDetails}>Close</IonButton>
+              </IonButtons>
+              <IonTitle>Product Details</IonTitle>
+            </IonToolbar>
+          </IonHeader>
+
+          <IonContent>
+            {selectedProduct ? (
+              <div style={{ padding: '16px' }}>
+                <h2>{selectedProduct.title}</h2>
+                <IonImg
+                  src={selectedProduct.thumbnailUrl}
+                  alt={selectedProduct.title}
+                  style={{ maxWidth: '200px' }}
+                />
+                <p>Price: $10.00</p>
+                <p>Brand: Some Brand</p>
+                <p>Description: Lorem ipsum dolor sit amet...</p>
+
+                <h3>Price History</h3>
+                <Line data={priceHistoryData} />
+              </div>
+            ) : (
+              <p>Loading product details...</p>
+            )}
+          </IonContent>
+        </IonModal>
       </IonContent>
     </IonPage>
   );
