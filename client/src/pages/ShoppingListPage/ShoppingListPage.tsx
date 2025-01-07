@@ -411,9 +411,9 @@ const ShoppingListPage: React.FC = () => {
                     <IonLabel className="priceLabel">$10.00</IonLabel>
                     {/* 若想在详情弹窗里也能增减，可以参考 SearchPage 的写法:
                         但这里给个简单Add按钮演示 */}
-                    <IonButton style={{ marginTop: '8px' }} onClick={() => alert('Add to cart logic')}>
+                    {/* <IonButton style={{ marginTop: '8px' }} onClick={() => alert('Add to cart logic')}>
                       Add To Cart
-                    </IonButton>
+                    </IonButton> */}
                   </div>
                 </IonRow>
 
