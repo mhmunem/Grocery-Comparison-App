@@ -1,17 +1,6 @@
-import { IonContent, IonHeader, IonPage, IonList, IonTitle, IonToolbar, IonSearchbar, IonCard, IonCardContent, IonLabel, IonItem, IonIcon, IonImg, IonModal, IonThumbnail, useIonViewWillEnter, IonChip, IonGrid, IonCol, IonRow, IonCardTitle, IonButtons, IonButton } from '@ionic/react';
-import { add, remove, arrowForward, arrowBack, syncOutline } from 'ionicons/icons';
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-} from 'chart.js';
+import { IonList, IonItem, IonCol, IonRow, IonButton } from '@ionic/react';
 import { Line } from 'react-chartjs-2';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 interface PriceHistory {
     date: Date;
@@ -29,54 +18,53 @@ interface PriceHistoryData {
     }>;
 }
 
-export function PriceHistory({products }: any) {
+export function PriceHistory() {
     const [dailyPriceHistory, setDailyPriceHistory] = useState<PriceHistory[]>([]);
     const [filteredPriceHistory, setFilteredPriceHistory] = useState<PriceHistory[]>([]);
     const [timeRange, setTimeRange] = useState('3M');
 
-      useEffect(() => {
+    useEffect(() => {
         const generateDummyData = () => {
-          const today = new Date();
-          const prices: PriceHistory[] = [];
-          for (let i = 0; i < 365; i++) {
-            const randomPrice = 10 + Math.random() * 5;
-            prices.push({ date: new Date(today.setDate(today.getDate() - 1)), price: randomPrice });
-          }
-          setDailyPriceHistory(prices.reverse());
+            const today = new Date();
+            const prices: PriceHistory[] = [];
+            for (let i = 0; i < 365; i++) {
+                const randomPrice = 10 + Math.random() * 5;
+                prices.push({ date: new Date(today.setDate(today.getDate() - 1)), price: randomPrice });
+            }
+            setDailyPriceHistory(prices.reverse());
         };
         generateDummyData();
-      }, []);
-    
-      useEffect(() => {
+    }, []);
+
+    useEffect(() => {
         const filterDataByRange = () => {
-          const today = new Date();
-          const ranges: Record<string, number> = {
-            '1M': 30,
-            '3M': 90,
-            '6M': 180,
-            '12M': 365,
-          };
-          const days = ranges[timeRange] || 365;
-          const filtered = dailyPriceHistory.slice(-days);
-          setFilteredPriceHistory(filtered);
+            const ranges: Record<string, number> = {
+                '1M': 30,
+                '3M': 90,
+                '6M': 180,
+                '12M': 365,
+            };
+            const days = ranges[timeRange] || 365;
+            const filtered = dailyPriceHistory.slice(-days);
+            setFilteredPriceHistory(filtered);
         };
         filterDataByRange();
-      }, [timeRange, dailyPriceHistory]);
-    
-      const priceHistoryData: PriceHistoryData = {
+    }, [timeRange, dailyPriceHistory]);
+
+    const priceHistoryData: PriceHistoryData = {
         labels: filteredPriceHistory.map((entry) =>
-          entry.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+            entry.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
         ),
         datasets: [
-          {
-            label: 'Price History',
-            data: filteredPriceHistory.map((entry) => entry.price),
-            borderColor: '#7371FC',
-            backgroundColor: 'rgba(75,192,192,0.2)',
-            tension: 0.4,
-          },
+            {
+                label: 'Price History',
+                data: filteredPriceHistory.map((entry) => entry.price),
+                borderColor: '#7371FC',
+                backgroundColor: 'rgba(75,192,192,0.2)',
+                tension: 0.4,
+            },
         ],
-      };
+    };
 
     return (
         <div>
@@ -95,14 +83,14 @@ export function PriceHistory({products }: any) {
             </IonRow>
             <IonRow>
                 <IonList style={{ width: '100%' }}>
-                        <IonItem>
-                            <IonCol size="10">
-                                Supermarket Location
-                            </IonCol>
-                            <IonCol size="2">
-                                $ 10.00
-                            </IonCol>
-                        </IonItem>
+                    <IonItem>
+                        <IonCol size="10">
+                            Supermarket Location
+                        </IonCol>
+                        <IonCol size="2">
+                            $ 10.00
+                        </IonCol>
+                    </IonItem>
                 </IonList>
             </IonRow>
         </div>

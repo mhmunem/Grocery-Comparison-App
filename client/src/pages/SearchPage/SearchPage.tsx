@@ -1,60 +1,14 @@
-import {
-    IonContent,
-    IonHeader,
-    IonPage,
-    IonList,
-    IonTitle,
-    IonToolbar,
-    IonSearchbar,
-    IonCard,
-    IonCardContent,
-    IonLabel,
-    IonItem,
-    IonIcon,
-    IonImg,
-    IonModal,
-    IonThumbnail,
-    useIonViewWillEnter,
-    IonChip,
-    IonGrid,
-    IonCol,
-    IonRow,
-    IonCardTitle,
-    IonButtons,
-    IonButton
-} from '@ionic/react';
-import ExploreContainer from '../../components/SharedComponents/ExploreContainer';
-import { LoadingContainer } from '../../components/SharedComponents/loadingContainer';
-import { SearchProductCard } from '../../components/SearchPage/SearchProductCard';
-import { PaginationControls } from '../../components/SearchPage/PaginationControls';
-import { ProductDetailsModal } from '../../components/ProductPage/ProductDetailsModal';
-
-
 import './SearchPage.css';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { add, remove, arrowForward, arrowBack, syncOutline } from 'ionicons/icons';
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
-
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend
-);
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { IonContent, IonHeader, IonPage, IonToolbar, IonSearchbar, IonLabel, IonImg, IonGrid, IonCol, IonRow } from '@ionic/react';
+import { LoadingContainer } from '../../components/SharedComponents/loadingContainer';
+import { PaginationControls } from '../../components/SearchPage/PaginationControls';
+import { ProductDetailsModal } from '../../components/ProductPage/ProductDetailsModal';
+import { SearchProductCard } from '../../components/SearchPage/SearchProductCard';
 import { getSearch } from "../../services/InitialSetupService"
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 interface PriceHistory {
     date: Date;
@@ -85,15 +39,13 @@ const SearchPage: React.FC = () => {
     const [selectedProduct, setSelectedProduct] = useState<any>(null);
     const [showProductDetails, setShowProductDetails] = useState(false);
 
-    // 价格历史
     const [dailyPriceHistory, setDailyPriceHistory] = useState<PriceHistory[]>([]);
     const [filteredPriceHistory, setFilteredPriceHistory] = useState<PriceHistory[]>([]);
     const [timeRange, setTimeRange] = useState('3M');
 
-    // ========== 新增: 下拉框状态 ==========
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [sortValue, setSortValue] = useState('relevance'); // 默认 "Most relevant"
-    // 下拉选项
+
     const sortOptions = [
         // TODO: change value
         { label: 'name', value: 'a' },
@@ -117,7 +69,7 @@ const SearchPage: React.FC = () => {
         // { label: 'Lowest to highest unit price', value: 'lowest-highest' }, // 新增选项
         // { label: 'Highest to lowest unit price', value: 'highest-lowest' }, // 新增选项
     ];
-    // 用 ref 检测点击外部
+
     const dropdownRef = useRef<HTMLDivElement>();
 
     useEffect(() => {
@@ -182,12 +134,11 @@ const SearchPage: React.FC = () => {
         handleSearch();
     };
 
-    // 切换下拉
+
     const toggleDropdown = () => {
         setIsDropdownOpen((prev) => !prev);
     };
 
-    // 选中某个排序选项
     const selectSortOption = (value: string) => {
         setSortValue(value);
         setIsDropdownOpen(false);
@@ -248,7 +199,6 @@ const SearchPage: React.FC = () => {
 
 
             <IonContent>
-                {/* 下拉容器（在搜索栏下方） */}
                 <div className="sortDropdown-container" ref={dropdownRef}>
                     <button
                         type="button"
@@ -331,6 +281,5 @@ const SearchPage: React.FC = () => {
         </IonPage>
     );
 };
-
 
 export default SearchPage;
