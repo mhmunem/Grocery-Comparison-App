@@ -1,11 +1,11 @@
 module.exports = {
-    preset: 'ts-jest', // Use ts-jest preset to handle TypeScript files
-    testEnvironment: 'node', // Set the test environment (e.g., node or jsdom)
-    moduleFileExtensions: ['ts', 'js'], // Recognize .ts and .js files
+    preset: 'ts-jest',
+    testEnvironment: 'node',
+    moduleFileExtensions: ['ts', 'js'],
     transform: {
-        '^.+\\.ts$': 'ts-jest', // Use ts-jest for transforming .ts files
+        '^.+\\.ts$': 'ts-jest',
     },
-    testMatch: ['**/?(*.)+(spec|test).[tj]s'], // Match test files
+    testMatch: ['**/?(*.)+(spec|test).[tj]s'],
     watchman: false,
 };
 

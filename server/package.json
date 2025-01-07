@@ -123,6 +123,7 @@
   "scripts": {
     "start": "node src/server.ts",
     "test": "./node_modules/.bin/jest | perl -pe 's/\\e\\[?.*?[\\@-~]//g'",
+    "tests": "./node_modules/.bin/jest",
     "dev": "nodemon src/server.ts",
     "test:ci": "jest --config ./jest.config.js --collectCoverage --coverageDirectory=\"./coverage\" --ci --reporters=default --reporters=jest-junit --watchAll=false | perl -pe 's/\\e\\[?.*?[\\@-~]//g'"
   },

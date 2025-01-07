@@ -3,7 +3,6 @@ import corsMiddleware from './middlewares/corsMiddleware'
 import db from './db/connection/pool'
 import errorHandler from './middlewares/errorHandler'
 import express from 'express'
-import productsRouter from './api/products'
 import routes from './routes/initialsetup'
 import swaggerJsdoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
@@ -27,7 +26,6 @@ const specs = swaggerJsdoc(options)
 corsMiddleware(app)
 bodyParserMiddleware(app)
 
-// Database connection check
 db.execute('SELECT NOW()')
     .then(() => console.log('Database connection is working'))
     .catch((err) => console.error('Database connection check failed:', err))
@@ -37,7 +35,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs))
 
 app.use('/', routes)
 
-app.use('/api/products', productsRouter)
+app.use('/search_product', routes)
 
 app.use(errorHandler)
 
