@@ -7,6 +7,7 @@ import { shopping_list } from '../schema/shopping_list';
 import { store_products } from '../schema/store_products';
 import { stores } from '../schema/stores';
 import { units } from '../schema/unit';
+import { reset } from 'drizzle-seed';
 
 const config = {
     user: process.env.DB_USER,
