@@ -17,9 +17,13 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
             products: {
                 count: 500,
                 columns: {
-                    price: f.number({
-                        minValue: 1,
-                        maxValue: 15,
+                    brand: f.valuesFromArray({
+                        values: [
+                            "Value", "Pams", "Large Brown Eggs", "Wheat Bread", "Ground Coffee",
+                            "Red Apples", "Greek Yogurt", "Chicken Breast", "Baby Spinach", "Orange Juice",
+                            "Pasta Sauce", "Spaghetti", "Ground Beef", "White Rice", "Black Beans",
+                            "Cheddar Cheese", "Butter", "Carrots", "Onions", "Garlic"
+                            ],
                     }),
                     amount: f.valuesFromArray({
                         values: [

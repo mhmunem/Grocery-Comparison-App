@@ -7,7 +7,7 @@ import { units } from "./unit"
 export const products = pgTable('products', {
     id: serial().primaryKey(),
     name: text().notNull(),
-    price: numeric().notNull(),
+    brand: text().notNull(),
     amount: numeric().notNull(),
     image: text().notNull(),
     storeID: integer().notNull().references(() => stores.id),
