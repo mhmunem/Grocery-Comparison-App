@@ -1,7 +1,17 @@
 import { NodePgDatabase } from "drizzle-orm/node-postgres"
 import { reset, seed } from "drizzle-seed"
 
+export async function reset_db(db: NodePgDatabase, tables: Object) {
+    try {
+        await reset(db, tables);
+    }catch (error) {
+        console.log("WARNING: `rest_db` not working!!!");
+    }
+    
+}
+
 export async function seed_db(db: NodePgDatabase, tables: Object) {
+    // reset(db, tables);
     try {
         await seed(db, tables).refine(f => ({
             products: {
