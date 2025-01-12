@@ -75,7 +75,7 @@ const SearchPage: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                let results = await getSearch("", "name", "ASC").then(re => re.slice(0, 20))
+                let results = await getSearch("", "name", "ASC")
                 setProducts(results);
 
                 const initialQuantities = products.reduce((acc: { [key: string]: number }, product: any) => {
@@ -162,14 +162,14 @@ const SearchPage: React.FC = () => {
     const increaseQuantity = (productId: string) => {
         setQuantities((prevQuantities) => ({
             ...prevQuantities,
-            [productId]: prevQuantities[productId] + 1,
+            [productId]: (prevQuantities[productId] || 0) + 1,
         }));
     };
-
+    
     const decreaseQuantity = (productId: string) => {
         setQuantities((prevQuantities) => ({
             ...prevQuantities,
-            [productId]: Math.max(prevQuantities[productId] - 1, 0),
+            [productId]: Math.max((prevQuantities[productId] || 0) - 1, 0),
         }));
     };
 
@@ -255,7 +255,7 @@ const SearchPage: React.FC = () => {
                     <div className="grid-container">
                         <IonGrid>
                             <IonRow>
-                                {products.map((product, index) => (
+                                {paginatedProducts.map((product, index) => (
                                     <IonCol
                                         size="6"
                                         size-sm="4"
