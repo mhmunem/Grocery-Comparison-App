@@ -140,6 +140,12 @@ ion-grid {
     margin-bottom: 20px;
 }
 
+.pagination-button {
+    width: 40px;  /* Width for a consistent button size (adjust as needed) */
+    min-width: 40px; /* Prevent shrinking below this width */
+    text-align: center; /* Center the text inside the button */
+  }
+
 
 
 /* Container for loading dialogue */

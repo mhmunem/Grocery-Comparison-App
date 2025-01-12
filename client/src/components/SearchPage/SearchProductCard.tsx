@@ -4,12 +4,12 @@ import { QuantityControls } from '../../components/SearchPage/QuantityControls';
 
 export function SearchProductCard({ decreaseQuantity, increaseQuantity, quantities, product, openProductDetails }: any) {
     return (
-        <IonCard className="listCard">
+        <IonCard className="listCard" onClick={() => openProductDetails(product)}>
             <IonImg
                 src={product.image}
                 alt={product.name}
                 className="productImage"
-                onClick={() => openProductDetails(product)} />
+                 />
 
             <IonCardContent>
 
