@@ -41,6 +41,12 @@ const SearchPage: React.FC = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [sortValue, setSortValue] = useState('relevance');
 
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const itemsPerPage = 20;
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginatedProducts = products.slice(startIndex, startIndex + itemsPerPage);
+    const totalPages = Math.ceil(products.length / itemsPerPage);
+
     const sortOptions = [
         { label: 'Name A to Z', value: 'a' },
         { label: 'Name Z to A', value: 'b' },
@@ -167,13 +173,26 @@ const SearchPage: React.FC = () => {
         }));
     };
 
+    const nextPage = () => {
+        setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+    };
+
+    const prevPage = () => {
+        setCurrentPage((prev) => Math.max(prev - 1, 1));
+    };
+
+    const goToPage = (page: number) => {
+        setCurrentPage(page);
+    };
+
+
 
     return (
         <IonPage>
             <IonHeader>
                 <IonToolbar color="primary">
                     <IonImg
-                        src="public/680logocropped.png"
+                        src="680logocropped.png"
                         alt="App Logo"
                         className="headerLogo"
                         slot="start"
@@ -259,7 +278,13 @@ const SearchPage: React.FC = () => {
                     </div>
                 )}
 
-                {!loading && products.length > 0 && (<PaginationControls />)}
+                {!loading && products.length > 0 && (<PaginationControls
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    nextPage={nextPage}
+                    prevPage={prevPage}
+                    goToPage={goToPage}
+                    />)}
 
                 <ProductDetailsModal
                     decreaseQuantity={decreaseQuantity}
