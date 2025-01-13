@@ -106,22 +106,20 @@ ion-grid {
 }
 
 .controlButton {
-  background-color: #f5f5f5;
-  color: #FFFFFF;
-  border-radius: 30%;
-  width: 60px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s ease, color 0.2s ease;
-  font-size: 14px;
+    background-color: #f5f5f5;
+    color: #FFFFFF;
+    border-radius: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    font-size: 14px;
 }
 
 
 .controlButton:hover {
-  background-color: #A594F9;
-  color: #fff;
+    background-color: #A594F9;
+    color: #fff;
 }
 
 
@@ -142,6 +140,12 @@ ion-grid {
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
+.pagination-button {
+    width: 40px;  /* Width for a consistent button size (adjust as needed) */
+    min-width: 40px; /* Prevent shrinking below this width */
+    text-align: center; /* Center the text inside the button */
+  }
 
 
 
@@ -198,13 +202,22 @@ ion-grid {
 
 
 
+
+
+/* --- 下拉框容器（包裹按钮 + 下拉菜单）--- */
+/* 修改重点：让它固定在右上角(可根据需求改动top/right值) */
 .sortDropdown-container {
     position: fixed;
+    /* 固定定位，相对于浏览器窗口 */
     top: 90px;
+    /* 根据需要微调，让它在搜索栏下方 */
     right: 30px;
+    /* 靠屏幕右侧 */
     z-index: 9999;
+    /* 确保浮在搜索结果等之上 */
     width: fit-content;
     margin: 0;
+    /* 去掉auto居中和上下间距 */
 }
 
 
@@ -239,6 +252,7 @@ ion-grid {
 
 .sortDropdown-chevron {
     font-size: 12px;
+    /* 也可使用 IonIcon */
     transition: transform 0.2s;
     margin-left: auto;
 }
@@ -251,6 +265,7 @@ ion-grid {
 
 .sortDropdown-menu {
     position: static;
+    /* 在容器内相对布局即可，也可absolute若想离按钮稍远 */
     width: 180px;
     max-height: 0;
     overflow: hidden;
@@ -262,10 +277,12 @@ ion-grid {
     transition: max-height 0.2s ease, opacity 0.2s ease;
     z-index: 9999;
     margin-top: 4px;
+    /* 若想菜单和按钮之间留点缝 */
 }
 
 .sortDropdown-menu.open {
     max-height: 300px;
+    /* 足够容纳选项 */
     opacity: 1;
     overflow: auto;
 }
@@ -285,12 +302,13 @@ ion-grid {
     font-weight: bold;
 }
 
-
+/* Media Queries (响应式适配) */
 @media (max-width: 761px) {
     .listCard {
         height: 400px;
     }
 
+    /* 移动端可调小下拉宽度 */
     .sortDropdown-toggle,
     .sortDropdown-menu {
         width: 150px;
