@@ -1,4 +1,4 @@
-import { 
+import {
   IonContent,
   IonHeader,
   IonPage,
@@ -24,7 +24,6 @@ import {
   IonButton,
   IonBadge,
 } from '@ionic/react';
-import ExploreContainer from '../../components/SharedComponents/ExploreContainer';
 import './SearchPage.css';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { add, remove, arrowForward, arrowBack, syncOutline, cartOutline } from 'ionicons/icons';
@@ -72,11 +71,13 @@ interface CartItem {
 }
 
 const SearchPage: React.FC = () => {
-  const [products, setProducts] = useState<any[]>([]);
+  
   const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
   const [addedToCart, setAddedToCart] = useState<{ [key: string]: boolean }>({});
 
+  const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+
   const [query, setQuery] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [searchAttempted, setSearchAttempted] = useState<boolean>(false);
@@ -84,16 +85,13 @@ const SearchPage: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [showProductDetails, setShowProductDetails] = useState(false);
 
-  // 价格历史
   const [dailyPriceHistory, setDailyPriceHistory] = useState<PriceHistory[]>([]);
   const [filteredPriceHistory, setFilteredPriceHistory] = useState<PriceHistory[]>([]);
   const [timeRange, setTimeRange] = useState('3M');
 
-  // 下拉框状态
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [sortValue, setSortValue] = useState('relevance'); // 默认 "Most relevant"
+  const [sortValue, setSortValue] = useState('relevance');
   const sortOptions = [
-    // TODO: change value
     { label: 'Most relevant', value: 'relevance' },
     { label: 'Most recent', value: 'recent' },
     { label: 'Alphabetical A-Z', value: 'az' },
@@ -106,13 +104,12 @@ const SearchPage: React.FC = () => {
     { label: 'distance H-L', value: 'highe to lowe' },
     { label: 'weight or volume L-H', value: 'loww to highw' },
     { label: 'weight or volume H-L', value: 'highw to loww' },
-    { label: 'Lowest to highest unit price', value: 'lowest-highest' }, // 新增选项
-    { label: 'Highest to lowest unit price', value: 'highest-lowest' }, // 新增选项
+    { label: 'Lowest to highest unit price', value: 'lowest-highest' },
+    { label: 'Highest to lowest unit price', value: 'highest-lowest' },
   ];
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // 从 localStorage 加载购物车数据
-  useEffect(() => {
+  useIonViewWillEnter(() => {
     const storedAddedToCart = localStorage.getItem('addedToCart');
     const storedQuantities = localStorage.getItem('quantities');
     if (storedAddedToCart) {
@@ -121,9 +118,9 @@ const SearchPage: React.FC = () => {
     if (storedQuantities) {
       setQuantities(JSON.parse(storedQuantities));
     }
-  }, []);
+  });
 
-  // 每次 addedToCart 或 quantities 变化时保存到 localStorage
+  
   useEffect(() => {
     localStorage.setItem('addedToCart', JSON.stringify(addedToCart));
   }, [addedToCart]);
@@ -131,6 +128,7 @@ const SearchPage: React.FC = () => {
   useEffect(() => {
     localStorage.setItem('quantities', JSON.stringify(quantities));
   }, [quantities]);
+
 
   useIonViewWillEnter(async () => {
     setLoading(true);
@@ -151,11 +149,10 @@ const SearchPage: React.FC = () => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const fetchedProducts = await response.json();
-
     return fetchedProducts;
   };
 
-  // 点击外部收起下拉
+  
   const handleClickOutside = useCallback((e: MouseEvent) => {
     if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
       setIsDropdownOpen(false);
@@ -169,6 +166,7 @@ const SearchPage: React.FC = () => {
     };
   }, [handleClickOutside]);
 
+
   const handleSearch = () => {
     setSearchAttempted(true);
     if (query.length < 3 || query.length > 50) {
@@ -177,7 +175,6 @@ const SearchPage: React.FC = () => {
     }
     setError('');
     console.log('Performing search for:', query);
-    // 真实搜索逻辑可写在这里
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -190,18 +187,17 @@ const SearchPage: React.FC = () => {
     handleSearch();
   };
 
-  // 切换下拉
+  
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
 
-  // 选中某个排序选项
   const selectSortOption = (value: string) => {
     setSortValue(value);
     setIsDropdownOpen(false);
     console.log('You selected sort:', value);
-    // TODO: 在此编写真正的排序逻辑
   };
+
 
   const openProductDetails = (product: any) => {
     setSelectedProduct(product);
@@ -213,13 +209,11 @@ const SearchPage: React.FC = () => {
     setSelectedProduct(null);
   };
 
-  // 添加商品到购物车
   const handleAddToCart = (productId: string) => {
     setAddedToCart((prev) => ({
       ...prev,
       [productId]: true,
     }));
-    // 如果商品数量为0，则设置为1
     setQuantities((prev) => ({
       ...prev,
       [productId]: prev[productId] > 0 ? prev[productId] : 1,
@@ -227,35 +221,29 @@ const SearchPage: React.FC = () => {
   };
 
   const increaseQuantity = (productId: string) => {
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [productId]: prevQuantities[productId] + 1,
+    setQuantities((prev) => ({
+      ...prev,
+      [productId]: (prev[productId] ?? 0) + 1,
     }));
   };
 
   const decreaseQuantity = (productId: string) => {
-    setQuantities((prevQuantities) => {
-      // 1) 先读取旧的数量
-      const oldQuantity = prevQuantities[productId] || 0;
-      // 2) 减少数量，不让它低于 0
+    setQuantities((prev) => {
+      const oldQuantity = prev[productId] || 0;
       const newQuantity = Math.max(oldQuantity - 1, 0);
-  
-      // 3) 更新购物车状态：若 newQuantity > 0 则在购物车中，若 == 0 则移除
-      setAddedToCart((prev) => ({
-        ...prev,
-        [productId]: newQuantity > 0,
+
+      setAddedToCart((cartState) => ({
+        ...cartState,
+        [productId]: newQuantity > 0, 
       }));
-  
-      // 4) 返回新的 quantities 以更新状态
+
       return {
-        ...prevQuantities,
+        ...prev,
         [productId]: newQuantity,
       };
     });
   };
-  
 
-  // 生成假数据的价格历史
   useEffect(() => {
     const generateDummyData = () => {
       const today = new Date();
@@ -266,12 +254,12 @@ const SearchPage: React.FC = () => {
         date.setDate(today.getDate() - i);
         prices.push({ date, price: parseFloat(randomPrice.toFixed(2)) });
       }
-      setDailyPriceHistory(prices.reverse());
+      prices.reverse();
+      setDailyPriceHistory(prices);
     };
     generateDummyData();
   }, []);
 
-  // 根据 timeRange 筛选 dailyPriceHistory
   useEffect(() => {
     const filterDataByRange = () => {
       const ranges: Record<string, number> = {
@@ -289,7 +277,7 @@ const SearchPage: React.FC = () => {
 
   const priceHistoryData: PriceHistoryData = {
     labels: filteredPriceHistory.map((entry) =>
-      entry.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+      entry.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
     ),
     datasets: [
       {
@@ -302,11 +290,12 @@ const SearchPage: React.FC = () => {
     ],
   };
 
+  
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar color="primary">
-          {/* 搜索栏 */}
+          
           <IonSearchbar
             value={query}
             onIonChange={(e) => setQuery(e.detail.value!)}
@@ -316,9 +305,11 @@ const SearchPage: React.FC = () => {
             debounce={300}
             className="searchbar"
           />
-          {/* 购物车按钮 */}
           <IonButtons slot="end">
-            <IonButton onClick={() => window.location.href = '/shoppinglist'} style={{ position: 'relative' }}>
+            <IonButton
+              // onClick={() => (window.location.href = '/shoppinglist')}
+              style={{ position: 'relative' }}
+            >
               <IonIcon icon={cartOutline} />
               {Object.keys(addedToCart).filter((key) => addedToCart[key]).length > 0 && (
                 <IonBadge color="danger">
@@ -331,7 +322,6 @@ const SearchPage: React.FC = () => {
       </IonHeader>
 
       <IonContent>
-        {/* 下拉容器（在搜索栏下方） */}
         <div className="sortDropdown-container" ref={dropdownRef}>
           <button
             type="button"
@@ -343,10 +333,7 @@ const SearchPage: React.FC = () => {
             </span>
             <span className="sortDropdown-chevron">&#9662;</span>
           </button>
-          <div
-            className={`sortDropdown-menu ${isDropdownOpen ? 'open' : ''}`}
-            tabIndex={-1}
-          >
+          <div className={`sortDropdown-menu ${isDropdownOpen ? 'open' : ''}`} tabIndex={-1}>
             {sortOptions.map((opt) => (
               <div
                 key={opt.value}
@@ -437,7 +424,7 @@ const SearchPage: React.FC = () => {
                               onClick={() => handleAddToCart(product.id.toString())}
                               className="controlButton"
                             >
-                              Add
+                              Add to Cart
                             </IonButton>
                           )}
                         </div>
@@ -462,7 +449,6 @@ const SearchPage: React.FC = () => {
           </div>
         )}
 
-        {/* 商品详情模态框 */}
         <IonModal isOpen={showProductDetails} onDidDismiss={closeProductDetails}>
           <IonHeader>
             <IonToolbar color="primary">
@@ -513,7 +499,7 @@ const SearchPage: React.FC = () => {
                         onClick={() => handleAddToCart(selectedProduct.id.toString())}
                         className="controlButton"
                       >
-                        Add
+                        Add to Cart
                       </IonButton>
                     )}
                   </div>
@@ -549,8 +535,8 @@ const SearchPage: React.FC = () => {
                 <IonLabel>
                   <h1>Description</h1>
                   <p>
-                    Paragraph Paragraph Paragraph Paragraph Paragraph Paragraph Paragraph Paragraph
-                    Paragraph Paragraph
+                    Paragraph Paragraph Paragraph Paragraph Paragraph Paragraph Paragraph
+                    Paragraph Paragraph Paragraph
                   </p>
                 </IonLabel>
               </div>
