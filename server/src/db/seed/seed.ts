@@ -158,9 +158,10 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
             store_products: {
                 count: 1000,
                 columns: {
-                    price: f.int({
+                    price: f.number({
                         minValue: 1,
                         maxValue: 1000,
+                        precision:100,
                         isUnique: false,
                     }),
                 },
