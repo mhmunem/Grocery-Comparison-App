@@ -6,5 +6,5 @@ export const store_products = pgTable('store_products', {
     id: serial().primaryKey(),
     storeID: integer().notNull().references(() => stores.id),
     productID: integer().notNull().references(() => products.id),
-    price: numeric(),
+    price: numeric().notNull(),
 })
