@@ -11,9 +11,9 @@ export async function search_product(db: NodePgDatabase, name: string, sort_by: 
         case 'name':
             column = products.name
             break;
-        case 'price':
-            column = products.price
-            break;
+        // case 'price':
+        //     column = products.price
+        //     break;
         default:
             column = products.amount
             break;

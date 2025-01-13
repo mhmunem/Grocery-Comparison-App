@@ -1,22 +1,34 @@
 import { NodePgDatabase } from "drizzle-orm/node-postgres"
 import { reset, seed } from "drizzle-seed"
 
+export async function reset_db(db: NodePgDatabase, tables: Object) {
+    try {
+        reset(db, tables);
+    }catch (error) {
+        console.log("WARNING: `reset_db` not working!");
+    }
+    
+}
+
 export async function seed_db(db: NodePgDatabase, tables: Object) {
+    // reset(db, tables);
     try {
         await seed(db, tables).refine(f => ({
             products: {
                 count: 500,
                 columns: {
-                    price: f.number({
-                        minValue: 1,
-                        maxValue: 15,
-                    }),
-                    amount: f.valuesFromArray({
+                    brand: f.valuesFromArray({
                         values: [
-                            1,
-                            100,
-                            500,
-                        ],
+                            "Value", "Pams", "Maggi", "Pams Finest", "Copenhagen",
+                            "Universal", "Bikano", "Trident", "Noodle Co", "Inaka Soba",
+                            "Sizzlers", "Karikaas", "Doritos", "Rolling Meadow", "Black Beans",
+                            "Heartland", "McCain", "Hellers", "Orion", "Littos"
+                            ],
+                    }),
+                    amount: f.int({
+                        minValue: 1,
+                        maxValue: 1000,
+                        isUnique: false
                     }),
                     name: f.valuesFromArray({
                         values: [
@@ -132,11 +144,19 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                             "Fresh Choice",
                             "Super Value",
                         ],
+                        isUnique: true,
                     }),
                 },
             },
             store_products: {
                 count: 1000,
+                columns: {
+                    price: f.int({
+                        minValue: 1,
+                        maxValue: 1000,
+                        isUnique: true,
+                    }),
+                },
             },
             units: {
                 count: 3,
@@ -147,6 +167,7 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                             "kg",
                             "ea",
                         ],
+                        isUnique: true,
                     }),
                 },
             },
