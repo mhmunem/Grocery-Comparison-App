@@ -11,13 +11,20 @@ export async function reset_db(db: NodePgDatabase, tables: Object) {
 }
 
 export async function seed_db(db: NodePgDatabase, tables: Object) {
-    // reset(db, tables);
     try {
         await seed(db, tables).refine(f => ({
             products: {
                 count: 500,
                 columns: {
                     brand: f.valuesFromArray({
+                        values: [
+                            "Value", "Pams", "Maggi", "Pams Finest", "Copenhagen",
+                            "Universal", "Bikano", "Trident", "Noodle Co", "Inaka Soba",
+                            "Sizzlers", "Karikaas", "Doritos", "Rolling Meadow", "Black Beans",
+                            "Heartland", "McCain", "Hellers", "Orion", "Littos"
+                            ],
+                    }),
+                    details: f.valuesFromArray({
                         values: [
                             "Value", "Pams", "Maggi", "Pams Finest", "Copenhagen",
                             "Universal", "Bikano", "Trident", "Noodle Co", "Inaka Soba",
@@ -154,7 +161,29 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                     price: f.int({
                         minValue: 1,
                         maxValue: 1000,
-                        isUnique: true,
+                        isUnique: false,
+                    }),
+                },
+            },
+            category: {
+                count: 12,
+                columns: {
+                    name: f.valuesFromArray({
+                        values: [
+                            "Fruit & Veg",
+                            "Meat",
+                            "Fish",
+                            "Deli",
+                            "Bakery",
+                            "Frozen",
+                            "Pantry",
+                            "Beer & Wine",
+                            "Drinks",
+                            "Household",
+                            "Baby & Child",
+                            "Health & Body",
+                        ],
+                        isUnique: false,
                     }),
                 },
             },
