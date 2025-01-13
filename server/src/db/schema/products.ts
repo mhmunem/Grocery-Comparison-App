@@ -10,6 +10,5 @@ export const products = pgTable('products', {
     brand: text().notNull(),
     amount: numeric().notNull(),
     image: text().notNull(),
-    storeID: integer().notNull().references(() => stores.id),
     unitID: integer().notNull().references(() => units.id),
 })
