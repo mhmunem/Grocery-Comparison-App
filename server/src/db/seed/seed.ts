@@ -4,10 +4,9 @@ import { reset, seed } from "drizzle-seed"
 export async function reset_db(db: NodePgDatabase, tables: Object) {
     try {
         reset(db, tables);
-    }catch (error) {
+    } catch (error) {
         console.log("WARNING: `reset_db` not working!");
     }
-    
 }
 
 export async function seed_db(db: NodePgDatabase, tables: Object) {
@@ -22,7 +21,7 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                             "Universal", "Bikano", "Trident", "Noodle Co", "Inaka Soba",
                             "Sizzlers", "Karikaas", "Doritos", "Rolling Meadow", "Black Beans",
                             "Heartland", "McCain", "Hellers", "Orion", "Littos"
-                            ],
+                        ],
                     }),
                     details: f.valuesFromArray({
                         values: [
@@ -30,12 +29,11 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                             "Universal", "Bikano", "Trident", "Noodle Co", "Inaka Soba",
                             "Sizzlers", "Karikaas", "Doritos", "Rolling Meadow", "Black Beans",
                             "Heartland", "McCain", "Hellers", "Orion", "Littos"
-                            ],
+                        ],
                     }),
                     amount: f.int({
                         minValue: 1,
                         maxValue: 1000,
-                        isUnique: false
                     }),
                     name: f.valuesFromArray({
                         values: [
@@ -151,17 +149,15 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                             "Fresh Choice",
                             "Super Value",
                         ],
-                        isUnique: true,
                     }),
                 },
             },
             store_products: {
-                count: 1000,
+                count: 3000,
                 columns: {
-                    price: f.int({
+                    price: f.number({
                         minValue: 1,
-                        maxValue: 1000,
-                        isUnique: false,
+                        maxValue: 20,
                     }),
                 },
             },
@@ -183,7 +179,6 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                             "Baby & Child",
                             "Health & Body",
                         ],
-                        isUnique: false,
                     }),
                 },
             },
