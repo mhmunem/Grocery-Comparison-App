@@ -40,7 +40,7 @@ export function SearchProductCard({ decreaseQuantity, increaseQuantity, quantiti
                         <IonButton
                             onClick={(event) => {
                                 event.stopPropagation(); // Prevents opening details when clicking "Add to List"
-                                increaseQuantity(product.id);
+                                increaseQuantity(product.id.toString());
                             }}
                             className="controlButton"
                         >
