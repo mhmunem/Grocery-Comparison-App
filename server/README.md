@@ -33,6 +33,7 @@ Verify the installation:
    ```
    npm i
    ```
+
 ## Running the Server
 
 To start the server:
@@ -80,7 +81,7 @@ All the commands are run in server directory.
    ```
 4. To see the database in a terminal:
    ```
-   docker exec -it psql -U postgres
+   docker exec -it fullstack_db psql -U postgres
    ```
    ```
    \dt
