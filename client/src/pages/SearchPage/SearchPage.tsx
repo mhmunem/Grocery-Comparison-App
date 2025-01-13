@@ -41,6 +41,12 @@ const SearchPage: React.FC = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [sortValue, setSortValue] = useState('relevance');
 
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const itemsPerPage = 20;
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginatedProducts = products.slice(startIndex, startIndex + itemsPerPage);
+    const totalPages = Math.ceil(products.length / itemsPerPage);
+
     const sortOptions = [
         { label: 'Name A to Z', value: 'a' },
         { label: 'Name Z to A', value: 'b' },
@@ -69,7 +75,7 @@ const SearchPage: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                let results = await getSearch("", "name", "ASC").then(re => re.slice(0, 20))
+                let results = await getSearch("", "name", "ASC")
                 setProducts(results);
 
                 const initialQuantities = products.reduce((acc: { [key: string]: number }, product: any) => {
@@ -156,16 +162,29 @@ const SearchPage: React.FC = () => {
     const increaseQuantity = (productId: string) => {
         setQuantities((prevQuantities) => ({
             ...prevQuantities,
-            [productId]: prevQuantities[productId] + 1,
+            [productId]: (prevQuantities[productId] || 0) + 1,
         }));
     };
-
+    
     const decreaseQuantity = (productId: string) => {
         setQuantities((prevQuantities) => ({
             ...prevQuantities,
-            [productId]: Math.max(prevQuantities[productId] - 1, 0),
+            [productId]: Math.max((prevQuantities[productId] || 0) - 1, 0),
         }));
     };
+
+    const nextPage = () => {
+        setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+    };
+
+    const prevPage = () => {
+        setCurrentPage((prev) => Math.max(prev - 1, 1));
+    };
+
+    const goToPage = (page: number) => {
+        setCurrentPage(page);
+    };
+
 
 
     return (
@@ -173,7 +192,7 @@ const SearchPage: React.FC = () => {
             <IonHeader>
                 <IonToolbar color="primary">
                     <IonImg
-                        src="public/680logocropped.png"
+                        src="680logocropped.png"
                         alt="App Logo"
                         className="headerLogo"
                         slot="start"
@@ -236,7 +255,7 @@ const SearchPage: React.FC = () => {
                     <div className="grid-container">
                         <IonGrid>
                             <IonRow>
-                                {products.map((product, index) => (
+                                {paginatedProducts.map((product, index) => (
                                     <IonCol
                                         size="6"
                                         size-sm="4"
@@ -259,7 +278,13 @@ const SearchPage: React.FC = () => {
                     </div>
                 )}
 
-                {!loading && products.length > 0 && (<PaginationControls />)}
+                {!loading && products.length > 0 && (<PaginationControls
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    nextPage={nextPage}
+                    prevPage={prevPage}
+                    goToPage={goToPage}
+                    />)}
 
                 <ProductDetailsModal
                     decreaseQuantity={decreaseQuantity}

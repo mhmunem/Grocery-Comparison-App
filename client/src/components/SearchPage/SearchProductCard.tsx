@@ -4,12 +4,12 @@ import { QuantityControls } from '../../components/SearchPage/QuantityControls';
 
 export function SearchProductCard({ decreaseQuantity, increaseQuantity, quantities, product, openProductDetails }: any) {
     return (
-        <IonCard className="listCard">
+        <IonCard className="listCard" onClick={() => openProductDetails(product)}>
             <IonImg
                 src={product.image}
                 alt={product.name}
                 className="productImage"
-                onClick={() => openProductDetails(product)} />
+                 />
 
             <IonCardContent>
 
@@ -26,14 +26,24 @@ export function SearchProductCard({ decreaseQuantity, increaseQuantity, quantiti
 
                     <IonLabel className="priceLabel">${product.price}</IonLabel>
                     {quantities[product.id] > 0 ? (
-                        <QuantityControls
-                            decreaseQuantity={decreaseQuantity}
-                            increaseQuantity={increaseQuantity}
-                            quantities={quantities}
-                            product={product}
-                        />
+                        <div
+                            onClick={(event) => event.stopPropagation()} // Prevents opening details when interacting with quantity controls
+                        >
+                            <QuantityControls
+                                decreaseQuantity={decreaseQuantity}
+                                increaseQuantity={increaseQuantity}
+                                quantities={quantities}
+                                product={product}
+                            />
+                        </div>
                     ) : (
-                        <IonButton onClick={() => increaseQuantity(product.id)} className="controlButton">
+                        <IonButton
+                            onClick={(event) => {
+                                event.stopPropagation(); // Prevents opening details when clicking "Add to List"
+                                increaseQuantity(product.id);
+                            }}
+                            className="controlButton"
+                        >
                             Add to List
                         </IonButton>
 
