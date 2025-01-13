@@ -8,15 +8,11 @@ We will develop a grocery price comparison app to help users find the best price
 
 - `client/`: Mobile application using React and Ionic.
 - `server/`: API and server-side logic with Express.js.
-- `db/`: PostgreSQL database schema and scripts.
-- `webscraping/`: Crawlee-based web scraping scripts to fetch grocery data.
 
 ## Tech Stack
 
 - **client**: React, Ionic, Capacitor
 - **server**: Node.js, Express.js
-- **Database**: PostgreSQL
-- **Web Scraping**: Crawlee
 
 ## Getting Started
 
@@ -24,9 +20,6 @@ Follow the instructions in the individual folder README files for setup.
 
 - `client/`:[client Readme](client\README.md)
 - `server/`:[server Readme](server\Readme.md)
-- `db/`: [Database Readme](db\Readme.md)
-- `webscraping/`:[WebScraping Readme](webscraping\README.md)
-
 
 ## Development Team
 
@@ -47,20 +40,21 @@ Follow the instructions in the individual folder README files for setup.
    node -v
    npm -v
    ```
+
 #### Troubleshooting
+
 ##### If node or npm Is Not Recognized
 
 1. **Check PATH Variable**:
    Ensure that node and npm are added to your system's PATH.
-
    - Windows:
      - Open System Properties > Environment Variables.
      - Locate the Path variable in System Variables and ensure it includes the directory where Node.js was installed (C:\Program Files\nodejs\).
 2. **Other issue check here** (https://medium.com/@ruben.alapont/troubleshooting-common-npm-issues-tips-and-solutions-c6d0cd094d56)
 
 ### Code Editor of your Choice
-- The Ionic React documentation recommends using Visual Studio Code (VS Code) as the IDE for development (https://ionicframework.com/docs/intro/environment) 
 
+- The Ionic React documentation recommends using Visual Studio Code (VS Code) as the IDE for development (https://ionicframework.com/docs/intro/environment)
 
 ## Git Workflow
 
@@ -69,6 +63,7 @@ Check the Git Cheat sheet for the Git workflow [here](https://about.gitlab.com/i
 ### Clone the Repository
 
 Clone the project to your local machine:
+
 ```
 git clone https://eng-git.canterbury.ac.nz/cosc680-2024/cosc680-2024-project.git
 cd cosc680-2024-project
@@ -79,6 +74,7 @@ cd cosc680-2024-project
 ```
 git checkout -b <branch-name>
 ```
+
 Use descriptive branch names, such as `feature/<feature_name>` or `bug/<bug_name>`.
 
 ### Stage and Commit Changes
@@ -104,6 +100,7 @@ git push origin <branch-name>
 ```
 
 ## Run the client and server
+
 ```
 npm run dev (check the package.json scripts)
 ```
@@ -115,11 +112,13 @@ This README provides detailed instructions for installing PostgreSQL, setting up
 ## 1. Install PostgreSQL
 
 ### Windows
+
 1. Download PostgreSQL from the [official website](https://www.postgresql.org/download/).
 2. Run the installer and follow the instructions.
 3. During installation, set up a PostgreSQL superuser (default is postgres) with a password.
 
 ## 2. Accessing PostgreSQL
+
 After installation, access PostgreSQL using the psql CLI from installation folder
 - enter  Server [localhost]:
             Database [postgres]:
@@ -130,11 +129,13 @@ After installation, access PostgreSQL using the psql CLI from installation folde
 ## 3. PostgreSQL Basics
 
 ### View Connection Information
+
 ```
 \conninfo
 ```
 
 ### Quit the PostgreSQL Command Line
+
 ```
 \q
 ```
@@ -142,11 +143,13 @@ After installation, access PostgreSQL using the psql CLI from installation folde
 ## 4. Creating Roles and Setting Permissions
 
 ### Create a Role
+
 ```
 CREATE ROLE admin WITH LOGIN PASSWORD 'admin';
 ```
 
 ### Grant Permissions to the Role
+
 - Allow the role to create databases:
   ```
   ALTER ROLE admin CREATEDB;
@@ -166,23 +169,28 @@ CREATE ROLE admin WITH LOGIN PASSWORD 'admin';
 
 
 ## 5. Creating and Connecting to a Database
+
 ### Create a Database
+
 ```
 CREATE DATABASE api;
 ```
 
 ### Connect to the Database
+
 ```
 \c api
 ```
 - This switches to the api database and uses the admin user (if logged in as admin).
 
 Example Output:
+
 ```
 You are now connected to database "api" as user "admin".
 ```
 
 ## 6. Working with Tables
+
 ### List Tables in the Current Schema
 
 ```sql
@@ -190,40 +198,36 @@ You are now connected to database "api" as user "admin".
 ```
 
 ## 7. Example Workflow
+
 1. Access PostgreSQL as a superuser:
    ```
    psql -U postgres
    ```
-
 2. Create a new role with login credentials:
    ```
    CREATE ROLE admin WITH LOGIN PASSWORD 'admin';
    ```
-
 3. Grant the `CREATEDB` privilege to the `admin` role:
    ```
    ALTER ROLE admin CREATEDB;
    ```
-
 4. Create a new database named `api`:
    ``
    CREATE DATABASE api;
    ```
-
 5. Switch to the `api` database:
    ```
    \c api
    ```
-
 6. Verify the connection:
    ```
    \conninfo
    ```
-
 7. View tables in the current schema (if any):
    ```
    \dt
    ```
+
 ## 8. Additional Commands
 ### List All Schemas
 ```
@@ -259,18 +263,18 @@ Future iterations may include cloud deployment for enhanced scalability and stor
 
 ### Installation
 
-1. Clone the repo 
+1. Clone the repo
 
-    ``` 
+    ```
     git clone -b <branch_name> <repo_url>
-        
+
     cd webscraping
     ```
 
 2. Install Dependencies (if not in package.json file else just use 'npm install')
    Install Crawlee with support for Playwright, Puppeteer, and Cheerio:
 
-   ``` 
+   ```
    npm install crawlee playwright puppeteer cheerio
    ```
 
@@ -278,7 +282,7 @@ Future iterations may include cloud deployment for enhanced scalability and stor
 
 ### Configure Crawlers
 
-#### PlaywrightCrawler  
+#### PlaywrightCrawler
 Playwright is used for advanced interactions with modern web pages. Example setup:
 
 ```
@@ -296,7 +300,7 @@ const playwrightCrawler = new PlaywrightCrawler({
 await playwrightCrawler.run(['https://crawlee.dev']);
 ```
 
-#### PuppeteerCrawler  
+#### PuppeteerCrawler
 Puppeteer is another headless browser framework, ideal for scraping JavaScript-heavy websites.
 
 ```
@@ -314,7 +318,7 @@ const puppeteerCrawler = new PuppeteerCrawler({
 await puppeteerCrawler.run(['https://crawlee.dev']);
 ```
 
-#### CheerioCrawler  
+#### CheerioCrawler
 Cheerio is a lightweight and fast solution for scraping static HTML pages.
 
 ```
@@ -341,7 +345,6 @@ node src/main.js
 
 Check the ```package.json``` scripts to start the server if none use the above scripts
 
-
 ## Resources
 
 Here are helpful resources for understanding and extending this project:
@@ -353,11 +356,9 @@ Here are helpful resources for understanding and extending this project:
 5. [PuppeteerCrawler Example](https://crawlee.dev/docs/examples/basic-crawler)
 6. [CheerioCrawler Example](https://crawlee.dev/docs/examples/cheerio-crawler)
 
-
 ## Future Development
 
-### Cloud Deployment  
-Consider deploying Crawlee project to the cloud to scale operations and achieve persistent storage. 
+### Cloud Deployment
+
+Consider deploying Crawlee project to the cloud to scale operations and achieve persistent storage.
 For guidance, refer to the [Crawlee Cloud Documentation](https://crawlee.dev/).
-
-
