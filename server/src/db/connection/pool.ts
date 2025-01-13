@@ -10,18 +10,58 @@ import { units } from '../schema/units'
 import { category } from '../schema/category'
 
 
+import dotenv from 'dotenv';
+
+dotenv.config({
+  path: '.env'
+});
+
+const env = process.env.NODE_ENV || 'dev'; 
+console.log("Running in environment:", env);
+
+const dbUrl = process.env[`${env.toUpperCase()}_DATABASE_URL`];
+console.log(dbUrl);
+
+const databases = ['cosc680_dev_db', 'cosc680_test_db', 'cosc680_prod_db'];
+
 const config = {
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
     database: process.env.DB_NAME,
     password: process.env.DB_PASSWORD,
-    port: parseInt(process.env.DB_PORT!),
+    port: parseInt(process.env.DB_PORT || "5432"),
+};
+console.log(process.env.DB_NAME,process.env.DB_USER),process.env.DB_HOST;
+const pool = new Pool(config);
+
+const createDatabases = async () => {
+for (const dbName of databases) {
+    try {
+        const query = `SELECT 1 FROM pg_database WHERE datname = $1 LIMIT 1`;
+        const res = await pool.query(query, [dbName]);
+        if (res.rowCount === 0) {
+            await pool.query(`CREATE DATABASE ${dbName}`);
+            console.log(`Database ${dbName} created successfully.`);
+        } else {
+            console.log(`Database ${dbName} already exists.`);
+        }
+    } catch (error) {
+        console.error(`Error while creating database ${dbName}:`, error);
+    }
 }
+};
 
-const pool = new Pool(config)
-const db = drizzle(pool)
+createDatabases();
 
-// reset_db(db, { products, stores, store_products, chains, units, shopping_list, category })
-seed_db(db, { products, stores, store_products, chains, units, shopping_list, category })
+const finalPool = new Pool({
+    connectionString: dbUrl
+});
 
-export default db
+const db = drizzle(finalPool);
+
+//seed_db(db, { products, stores, store_products, chains, units, shopping_list })
+
+
+export default db;
+
+
