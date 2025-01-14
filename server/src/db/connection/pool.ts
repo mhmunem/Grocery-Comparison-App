@@ -10,6 +10,14 @@ import { units } from '../schema/units'
 import { category } from '../schema/category'
 
 
+const env = process.env.NODE_ENV!
+
+console.log("Running in environment:", env)
+
+const dbUrl = process.env[`${env.toUpperCase()}_DATABASE_URL`]
+
+const databases = ['cosc680_dev_db', 'cosc680_test_db', 'cosc680_prod_db']
+
 const config = {
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
@@ -19,9 +27,34 @@ const config = {
 }
 
 const pool = new Pool(config)
-const db = drizzle(pool)
 
-// reset_db(db, { products, stores, store_products, chains, units, shopping_list, category })
+const createDatabases = async () => {
+    for (const dbName of databases) {
+        try {
+            const query = `SELECT 1 FROM pg_database WHERE datname = $1 LIMIT 1`
+            const res = await pool.query(query, [dbName])
+            if (res.rowCount === 0) {
+                await pool.query(`CREATE DATABASE ${dbName}`)
+                console.log(`Database ${dbName} created successfully.`)
+            } else {
+                console.log(`Database ${dbName} already exists.`)
+            }
+        } catch (error) {
+            console.error(`Error while creating database ${dbName}:`, error)
+        }
+    }
+}
+
+createDatabases()
+
+const finalPool = new Pool({
+    connectionString: dbUrl
+})
+
+const db = drizzle(finalPool)
+
+// reset(db, { products, stores, store_products, chains, units, shopping_list, category })
 seed_db(db, { products, stores, store_products, chains, units, shopping_list, category })
+
 
 export default db
