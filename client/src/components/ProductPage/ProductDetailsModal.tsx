@@ -3,8 +3,14 @@ import { ProductDetails } from '../../components/ProductPage/ProductDetails';
 import { PriceHistory } from '../../components/ProductPage/PriceHistory';
 
 export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quantities, selectedProduct, showProductDetails, closeProductDetails }: any) {
-    return (
 
+
+    if(!selectedProduct){
+        return null
+    }
+    
+    return (
+        
         <IonModal isOpen={showProductDetails} onDidDismiss={closeProductDetails}>
             <IonHeader>
                 <IonToolbar color="primary">
@@ -18,7 +24,7 @@ export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quanti
                 {selectedProduct ? (
                     <div style={{ padding: '16px' }}>
                         <IonRow>
-                            <h2>{selectedProduct.name}</h2>
+                            <h2>{selectedProduct.products.name}</h2>
                         </IonRow>
                         <ProductDetails
                             decreaseQuantity={decreaseQuantity}
@@ -30,7 +36,7 @@ export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quanti
                             product={selectedProduct}
                         />
                         <IonLabel>
-                            <h1>Description</h1>
+                            <h1>{selectedProduct.products.details}</h1>
                             <p>Paragraph Paragraph Paragraph Paragraph ParagraphParagraph Paragraph Paragraph Paragraph Paragraph</p>
                         </IonLabel>
                     </div>
