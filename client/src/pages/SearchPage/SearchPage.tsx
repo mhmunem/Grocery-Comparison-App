@@ -34,19 +34,38 @@ interface CartItem {
     quantity: number;
 }
 
+type Product = {
+    products: {
+        id: number;
+        name: string;
+        brand: string;
+        details: string;
+        amount: number;
+        image: string;
+        unitID: number;
+        categoryID: number;
+    };
+    store_products: {
+        id: number;
+        storeID: number;
+        productID: number;
+        price: string;
+    };
+}
+
 const SearchPage: React.FC = () => {
 
     const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
     const [addedToCart, setAddedToCart] = useState<{ [key: string]: boolean }>({});
 
-    const [products, setProducts] = useState<any[]>([]);
+    const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
     const [query, setQuery] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [searchAttempted, setSearchAttempted] = useState<boolean>(false);
 
-    const [selectedProduct, setSelectedProduct] = useState<any>(null);
+    const [selectedProduct, setSelectedProduct] = useState<Product>();
     const [showProductDetails, setShowProductDetails] = useState(false);
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -79,11 +98,12 @@ const SearchPage: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                let results = await getSearch("", "name", "ASC")
+                setLoading(true);
+                let results: Product[] = await getSearch("", "name", "ASC");
                 setProducts(results);
 
-                const initialQuantities = products.reduce((acc: { [key: string]: number }, product: any) => {
-                    acc[product.id] = 0;
+                const initialQuantities = products.reduce((acc: { [key: string]: number }, product: Product) => {
+                    acc[product.store_products.productID] = 0;
                     return acc;
                 }, {});
 
@@ -92,7 +112,9 @@ const SearchPage: React.FC = () => {
                 console.error('Error fetching data:', error);
             } finally {
                 setLoading(false);
+                
             }
+
         };
         fetchData();
     }, []);
@@ -129,9 +151,8 @@ const SearchPage: React.FC = () => {
 
         let results = await getSearch(query, "name", "ASC").then(re => re)
         setProducts(results);
-        console.log(products);
-
-        console.log("getSearch call api:", results);
+        // console.log(products);
+        productapi: ", results";
         setError('');
     };
 
@@ -161,14 +182,20 @@ const SearchPage: React.FC = () => {
         // etc.
     };
 
-    const openProductDetails = (product: any) => {
+    const openProductDetails = (product: Product) => {
+        
+
         setSelectedProduct(product);
+        console.log("openProductDetails:", selectedProduct)
         setShowProductDetails(true);
+
+        
     };
+
+
 
     const closeProductDetails = () => {
         setShowProductDetails(false);
-        setSelectedProduct(null);
     };
 
     const handleAddToCart = (productId: string) => {
@@ -188,6 +215,8 @@ const SearchPage: React.FC = () => {
             ...prevQuantities,
             [productId]: (prevQuantities[productId] || 0) + 1,
         }));
+        console.log("Quantities State:", quantities);
+        
     };
 
     const decreaseQuantity = (productId: string) => {
@@ -257,7 +286,7 @@ const SearchPage: React.FC = () => {
 
 
             <IonContent>
-            <IonRow>
+                <IonRow>
                     <IonItem>
                         <IonSelect multiple={true} label="Filter by Category" label-placement="floating">
                             <IonSelectOption value="Produce">Produce</IonSelectOption>
@@ -308,24 +337,33 @@ const SearchPage: React.FC = () => {
                     <div className="grid-container">
                         <IonGrid>
                             <IonRow>
-                                {paginatedProducts.map((product, index) => (
-                                    <IonCol
-                                        size="6"
-                                        size-sm="4"
-                                        size-md="4"
-                                        size-lg="3"
-                                        key={index}
-                                        class="ion-no-margin"
-                                    >
-                                        <SearchProductCard
-                                            decreaseQuantity={decreaseQuantity}
-                                            increaseQuantity={increaseQuantity}
-                                            quantities={quantities}
-                                            product={product}
-                                            openProductDetails={openProductDetails}
-                                        />
-                                    </IonCol>
-                                ))}
+                                {paginatedProducts.map((product, index) => {
+                                    console.log('Rendering Product:', product, 'Index:', index); // Logs each product and its index
+                                    return (
+                                        <IonCol
+                                            size="6"
+                                            size-sm="4"
+                                            size-md="4"
+                                            size-lg="3"
+                                            key={index}
+                                            class="ion-no-margin"
+                                        >
+                                            <SearchProductCard
+                                                decreaseQuantity={decreaseQuantity}
+                                                increaseQuantity={increaseQuantity}
+                                                quantities={quantities}
+                                                product={product}
+                                                productID={product.products.id}
+                                                productBrand={product.products.brand}
+                                                productDetails={product.products.details}
+                                                productName={product.products.name}
+                                                productPrice={product.store_products.price}
+                                                productImage={product.products.image}
+                                                openProductDetails={openProductDetails}
+                                            />
+                                        </IonCol>
+                                    );
+                                })}
                             </IonRow>
                         </IonGrid>
                     </div>

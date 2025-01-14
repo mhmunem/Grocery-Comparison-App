@@ -8,13 +8,13 @@ export function ProductDetails({ decreaseQuantity, increaseQuantity, quantities,
             <IonImg src={selectedProduct.image} />
             <div className="productDetails">
                 <div>
-                    <IonLabel className="brandSize">Brand</IonLabel>
-                    <IonLabel className="brandSize">100g</IonLabel>
+                    <IonLabel className="brandSize">Brand: {selectedProduct.products.brand}</IonLabel>
+                    <IonLabel className="brandSize">Unit size: {selectedProduct.products.amount}g</IonLabel>
                 </div>
 
                 <IonLabel className="priceLabel">{selectedProduct.price}</IonLabel>
 
-                {quantities[selectedProduct.id] > 0 ? (
+                {quantities[selectedProduct.store_products.productID] > 0 ? (
                     <QuantityControls
                         decreaseQuantity={decreaseQuantity}
                         increaseQuantity={increaseQuantity}
@@ -22,7 +22,7 @@ export function ProductDetails({ decreaseQuantity, increaseQuantity, quantities,
                         product={selectedProduct}
                     />
                 ) : (
-                    <IonButton onClick={() => increaseQuantity(selectedProduct.id)} className="controlButton">
+                    <IonButton onClick={() => increaseQuantity(selectedProduct.store_products.productID)}>
                         Add to List
                     </IonButton>
 

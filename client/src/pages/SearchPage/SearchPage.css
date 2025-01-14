@@ -92,7 +92,6 @@ ion-grid {
     font-weight: bold;
     color: #4caf50;
     text-align: center;
-    margin: 0 10px;
 }
 
 
@@ -113,7 +112,7 @@ ion-grid {
     align-items: center;
     justify-content: center;
     transition: background-color 0.2s ease, color 0.2s ease;
-    font-size: 14px;
+    font-size: 12px;
 }
 
 
@@ -317,7 +316,7 @@ ion-grid {
 
 @media (min-width: 761px) {
     .listCard {
-        height: 350px;
+        height: 300px;
     }
 }
 
@@ -327,7 +326,7 @@ ion-grid {
     }
 
     .listCard {
-        height: 350px;
+        height: 300px;
     }
 }
 
