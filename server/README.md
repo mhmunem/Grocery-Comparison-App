@@ -92,6 +92,10 @@ All the commands are run in server directory.
 
 for more information visit the [drizzle docs](https://orm.drizzle.team/docs/overview).
 
+## To use Database 
+
+1. Update the NODE_ENV variaable to dev/test/prod based on which databse you need.
+
 ## Additional Notes
 
 - To install packages and at the same time include that in package.json, use:
