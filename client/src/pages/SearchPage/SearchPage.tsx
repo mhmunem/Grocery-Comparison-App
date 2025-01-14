@@ -1,7 +1,8 @@
 import './SearchPage.css';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-import { IonContent, IonHeader, IonPage, IonToolbar, IonSearchbar, IonLabel, IonImg, IonGrid, IonCol, IonRow } from '@ionic/react';
+import { IonContent, IonItem, IonSelect, IonSelectOption, IonBadge, IonButtons, IonButton, IonIcon, IonHeader, IonPage, IonToolbar, IonSearchbar, IonLabel, IonImg, IonGrid, IonCol, IonRow } from '@ionic/react';
+import { cartOutline } from 'ionicons/icons';
 import { LoadingContainer } from '../../components/SharedComponents/loadingContainer';
 import { PaginationControls } from '../../components/SearchPage/PaginationControls';
 import { ProductDetailsModal } from '../../components/ProductPage/ProductDetailsModal';
@@ -26,54 +27,83 @@ interface PriceHistoryData {
     }>;
 }
 
-const SearchPage: React.FC = () => {
-    const [products, setProducts] = useState<any[]>([]);
-    const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
 
+
+interface CartItem {
+    product: any;
+    quantity: number;
+}
+
+type Product = {
+    products: {
+        id: number;
+        name: string;
+        brand: string;
+        details: string;
+        amount: number;
+        image: string;
+        unitID: number;
+        categoryID: number;
+    };
+    store_products: {
+        id: number;
+        storeID: number;
+        productID: number;
+        price: string;
+    };
+}
+
+const SearchPage: React.FC = () => {
+
+    const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
+    const [addedToCart, setAddedToCart] = useState<{ [key: string]: boolean }>({});
+
+    const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+
     const [query, setQuery] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [searchAttempted, setSearchAttempted] = useState<boolean>(false);
 
-    const [selectedProduct, setSelectedProduct] = useState<any>(null);
+    const [selectedProduct, setSelectedProduct] = useState<Product>();
     const [showProductDetails, setShowProductDetails] = useState(false);
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [sortValue, setSortValue] = useState('relevance');
 
-    const sortOptions = [
-        { label: 'Name A to Z', value: 'a' },
-        { label: 'Name Z to A', value: 'b' },
-        { label: 'Price Low to High', value: 'c' },
-        { label: 'Price High to Low', value: 'd' },
-        { label: 'Amount Low to High', value: 'e' },
-        { label: 'Amount High to Low', value: 'f' },
-        // { label: 'Most relevant', value: 'relevance' },
-        // { label: 'Most recent', value: 'recent' },
-        // { label: 'Alphabetical A-Z', value: 'az' },
-        // { label: 'Alphabetical Z-A', value: 'za' },
-        // { label: 'discounts L-H', value: 'a' },
-        // { label: 'discounts H-L', value: 'high to low' },
-        // { label: 'popularity L-H', value: 'b' },
-        // { label: 'popularity H-L', value: 'high to low' },
-        // { label: 'distance L-H', value: 'c' },
-        // { label: 'distance H-L', value: 'high to low' },
-        // { label: 'weight or volume L-H', value: 'low to high' },
-        // { label: 'weight or volume H-L', value: 'high to low' },
-        // { label: 'Lowest to highest unit price', value: 'lowest-highest' },
-        // { label: 'Highest to lowest unit price', value: 'highest-lowest' },
-    ];
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const itemsPerPage = 20;
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginatedProducts = products.slice(startIndex, startIndex + itemsPerPage);
+    const totalPages = Math.ceil(products.length / itemsPerPage);
 
-    const dropdownRef = useRef<HTMLDivElement>();
+    const sortOptions = [
+        { label: 'Most relevant', value: 'relevance' },
+        { label: 'Most recent', value: 'recent' },
+        { label: 'Alphabetical A-Z', value: 'az' },
+        { label: 'Alphabetical Z-A', value: 'za' },
+        { label: 'discounts L-H', value: 'lowd to highd' },
+        { label: 'discounts H-L', value: 'highd to lowd' },
+        { label: 'popularity L-H', value: 'lowp to highp' },
+        { label: 'popularity H-L', value: 'highp to lowp' },
+        { label: 'distance L-H', value: 'lowe to highe' },
+        { label: 'distance H-L', value: 'highe to lowe' },
+        { label: 'weight or volume L-H', value: 'loww to highw' },
+        { label: 'weight or volume H-L', value: 'highw to loww' },
+        { label: 'Lowest to highest unit price', value: 'lowest-highest' },
+        { label: 'Highest to lowest unit price', value: 'highest-lowest' },
+    ];
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                let results = await getSearch("", "name", "ASC").then(re => re.slice(0, 20))
+                setLoading(true);
+                let results: Product[] = await getSearch("", "name", "ASC");
                 setProducts(results);
 
-                const initialQuantities = products.reduce((acc: { [key: string]: number }, product: any) => {
-                    acc[product.id] = 0;
+                const initialQuantities = products.reduce((acc: { [key: string]: number }, product: Product) => {
+                    acc[product.store_products.productID] = 0;
                     return acc;
                 }, {});
 
@@ -82,10 +112,21 @@ const SearchPage: React.FC = () => {
                 console.error('Error fetching data:', error);
             } finally {
                 setLoading(false);
+                
             }
+
         };
         fetchData();
     }, []);
+
+    useEffect(() => {
+        localStorage.setItem('addedToCart', JSON.stringify(addedToCart));
+    }, [addedToCart]);
+
+    useEffect(() => {
+        localStorage.setItem('quantities', JSON.stringify(quantities));
+    }, [quantities]);
+
 
     const handleClickOutside = useCallback((e: MouseEvent) => {
         if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -110,9 +151,8 @@ const SearchPage: React.FC = () => {
 
         let results = await getSearch(query, "name", "ASC").then(re => re)
         setProducts(results);
-        console.log(products);
-
-        console.log("getSearch call api:", results);
+        // console.log(products);
+        productapi: ", results";
         setError('');
     };
 
@@ -142,30 +182,72 @@ const SearchPage: React.FC = () => {
         // etc.
     };
 
-    const openProductDetails = (product: any) => {
+    const openProductDetails = (product: Product) => {
+        
+
         setSelectedProduct(product);
+        console.log("openProductDetails:", selectedProduct)
         setShowProductDetails(true);
+
+        
     };
+
+
 
     const closeProductDetails = () => {
         setShowProductDetails(false);
-        setSelectedProduct(null);
+    };
+
+    const handleAddToCart = (productId: string) => {
+        setAddedToCart((prev) => ({
+            ...prev,
+            [productId]: true,
+        }));
+        setQuantities((prev) => ({
+            ...prev,
+            [productId]: prev[productId] > 0 ? prev[productId] : 1,
+        }));
     };
 
 
     const increaseQuantity = (productId: string) => {
         setQuantities((prevQuantities) => ({
             ...prevQuantities,
-            [productId]: prevQuantities[productId] + 1,
+            [productId]: (prevQuantities[productId] || 0) + 1,
         }));
+        console.log("Quantities State:", quantities);
+        
     };
 
     const decreaseQuantity = (productId: string) => {
-        setQuantities((prevQuantities) => ({
-            ...prevQuantities,
-            [productId]: Math.max(prevQuantities[productId] - 1, 0),
-        }));
+        setQuantities((prev) => {
+            const oldQuantity = prev[productId] || 0;
+            const newQuantity = Math.max(oldQuantity - 1, 0);
+
+            setAddedToCart((cartState) => ({
+                ...cartState,
+                [productId]: newQuantity > 0,
+            }));
+
+            return {
+                ...prev,
+                [productId]: newQuantity,
+            };
+        });
     };
+
+    const nextPage = () => {
+        setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+    };
+
+    const prevPage = () => {
+        setCurrentPage((prev) => Math.max(prev - 1, 1));
+    };
+
+    const goToPage = (page: number) => {
+        setCurrentPage(page);
+    };
+
 
 
     return (
@@ -173,7 +255,7 @@ const SearchPage: React.FC = () => {
             <IonHeader>
                 <IonToolbar color="primary">
                     <IonImg
-                        src="public/680logocropped.png"
+                        src="680logocropped.png"
                         alt="App Logo"
                         className="headerLogo"
                         slot="start"
@@ -186,11 +268,33 @@ const SearchPage: React.FC = () => {
                         placeholder="Search for products..."
                         debounce={300}
                         className="searchbar" />
+                    <IonButtons slot="end">
+                        <IonButton
+                            // onClick={() => (window.location.href = '/shoppinglist')}
+                            style={{ position: 'relative' }}
+                        >
+                            <IonIcon icon={cartOutline} />
+                            {Object.keys(addedToCart).filter((key) => addedToCart[key]).length > 0 && (
+                                <IonBadge color="danger">
+                                    {Object.keys(addedToCart).filter((key) => addedToCart[key]).length}
+                                </IonBadge>
+                            )}
+                        </IonButton>
+                    </IonButtons>
                 </IonToolbar>
             </IonHeader>
 
 
             <IonContent>
+                <IonRow>
+                    <IonItem>
+                        <IonSelect multiple={true} label="Filter by Category" label-placement="floating">
+                            <IonSelectOption value="Produce">Produce</IonSelectOption>
+                            <IonSelectOption value="Meat">Meat</IonSelectOption>
+                            <IonSelectOption value="Dairy">Dairy</IonSelectOption>
+                        </IonSelect>
+                    </IonItem>
+                </IonRow>
                 <div className="sortDropdown-container" ref={dropdownRef}>
                     <button
                         type="button"
@@ -202,10 +306,7 @@ const SearchPage: React.FC = () => {
                         </span>
                         <span className="sortDropdown-chevron">&#9662;</span>
                     </button>
-                    <div
-                        className={`sortDropdown-menu ${isDropdownOpen ? 'open' : ''}`}
-                        tabIndex={-1}
-                    >
+                    <div className={`sortDropdown-menu ${isDropdownOpen ? 'open' : ''}`} tabIndex={-1}>
                         {sortOptions.map((opt) => (
                             <div
                                 key={opt.value}
@@ -236,30 +337,45 @@ const SearchPage: React.FC = () => {
                     <div className="grid-container">
                         <IonGrid>
                             <IonRow>
-                                {products.map((product, index) => (
-                                    <IonCol
-                                        size="6"
-                                        size-sm="4"
-                                        size-md="4"
-                                        size-lg="3"
-                                        key={index}
-                                        class="ion-no-margin"
-                                    >
-                                        <SearchProductCard
-                                            decreaseQuantity={decreaseQuantity}
-                                            increaseQuantity={increaseQuantity}
-                                            quantities={quantities}
-                                            product={product}
-                                            openProductDetails={openProductDetails}
-                                        />
-                                    </IonCol>
-                                ))}
+                                {paginatedProducts.map((product, index) => {
+                                    console.log('Rendering Product:', product, 'Index:', index); // Logs each product and its index
+                                    return (
+                                        <IonCol
+                                            size="6"
+                                            size-sm="4"
+                                            size-md="4"
+                                            size-lg="3"
+                                            key={index}
+                                            class="ion-no-margin"
+                                        >
+                                            <SearchProductCard
+                                                decreaseQuantity={decreaseQuantity}
+                                                increaseQuantity={increaseQuantity}
+                                                quantities={quantities}
+                                                product={product}
+                                                productID={product.products.id}
+                                                productBrand={product.products.brand}
+                                                productDetails={product.products.details}
+                                                productName={product.products.name}
+                                                productPrice={product.store_products.price}
+                                                productImage={product.products.image}
+                                                openProductDetails={openProductDetails}
+                                            />
+                                        </IonCol>
+                                    );
+                                })}
                             </IonRow>
                         </IonGrid>
                     </div>
                 )}
 
-                {!loading && products.length > 0 && (<PaginationControls />)}
+                {!loading && products.length > 0 && (<PaginationControls
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    nextPage={nextPage}
+                    prevPage={prevPage}
+                    goToPage={goToPage}
+                />)}
 
                 <ProductDetailsModal
                     decreaseQuantity={decreaseQuantity}

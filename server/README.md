@@ -1,12 +1,13 @@
-# Express Server Setup
+# Back-end Server Setup
 
-This README provides instructions for setting up, running, and managing your Express server.
+This README provides instructions for setting up, running, and managing your Back-end Server.
 
 ## Prerequisites
 
 Ensure you have the following installed:
 - Node.js: [Download Node.js](https://nodejs.org/)
 - npm: Comes with Node.js installation
+- Docker: [Download Docker](https://docs.docker.com/get-started/get-docker/)
 - nodemon (optional): For automatic server restart on code changes
 - install postman:[Download Postman](https://www.postman.com/downloads/) For API testing 
 
@@ -15,74 +16,85 @@ Verify the installation:
     - node -v
     - npm -v
     - nodeman
+    - docker -v
 ```
 
 ## Setup
 
 1. Clone the repository 
    ```
-   git clone -b <branch_name> <repon_name>
-
+   git clone -b <branch-name> <repo-name>
    ```
 2.  Navigate to the project directory:
     ```
     cd server
     ```
-3. Install Express: (if not in `package.json` file)
+3. Install packages:
    ```
-   npm install express
+   npm i
    ```
-4. Install Pg: (if not in `package.json` file)
 
-    ```
-    npm install pg / npm i pg
-
-    ```
 ## Running the Server
 
-To start the Express server:
+To start the server:
 
-1. Navigate to the project directory:
+1. Start the docker engine by opening Docker Desktop.
+
+2. Run the server:  
+   ```
+   docker compose up --build
+   ```
+3. Navigate to the project server directory:
    ```
    cd server
    ```
+4. Open a browser and navigate to `http://localhost:5173/` to see the message - 
+   ``` "Welcome to the Grocery Comparison from server!" ```
+   This means the server is running at `http://localhost:5000/`
 
-2. Run the server: (file can index/app/main) check the package.json main field then use that name for file. 
-   ```
-   node <file.js>
+# Drizzle Configuration
+All the commands are run in server directory.
 
+1. Generate the drizzle TS files to SQL:
    ```
-   if the file name is server.ts then run 
+   npx drizzle-kit generate --config ./drizzle.config.ts
    ```
-   node src/server.ts
+   or
+   ```
+   npm run db:generate
+   ```
+2. Push SQL to Postgres database:
+   ```
+   npx drizzle-kit push --config ./drizzle.config.ts
+   ```
+   or 
+   ```
+   npm run db:push
+   ```
+3. To see the database in a Graphical user interface:
+   ```
+   npx drizzle-kit studio --config ./drizzle.config.ts
+   ```
+   or 
+   ```
+   npm run db:show
+   ```
+4. To see the database in a terminal:
+   ```
+   docker exec -it fullstack_db psql -U postgres
+   ```
+   ```
+   \dt
+   ```
+   ```
+   select * from <table-name>
+   ```
 
-   ```
-      or    
+for more information visit the [drizzle docs](https://orm.drizzle.team/docs/overview).
 
-      ```
-      npm start or npm run dev (check the scripts in package.json)
-      ```
-   You should see the some output in your terminal based on ts file. For eg:
-   ```
-   Server is running on http://localhost:3000
-   ```
+## To use Database 
 
-3. Open a browser and navigate to `http://localhost:3000` to see the message.
-
-## Using Nodemon (Optional)
-
-To automatically restart the server whenever changes are made:
-
-1. Install nodemon globally:
-   ```
-   npm install -g nodemon
-   ```
-
-2. Start the server using nodemon:
-   ```
-   nodemon src/server.js or npm run dev
-   ```
-   Nodemon will watch for changes in your files and restart the server automatically.
+1. Update the NODE_ENV variaable to dev/test/prod based on which databse you need.
 
 ## Additional Notes
 
@@ -99,13 +111,3 @@ To automatically restart the server whenever changes are made:
 ## Coding Best Practices
 
 [Express.js Coding Stadards](https://eng-git.canterbury.ac.nz/cosc680-2024/cosc680-2024-project/-/wikis/Coding-Style-Guidelines/Express.js-Coding-Standards-)
-
-# Drizzle
-
-After changing the schema for the database do the following:
-
-1. from root: `cd server/`
-2. `npx drizzle-kit generate`
-3. `npx drizzle-kit push`
-
-If there are problems, the last push can be undone with `npx drizzle-kit drop`

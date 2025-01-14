@@ -1,22 +1,39 @@
 import { NodePgDatabase } from "drizzle-orm/node-postgres"
 import { reset, seed } from "drizzle-seed"
 
+export async function reset_db(db: NodePgDatabase, tables: Object) {
+    try {
+        reset(db, tables);
+    } catch (error) {
+        console.log("WARNING: `reset_db` not working!");
+    }
+}
+
 export async function seed_db(db: NodePgDatabase, tables: Object) {
     try {
         await seed(db, tables).refine(f => ({
             products: {
                 count: 500,
                 columns: {
-                    price: f.number({
-                        minValue: 1,
-                        maxValue: 15,
-                    }),
-                    amount: f.valuesFromArray({
+                    brand: f.valuesFromArray({
                         values: [
-                            1,
-                            100,
-                            500,
+                            "Value", "Pams", "Maggi", "Pams Finest", "Copenhagen",
+                            "Universal", "Bikano", "Trident", "Noodle Co", "Inaka Soba",
+                            "Sizzlers", "Karikaas", "Doritos", "Rolling Meadow", "Black Beans",
+                            "Heartland", "McCain", "Hellers", "Orion", "Littos"
                         ],
+                    }),
+                    details: f.valuesFromArray({
+                        values: [
+                            "Value", "Pams", "Maggi", "Pams Finest", "Copenhagen",
+                            "Universal", "Bikano", "Trident", "Noodle Co", "Inaka Soba",
+                            "Sizzlers", "Karikaas", "Doritos", "Rolling Meadow", "Black Beans",
+                            "Heartland", "McCain", "Hellers", "Orion", "Littos"
+                        ],
+                    }),
+                    amount: f.int({
+                        minValue: 1,
+                        maxValue: 1000,
                     }),
                     name: f.valuesFromArray({
                         values: [
@@ -136,7 +153,36 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                 },
             },
             store_products: {
-                count: 1000,
+                count: 3000,
+                columns: {
+                    price: f.number({
+                        minValue: 1,
+                        precision: 100,
+                        isUnique: false,
+                        maxValue: 20,
+                    }),
+                },
+            },
+            category: {
+                count: 12,
+                columns: {
+                    name: f.valuesFromArray({
+                        values: [
+                            "Fruit & Veg",
+                            "Meat",
+                            "Fish",
+                            "Deli",
+                            "Bakery",
+                            "Frozen",
+                            "Pantry",
+                            "Beer & Wine",
+                            "Drinks",
+                            "Household",
+                            "Baby & Child",
+                            "Health & Body",
+                        ],
+                    }),
+                },
             },
             units: {
                 count: 3,
@@ -147,6 +193,7 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                             "kg",
                             "ea",
                         ],
+                        isUnique: true,
                     }),
                 },
             },
