@@ -1,42 +1,7 @@
 services:
-  fullstack_client:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-    container_name: fullstack_client
-    restart: unless-stopped
-    volumes:
-      - ./client/src:/client/src
-    ports:
-      - "5173:5173"
-    depends_on:
-      - fullstack_server
-      - fullstack_db
-    networks:
-      - project_network
-    env_file:
-      - ./client/.env
-
-  fullstack_server:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    container_name: fullstack_server
-    restart: unless-stopped
-    volumes:
-      - ./server/src:/server/src
-    ports:
-      - "${PORT}:${PORT}"
-    env_file:
-      - ./server/.env
-    depends_on:
-      - fullstack_db
-    networks:
-      - project_network
-
   fullstack_db:
-    image: postgres:17.2
     container_name: fullstack_db
+    image: postgres:17.2
     restart: always
     env_file:
       - ./server/.env
@@ -53,13 +18,13 @@ services:
       - project_network
     
   db_migrate:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
     container_name: db_migrate
     depends_on:
       fullstack_db:
         condition: service_healthy
+    build:
+      context: ./server
+      dockerfile: Dockerfile
     env_file:
       - ./server/.env
     command: sh -c "npm run db:generate && npm run db:push"
@@ -68,9 +33,32 @@ services:
     networks:
       - project_network
 
+  fullstack_server:
+    container_name: fullstack_server
+    depends_on:
+      fullstack_db:
+        condition: service_healthy
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./server/src:/server/src
+    healthcheck:
+        test: [ "CMD", "curl", "--fail", "-G", "http://localhost:${PORT}" ]
+        interval: 30s
+        timeout: 10s
+        retries: 30
+    ports:
+      - "${PORT}:${PORT}"
+    env_file:
+      - ./server/.env
+    networks:
+      - project_network
+
   pgadmin:
-      image: dpage/pgadmin4
       container_name: pgadmin4_container
+      image: dpage/pgadmin4
       restart: always
       ports:
         - "8888:80"
@@ -81,12 +69,29 @@ services:
       networks:
         - project_network 
 
+  fullstack_client:
+    container_name: fullstack_client
+    depends_on:
+      fullstack_db:
+        condition: service_healthy
+      fullstack_server:
+        condition: service_healthy
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ./client/.env
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client/src:/client/src
+    networks:
+      - project_network
+
 volumes:
   cosc680-db:
   pgadmin-data:
 
 networks:
   project_network:
-
-
-
