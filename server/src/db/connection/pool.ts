@@ -15,7 +15,7 @@ const env = process.env.NODE_ENV!
 
 console.log("Running in environment:", env)
 
-const dbUrl = process.env[`${env.toUpperCase()}_DATABASE_URL`]
+const dbUrl = process.env[`${env?.toUpperCase()}_DATABASE_URL`]
 
 const databases = ['cosc680_dev_db', 'cosc680_test_db', 'cosc680_prod_db']
 

@@ -36,8 +36,8 @@ export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quanti
                             product={selectedProduct}
                         />
                         <IonLabel>
-                            <h1>{selectedProduct.products.details}</h1>
-                            <p>Paragraph Paragraph Paragraph Paragraph ParagraphParagraph Paragraph Paragraph Paragraph Paragraph</p>
+                            <h1>Product Details</h1>
+                            <p>{selectedProduct.products.details}</p>
                         </IonLabel>
                     </div>
                 ) : (
