@@ -19,7 +19,7 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
     try {
         reset(db, tables);
     } catch (error) {
-        console.log("WARNING: `reset_db` not failed!")
+        console.log("WARNING: `reset_db` failed!")
     }
 
     try {

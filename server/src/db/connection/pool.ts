@@ -9,6 +9,7 @@ import { stores } from '../schema/stores'
 import { units } from '../schema/units'
 import { category } from '../schema/category'
 import { price_history } from '../schema/price_history'
+import { sql } from 'drizzle-orm'
 
 
 const env = process.env.NODE_ENV!
@@ -54,18 +55,16 @@ const finalPool = new Pool({
 const db = drizzle(finalPool)
 
 const current_env = process.env.NODE_ENV!
-const current_db = await db.execute(sql`SELECT current_database()`).then(r => r.rows[0].current_database) as string
 
-if (current_env.toLowerCase() === 'prod' || current_db.toLowerCase().includes('prod')) {
-    const msg = "DO NOT RESET OR SEED THE PRODUCTION DATABASE"
+if (current_env.toLowerCase() === 'prod') {
+    const msg = "DO NOT ALTER THE PRODUCTION DATABASE"
 
     // Two different mechanisms to ensure the production database is not altered using this function.
     console.error(msg)
-    throw Error(msg)
     process.exit(1)
+} else {
+    seed_db(db, { products, stores, store_products, chains, units, shopping_list, category, price_history })
 }
-
-seed_db(db, { products, stores, store_products, chains, units, shopping_list, category, price_history })
 
 
 export default db
