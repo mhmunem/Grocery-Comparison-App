@@ -80,10 +80,9 @@ const StorePage: React.FC = () => {
                             <div><IonButton expand="block" onClick={() => deselectStores('favorites')}>Deselect all stores under this tab</IonButton>
                                 <IonList>
                                     {filteredStores.map(store => (
-                                        <IonItem key={store.id}>
+                                        <IonItem key={store.id} onClick={() => selectStores(store.id)}>
                                             <IonCheckbox
-                                                checked={selectedStores.includes(store.id)}
-                                                onIonChange={() => selectStores(store.id)} />
+                                                checked={selectedStores.includes(store.id)} />
                                             <IonLabel>{store.name}</IonLabel>
                                         </IonItem>
                                     ))}
@@ -96,10 +95,9 @@ const StorePage: React.FC = () => {
                         <IonButton expand="block" onClick={() => deselectStores(selectedChainId)}>Deselect all stores under this tab</IonButton>
                         <IonList>
                             {stores.filter(store => store.chainID === selectedChainId).map(store => (
-                                <IonItem key={store.id}>
+                                <IonItem onClick={() => selectStores(store.id)} key={store.id}>
                                     <IonCheckbox disabled={selectedStores.length >= 20 && !selectedStores.includes(store.id)}
                                         checked={selectedStores.includes(store.id)}
-                                        onIonChange={() => selectStores(store.id)}
                                     />
                                     <IonLabel>{store.name}</IonLabel>
                                 </IonItem>
