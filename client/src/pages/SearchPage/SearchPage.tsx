@@ -179,7 +179,6 @@ const SearchPage: React.FC = () => {
             [productId]: (prevQuantities[productId] || 0) + 1,
         }));
         console.log("Quantities State:", quantities);
-
     };
 
     const decreaseQuantity = (productId: string) => {
