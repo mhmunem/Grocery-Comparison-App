@@ -34,11 +34,8 @@ db.execute('SELECT NOW()')
 // BUG: page is empty
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs))
 
-app.use('/', routes)
+app.use('/', routes, storesRouter)
 app.use('/search_product', routes)
-
-app.use('/stores',storesRouter)
-app.use('/chains',storesRouter)
 
 app.use(errorHandler)
 

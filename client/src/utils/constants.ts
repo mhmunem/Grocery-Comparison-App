@@ -7,7 +7,7 @@ export const API_ENDPOINTS = {
     POST_DATA: "/initialSetup",
     PUT_DATA: "/initialSetup/:id",
     DELETE_DATA: "/initialSetup/:id",
-    GET_STORES_DATA: "/stores/stores",
-    GET_CHAINS_DATA: "/chains/chains"
+    GET_STORES_DATA: "/stores",
+    GET_CHAINS_DATA: "/chains"
 };
 

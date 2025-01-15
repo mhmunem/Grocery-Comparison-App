@@ -13,7 +13,7 @@ const storesRouter = express.Router();
 
 /**
  * @swagger
- * /stores/chains:
+ * /chains:
  *   get:
  *     tags: [Stores]
  *     summary: Retrieve chains data
@@ -44,7 +44,7 @@ storesRouter.get('/chains', async (_, res) => {
 
 /**
  * @swagger
- * /stores/stores:
+ * /stores:
  *   get:
  *     tags: [Stores]
  *     summary: Retrieve stores data
