@@ -47,7 +47,6 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                     amount: f.number({
                         minValue: 1,
                         precision: 100,
-                        isUnique: false,
                         maxValue: 10,
                     }),
                     name: f.valuesFromArray({
@@ -175,7 +174,6 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                     price: f.number({
                         minValue: 1,
                         precision: 100,
-                        isUnique: false,
                         maxValue: 20,
                     }),
                 },
