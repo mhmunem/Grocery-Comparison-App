@@ -1,5 +1,6 @@
 import { NodePgDatabase } from "drizzle-orm/node-postgres"
 import { reset, seed } from "drizzle-seed"
+import { price_history } from "../schema/price_history";
 
 export async function reset_db(db: NodePgDatabase, tables: Object) {
     try {
@@ -25,15 +26,17 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                     }),
                     details: f.valuesFromArray({
                         values: [
-                            "Value", "Pams", "Maggi", "Pams Finest", "Copenhagen",
-                            "Universal", "Bikano", "Trident", "Noodle Co", "Inaka Soba",
-                            "Sizzlers", "Karikaas", "Doritos", "Rolling Meadow", "Black Beans",
-                            "Heartland", "McCain", "Hellers", "Orion", "Littos"
+                            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                            "Lorem ipsum odor amet, consectetuer adipiscing elit. Interdum feugiat venenatis etiam congue pharetra. Ligula sem id quam justo potenti habitant. Commodo posuere vestibulum, bibendum consequat class tempor. Ut rhoncus taciti suspendisse; consequat dui consequat fermentum. Fermentum condimentum mauris ligula ut fringilla fringilla mauris vehicula eget. Blandit ornare penatibus parturient per aenean nullam vitae ultricies. Fames vivamus class risus ullamcorper, nec elit integer. Feugiat luctus nisl elementum fringilla aenean arcu senectus. Nec vehicula porttitor habitasse gravida morbi parturient adipiscing risus scelerisque. Vitae primis sollicitudin netus dictum per donec. Egestas placerat praesent euismod efficitur vivamus euismod libero. Fames bibendum eget ut diam; posuere condimentum. Blandit porttitor phasellus malesuada turpis metus. Sem litora proin convallis class, ullamcorper felis et. Curabitur rhoncus dui senectus taciti purus feugiat fames ultrices.",
+                            "Lorem ipsum odor amet, consectetuer adipiscing elit. Fusce quis eget odio primis euismod sit ac amet. Himenaeos tempus nulla vitae felis montes viverra leo himenaeos nunc. Sagittis curae vivamus aptent est ultricies nibh aliquet vulputate. Placerat mauris tortor non lectus lacus diam parturient habitasse. Per dignissim suspendisse varius blandit platea. Mauris taciti nullam justo; sodales tortor sociosqu elit. Eleifend faucibus pulvinar nisi dictum litora commodo nostra dignissim fusce? Bibendum nullam placerat laoreet massa efficitur orci.",
                         ],
                     }),
-                    amount: f.int({
+                    amount: f.number({
                         minValue: 1,
-                        maxValue: 1000,
+                        precision: 100,
+                        isUnique: false,
+                        maxValue: 10,
                     }),
                     name: f.valuesFromArray({
                         values: [
@@ -134,6 +137,7 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                             "Super Value Pauanui", "Super Value Plaza", "Super Value Reefton",
                             "Super Value Tinwald", "Super Value Wanganuik",
                         ],
+                        isUnique: true,
                     }),
                 },
             },
@@ -149,6 +153,7 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                             "Fresh Choice",
                             "Super Value",
                         ],
+                        isUnique: true,
                     }),
                 },
             },
@@ -181,6 +186,7 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                             "Baby & Child",
                             "Health & Body",
                         ],
+                        isUnique: true,
                     }),
                 },
             },
@@ -194,6 +200,20 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                             "ea",
                         ],
                         isUnique: true,
+                    }),
+                },
+            },
+            price_history: {
+                count: 100,
+                columns: {
+                    date: f.date({
+                        minDate: "2025-01-01",
+                        maxDate: "2025-01-01",
+                    }),
+                    price: f.number({
+                        minValue: 1,
+                        precision:100,
+                        maxValue: 1000,  
                     }),
                 },
             },
