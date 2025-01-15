@@ -5,7 +5,8 @@
 This project uses docker compose for development, testing, and release.
 
 The run the client, server, or pgadmin separately simple run `sudo docker compose -f <respective_compose_file> up`.
-To run the server with pgadmin use the following command: `sudo docker compose -f ./docker-compose-pgadmin.yml -f ./docker-compose-server.yml up`.
+One can also run multiple docker compose files at the same time.
+E.g. `sudo docker compose -f ./docker-compose-db.yml -f ./docker-compose-server.yml up` to run the server with database.
 However, to run the entire stack (client, server, and pgadmin) in parallel run `sudo docker compose up`.
 
 # Overview
