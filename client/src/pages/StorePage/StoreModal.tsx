@@ -1,10 +1,10 @@
-interface Chain {
+type Chain = {
     id: number; 
     name: string;
     image_logo: string;
 }
 
-interface Stores{
+type Stores = {
     id: number,
     name: string,
     chainID: number;
