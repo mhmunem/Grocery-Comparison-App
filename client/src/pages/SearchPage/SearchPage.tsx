@@ -1,13 +1,13 @@
-import './SearchPage.css';
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-import { IonContent, IonItem, IonSelect, IonSelectOption, IonBadge, IonButtons, IonButton, IonIcon, IonHeader, IonPage, IonToolbar, IonSearchbar, IonLabel, IonImg, IonGrid, IonCol, IonRow } from '@ionic/react';
+import { IonBadge, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonItem, IonLabel, IonPage, IonRow, IonSearchbar, IonSelect, IonSelectOption, IonToolbar } from '@ionic/react';
+import { CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from 'chart.js';
 import { cartOutline } from 'ionicons/icons';
-import { LoadingContainer } from '../../components/SharedComponents/loadingContainer';
-import { PaginationControls } from '../../components/SearchPage/PaginationControls';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ProductDetailsModal } from '../../components/ProductPage/ProductDetailsModal';
+import { PaginationControls } from '../../components/SearchPage/PaginationControls';
 import { SearchProductCard } from '../../components/SearchPage/SearchProductCard';
-import { getSearch } from "../../services/InitialSetupService"
+import { LoadingContainer } from '../../components/SharedComponents/loadingContainer';
+import { getSearch } from "../../services/InitialSetupService";
+import './SearchPage.css';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -144,20 +144,19 @@ const SearchPage: React.FC = () => {
     const handleSearch = async () => {
         setSearchAttempted(true);
         if (query.length < 3 || query.length > 50) {
-            // BUG: it always gives this error on the first search
-            setError('Search query must be between 3 and 50 characters.');
+            setError(`Search query must be between 3 and 50 characters.Current length: ${query.length}`);
             return;
         }
 
         let results = await getSearch(query, "name", "ASC").then(re => re)
         setProducts(results);
-        // console.log(products);
         productapi: ", results";
         setError('');
     };
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
         if (event.key === 'Enter') {
+            event.preventDefault();
             handleSearch();
         }
     };
@@ -263,7 +262,8 @@ const SearchPage: React.FC = () => {
                     <IonSearchbar
                         value={query}
                         onIonChange={(e) => setQuery(e.detail.value!)}
-                        onKeyDown={handleKeyDown}
+                        onKeyUp={handleKeyDown}
+                        //onKeyDown={handleKeyDown}
                         onIonBlur={handleBlur}
                         placeholder="Search for products..."
                         debounce={300}
