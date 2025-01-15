@@ -11,28 +11,6 @@ import './SearchPage.css';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-interface PriceHistory {
-    date: Date;
-    price: number;
-}
-
-interface PriceHistoryData {
-    labels: string[];
-    datasets: Array<{
-        label: string;
-        data: number[];
-        borderColor: string;
-        backgroundColor: string;
-        tension: number;
-    }>;
-}
-
-
-
-interface CartItem {
-    product: any;
-    quantity: number;
-}
 
 type Product = {
     products: {
@@ -112,7 +90,7 @@ const SearchPage: React.FC = () => {
                 console.error('Error fetching data:', error);
             } finally {
                 setLoading(false);
-                
+
             }
 
         };
@@ -182,32 +160,18 @@ const SearchPage: React.FC = () => {
     };
 
     const openProductDetails = (product: Product) => {
-        
+
 
         setSelectedProduct(product);
         console.log("openProductDetails:", selectedProduct)
         setShowProductDetails(true);
 
-        
+
     };
-
-
 
     const closeProductDetails = () => {
         setShowProductDetails(false);
     };
-
-    const handleAddToCart = (productId: string) => {
-        setAddedToCart((prev) => ({
-            ...prev,
-            [productId]: true,
-        }));
-        setQuantities((prev) => ({
-            ...prev,
-            [productId]: prev[productId] > 0 ? prev[productId] : 1,
-        }));
-    };
-
 
     const increaseQuantity = (productId: string) => {
         setQuantities((prevQuantities) => ({
@@ -215,7 +179,7 @@ const SearchPage: React.FC = () => {
             [productId]: (prevQuantities[productId] || 0) + 1,
         }));
         console.log("Quantities State:", quantities);
-        
+
     };
 
     const decreaseQuantity = (productId: string) => {
@@ -263,14 +227,12 @@ const SearchPage: React.FC = () => {
                         value={query}
                         onIonChange={(e) => setQuery(e.detail.value!)}
                         onKeyUp={handleKeyDown}
-                        //onKeyDown={handleKeyDown}
                         onIonBlur={handleBlur}
                         placeholder="Search for products..."
                         debounce={300}
                         className="searchbar" />
                     <IonButtons slot="end">
                         <IonButton
-                            // onClick={() => (window.location.href = '/shoppinglist')}
                             style={{ position: 'relative' }}
                         >
                             <IonIcon icon={cartOutline} />
