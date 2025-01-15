@@ -1,6 +1,7 @@
 import { NodePgDatabase } from "drizzle-orm/node-postgres"
 import { reset, seed } from "drizzle-seed"
 import { price_history } from "../schema/price_history";
+import { count } from "console";
 
 export async function reset_db(db: NodePgDatabase, tables: Object) {
     try {
@@ -114,6 +115,9 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                         ],
                     }),
                 },
+                with: {
+                    price_history: 31,
+                },
             },
             stores: {
                 count: 47,
@@ -204,17 +208,18 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                 },
             },
             price_history: {
-                count: 100,
                 columns: {
+                    count: 31,
                     date: f.date({
                         minDate: "2025-01-01",
-                        maxDate: "2025-01-01",
+                        maxDate: "2025-01-31",
                     }),
                     price: f.number({
                         minValue: 1,
                         precision:100,
                         maxValue: 1000,  
                     }),
+                    
                 },
             },
             shopping_list: {
