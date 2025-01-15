@@ -28,14 +28,14 @@ services:
     env_file:
       - ./server/.env
     command: sh -c "npm run db:generate && npm run db:push"
-    volumes:
-      - ./server/src:/server/src
     networks:
       - project_network
 
   fullstack_server:
     container_name: fullstack_server
     depends_on:
+      db_migrate:
+        condition: service_completed_successfully
       fullstack_db:
         condition: service_healthy
     build:
@@ -72,6 +72,8 @@ services:
   fullstack_client:
     container_name: fullstack_client
     depends_on:
+      db_migrate:
+        condition: service_completed_successfully
       fullstack_db:
         condition: service_healthy
       fullstack_server:
@@ -88,6 +90,25 @@ services:
       - ./client/src:/client/src
     networks:
       - project_network
+
+  web_scraper:   
+      build:
+        context: ./server  
+        dockerfile: Dockerfile   
+      container_name: web_scraper_container 
+      depends_on:
+        db_migrate:
+          condition: service_completed_successfully
+        fullstack_server:
+          condition: service_healthy 
+      volumes:
+        - ./server/src/web-scraping:/server/src/web-scraping
+      env_file:
+        - ./server/.env 
+      command: ["npm", "run", "scrape"]
+      networks:
+        - project_network
+
 
 volumes:
   cosc680-db:
