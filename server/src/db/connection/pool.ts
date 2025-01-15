@@ -53,6 +53,18 @@ const finalPool = new Pool({
 
 const db = drizzle(finalPool)
 
+const current_env = process.env.NODE_ENV!
+const current_db = await db.execute(sql`SELECT current_database()`).then(r => r.rows[0].current_database) as string
+
+if (current_env.toLowerCase() === 'prod' || current_db.toLowerCase().includes('prod')) {
+    const msg = "DO NOT RESET OR SEED THE PRODUCTION DATABASE"
+
+    // Two different mechanisms to ensure the production database is not altered using this function.
+    console.error(msg)
+    throw Error(msg)
+    process.exit(1)
+}
+
 seed_db(db, { products, stores, store_products, chains, units, shopping_list, category, price_history })
 
 
