@@ -2,7 +2,7 @@ import { Pool } from 'pg'
 import { chains } from '../schema/chains'
 import { drizzle } from 'drizzle-orm/node-postgres'
 import { products } from '../schema/products'
-import { seed_db, reset_db } from '../seed/seed'
+import { seed_db } from '../seed/seed'
 import { shopping_list } from '../schema/shopping_list'
 import { store_products } from '../schema/store_products'
 import { stores } from '../schema/stores'
@@ -16,7 +16,6 @@ const env = process.env.NODE_ENV!
 console.log("Running in environment:", env)
 
 const dbUrl = process.env[`${env.toUpperCase()}_DATABASE_URL`]
-
 const databases = ['cosc680_dev_db', 'cosc680_test_db', 'cosc680_prod_db']
 
 const config = {
@@ -54,7 +53,6 @@ const finalPool = new Pool({
 
 const db = drizzle(finalPool)
 
-// reset_db(db, { products, stores, store_products, chains, units, shopping_list, category, price_history })
 seed_db(db, { products, stores, store_products, chains, units, shopping_list, category, price_history })
 
 

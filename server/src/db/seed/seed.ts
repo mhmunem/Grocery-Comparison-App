@@ -1,16 +1,27 @@
+import { sql } from "drizzle-orm"
 import { NodePgDatabase } from "drizzle-orm/node-postgres"
 import { reset, seed } from "drizzle-seed"
 
-export async function reset_db(db: NodePgDatabase, tables: Object) {
+export async function seed_db(db: NodePgDatabase, tables: Object) {
+
+    const current_env = process.env.NODE_ENV!
+    const current_db = await db.execute(sql`SELECT current_database()`).then(r => r.rows[0].current_database) as string
+
+    if (current_env.toLowerCase() === 'prod' || current_db.toLowerCase().includes('prod')) {
+        const msg = "DO NOT RESET OR SEED THE PRODUCTION DATABASE"
+
+        // Two different mechanisms to ensure the production database is not altered using this function.
+        console.error(msg)
+        throw Error(msg)
+        process.exit(1)
+    }
+
     try {
         reset(db, tables);
-        console.log("Database reset succesfully")
     } catch (error) {
-        console.log("WARNING: `reset_db` not working!")
+        console.log("WARNING: `reset_db` not failed!")
     }
-}
 
-export async function seed_db(db: NodePgDatabase, tables: Object) {
     try {
         await seed(db, tables).refine(f => ({
             products: {
@@ -228,7 +239,8 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                 }
             },
         }))
-    } catch (error) {
+        console.log("Database seeded succesfully")
+    } catch (_) {
         console.log("WARNING: found deplicate keys while trying to seed the database. Remove the duplicate keys first. You can reset the database with `reset()` from drizzle-seed.");
     }
 }
