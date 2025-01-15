@@ -1,0 +1,40 @@
+services:
+  fullstack_db:
+    container_name: fullstack_db
+    image: postgres:17.2
+    restart: always
+    env_file:
+      - ./server/.env
+    volumes:
+      - cosc680-db:/var/lib/postgresql/data  
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    # healthcheck:
+    #   test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
+    networks:
+      - project_network
+    
+  db_migrate:
+    container_name: db_migrate
+    # depends_on:
+    #   fullstack_db:
+    #     condition: service_healthy
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    env_file:
+      - ./server/.env
+    command: sh -c "npm run db:generate && npm run db:push"
+    volumes:
+      - ./server/src:/server/src
+    networks:
+      - project_network
+
+volumes:
+  cosc680-db:
+
+networks:
+  project_network:

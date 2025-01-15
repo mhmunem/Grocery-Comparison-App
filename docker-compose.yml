@@ -1,11 +1,5 @@
 include:
+  - ./docker-compose-db.yml
   - ./docker-compose-server.yml
   - ./docker-compose-pgadmin.yml
   - ./docker-compose-client.yml
-
-volumes:
-  cosc680-db:
-  pgadmin-data:
-
-networks:
-  project_network:
