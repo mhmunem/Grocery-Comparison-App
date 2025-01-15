@@ -8,6 +8,7 @@ import { store_products } from '../schema/store_products'
 import { stores } from '../schema/stores'
 import { units } from '../schema/units'
 import { category } from '../schema/category'
+import { reset } from 'drizzle-seed'
 
 
 const env = process.env.NODE_ENV!
@@ -54,7 +55,7 @@ const finalPool = new Pool({
 const db = drizzle(finalPool)
 
 // reset(db, { products, stores, store_products, chains, units, shopping_list, category })
-seed_db(db, { products, stores, store_products, chains, units, shopping_list, category })
+// seed_db(db, { products, stores, store_products, chains, units, shopping_list, category })
 
 
 export default db
