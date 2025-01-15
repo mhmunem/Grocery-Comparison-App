@@ -58,6 +58,4 @@ const db = drizzle(finalPool)
 seed_db(db, { products, stores, store_products, chains, units, shopping_list, category, price_history })
 
 
-
-
 export default db
