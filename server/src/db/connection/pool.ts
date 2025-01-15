@@ -56,10 +56,7 @@ const db = drizzle(finalPool)
 
 
 if (env.toLowerCase().includes('prod')) {
-    const msg = "DO NOT ALTER THE PRODUCTION DATABASE"
-
-    // Two different mechanisms to ensure the production database is not altered using this function.
-    console.error(msg)
+    console.error("DO NOT ALTER THE PRODUCTION DATABASE")
     process.exit(1)
 } else {
     seed_db(db, { products, stores, store_products, chains, units, shopping_list, category, price_history })
