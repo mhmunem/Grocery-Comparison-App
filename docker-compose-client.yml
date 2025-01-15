@@ -1,0 +1,23 @@
+services:
+  fullstack_client:
+    container_name: fullstack_client
+    depends_on:
+      fullstack_db:
+        condition: service_healthy
+      fullstack_server:
+        condition: service_healthy
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ./client/.env
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client/src:/client/src
+    networks:
+      - project_network
+
+networks:
+  project_network:

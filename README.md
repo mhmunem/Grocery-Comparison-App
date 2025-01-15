@@ -1,6 +1,14 @@
 # Grocery Comparison App
 
-## Overview
+## How to Run
+
+This project uses docker compose for development, testing, and release.
+
+The run the client, server, or pgadmin separately simple run `sudo docker compose -f <respective_compose_file> up`.
+To run the server with pgadmin use the following command: `sudo docker compose -f ./docker-compose-pgadmin.yml -f ./docker-compose-server.yml up`.
+However, to run the entire stack (client, server, and pgadmin) in parallel run `sudo docker compose up`.
+
+# Overview
 
 We will develop a grocery price comparison app to help users find the best prices for their grocery items across multiple supermarkets.
 

@@ -1,59 +1,11 @@
-services:
-  fullstack_client:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-    container_name: fullstack_client
-    restart: unless-stopped
-    volumes:
-      - ./client/src:/client/src
-    ports:
-      - "5173:5173"
-    depends_on:
-      - fullstack_server
-      - fullstack_db
-    networks:
-      - project_network
-    env_file:
-      - ./client/.env
+include:
+  - ./docker-compose-server.yml
+  - ./docker-compose-pgadmin.yml
+  - ./docker-compose-client.yml
 
-  fullstack_server:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    container_name: fullstack_server
-    restart: unless-stopped
-    volumes:
-      - ./server/src:/server/src
-    ports:
-      - "${PORT}:${PORT}"
-    env_file:
-      - ./server/.env
-    depends_on:
-      - fullstack_db
-    networks:
-      - project_network
-
-  fullstack_db:
-    image: postgres:17.2
-    container_name: fullstack_db
-    restart: always
-    env_file:
-      - ./server/.env
-    volumes:
-      - cosc680-db:/var/lib/postgresql/data  
-    ports:
-      - "${DB_PORT}:${DB_PORT}"
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - project_network
-    
 volumes:
   cosc680-db:
+  pgadmin-data:
 
 networks:
   project_network:
