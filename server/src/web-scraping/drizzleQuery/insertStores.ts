@@ -5,12 +5,9 @@ import { ilike } from "drizzle-orm";
 
 const insertOrUpdateStores = async (storeData: any) => {
     try {
-        //const allChains = await db.select().from(chains);
-
         for (const store of storeData) {
             if (store.name) {
                 const chain = await db.select().from(chains).where(ilike(chains.name, `${store.name.split(' ')[0]}%`)).limit(1);
-                //console.log(chain)
                 if (chain) {
                     await db.insert(stores).values({
                         name: store.name,
