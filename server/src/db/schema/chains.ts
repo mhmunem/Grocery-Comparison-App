@@ -1,7 +1,9 @@
-import { serial, text, pgTable } from "drizzle-orm/pg-core";
+import { serial, text, pgTable, unique } from "drizzle-orm/pg-core";
 
 export const chains = pgTable('chains', {
     id: serial().primaryKey(),
-    name: text().notNull(),
+    name: text().notNull().unique(),
     image_logo: text().notNull(),
-})
+}, (table) => ({
+    nameUnique: unique('name_unique').on(table.name),
+}));
