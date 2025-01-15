@@ -9,7 +9,6 @@ import { stores } from '../schema/stores'
 import { units } from '../schema/units'
 import { category } from '../schema/category'
 import { price_history } from '../schema/price_history'
-import { sql } from 'drizzle-orm'
 
 
 const env = process.env.NODE_ENV!
