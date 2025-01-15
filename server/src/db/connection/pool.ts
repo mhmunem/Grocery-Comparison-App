@@ -55,7 +55,7 @@ const finalPool = new Pool({
 const db = drizzle(finalPool)
 
 
-if (env.toLowerCase() === 'prod') {
+if (env.toLowerCase().includes('prod')) {
     const msg = "DO NOT ALTER THE PRODUCTION DATABASE"
 
     // Two different mechanisms to ensure the production database is not altered using this function.
