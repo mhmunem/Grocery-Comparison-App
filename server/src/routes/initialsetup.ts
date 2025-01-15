@@ -2,6 +2,8 @@ import express from 'express';
 import { search_product } from "../search/search";
 import { Request, Response } from 'express';
 import db from "../db/connection/pool";
+import { SortDirection } from '../types/routes';
+import { SortBy } from '../types/routes';
 
 
 const router = express.Router();
@@ -138,11 +140,12 @@ router.delete('/initialSetup/:id', (req, res) => {
  *       400:
  *         description: Invalid request parameters.
  */
-router.get('/search_product', (req: Request<{ name: string, sort_by: "name" | "price" | "amount", sort_direction: "ASC" | "DESC" }>, res: Response) => {
-    async function f() {
-        res.send(await search_product(db, String(req.query.name), 'name', 'ASC'))
-    }
-    f()
+router.get('/search_product', async (req: Request<{ name: string, sort_by: SortBy, sort_direction: SortDirection }>, res: Response) => {
+    const { name, sort_by, sort_direction } = req.query
+
+    const result = await search_product(db, name as string, sort_by as SortBy, sort_direction as SortDirection)
+
+    res.send(result)
 });
 
 export default router;
