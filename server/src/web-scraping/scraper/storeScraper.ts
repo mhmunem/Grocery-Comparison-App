@@ -4,7 +4,6 @@ import insertOrUpdateStores from '../drizzleQuery/insertStores';
 
 const fetchStores = async () => {
     const response = await axios.get('https://backend.grocer.nz/stores');
-   // console.log(response,response.data);
     return response.data;
 };
 
