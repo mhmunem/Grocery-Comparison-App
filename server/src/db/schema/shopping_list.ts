@@ -1,4 +1,4 @@
-import { numericCasted } from "../../types/types";
+import { numericCasted } from "../../types/schema";
 import { products } from "./products";
 import { serial, integer, pgTable } from "drizzle-orm/pg-core";
 

@@ -126,7 +126,7 @@
     "start": "ts-node src/server.ts",
     "test": "./node_modules/.bin/jest | perl -pe 's/\\e\\[?.*?[\\@-~]//g'",
     "tests": "./node_modules/.bin/jest",
-    "dev": "nodemon src/server.ts",
+    "dev": "nodemon --legacy-watch src/server.ts",
     "scrape": "tsx src/web-scraping/main.ts",
     "test:ci": "jest --config ./jest.config.js --collectCoverage --coverageDirectory=\"./coverage\" --ci --reporters=default --reporters=jest-junit --watchAll=false | perl -pe 's/\\e\\[?.*?[\\@-~]//g'",
     "db:generate": "npx drizzle-kit generate --config ./drizzle.config.ts",

@@ -9,6 +9,7 @@ import { stores } from '../schema/stores'
 import { units } from '../schema/units'
 import { category } from '../schema/category'
 import { reset } from 'drizzle-seed'
+import { price_history } from '../schema/price_history'
 
 
 const env = process.env.NODE_ENV!

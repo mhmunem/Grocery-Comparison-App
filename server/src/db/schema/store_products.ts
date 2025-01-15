@@ -1,7 +1,7 @@
 import { products } from "./products";
 import { serial, integer, pgTable } from "drizzle-orm/pg-core";
 import { stores } from "./stores";
-import { numericCasted } from "../../types/types";
+import { numericCasted } from "../../types/schema";
 
 export const store_products = pgTable('store_products', {
     id: serial().primaryKey(),
