@@ -1,6 +1,5 @@
-import { sql } from "drizzle-orm"
 import { NodePgDatabase } from "drizzle-orm/node-postgres"
-import { reset, seed } from "drizzle-seed"
+import { seed } from "drizzle-seed"
 
 export async function seed_db(db: NodePgDatabase, tables: Object) {
     try {
