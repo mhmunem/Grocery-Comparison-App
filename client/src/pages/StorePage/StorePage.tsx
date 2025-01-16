@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { star, storefront, storefrontOutline } from 'ionicons/icons';
 import './StorePage.css';
 import { getChains, getStores } from '../../services/StoreService';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, IonButton, IonList, IonItem, IonCheckbox, IonLabel, IonTabBar, IonTabButton } from '@ionic/react';
+import { IonImg, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, IonButton, IonList, IonItem, IonCheckbox, IonLabel, IonTabBar, IonTabButton } from '@ionic/react';
 
 const StorePage: React.FC = () => {
     const [chains, setChains] = useState<Chain[]>([]);
@@ -52,14 +52,22 @@ const StorePage: React.FC = () => {
     return (
         <IonPage>
             <IonHeader>
-                <IonToolbar>
-                    <IonTitle></IonTitle>
+
+                <IonToolbar className="toolbar" color="primary">
+                    <div className="title-center">
+                        <IonImg
+                            src="680logocropped.png"
+                            alt="App Logo"
+                            className='headerLogo'
+                        />
+                        <IonTitle slot="end" > Store Selector</IonTitle>
+                    </div>
                 </IonToolbar>
             </IonHeader>
             <IonContent fullscreen>
                 <IonTabBar>
                     <IonTabButton tab="favorites" onClick={() => selectChain('favorites')}>
-                        <IonIcon  aria-hidden="true" icon={star} color="primary" />
+                        <IonIcon aria-hidden="true" icon={star} color="primary" />
                         <IonLabel>Favorites</IonLabel>
                     </IonTabButton>
 

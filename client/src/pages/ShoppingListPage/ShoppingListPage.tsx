@@ -250,11 +250,19 @@ const ShoppingListPage: React.FC = () => {
  
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar color="primary">
-          <IonTitle>Shopping List</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+            <IonHeader>
+
+                <IonToolbar className="toolbar" color="primary">
+                    <div className="title-center">
+                        <IonImg
+                            src="680logocropped.png"
+                            alt="App Logo"
+                            className='headerLogo'
+                        />
+                        <IonTitle slot="end" >Shopping List</IonTitle>
+                    </div>
+                </IonToolbar>
+            </IonHeader>
 
       <IonContent fullscreen>
         {loading ? (
