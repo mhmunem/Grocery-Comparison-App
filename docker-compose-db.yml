@@ -33,6 +33,23 @@ services:
     networks:
       - project_network
 
+  web_scraper:   
+      build:
+        context: ./server  
+        dockerfile: Dockerfile   
+      container_name: web_scraper_container 
+      depends_on:
+        db_migrate:
+          condition: service_completed_successfully
+      volumes:
+        - ./server/src/web-scraping:/server/src/web-scraping
+      env_file:
+        - ./server/.env 
+      command: ["npm", "run", "scrape"]
+      networks:
+        - project_network
+
+
 volumes:
   cosc680-db:
 

@@ -5,11 +5,12 @@ import Home from "../pages/HomePage/HomePage";
 import Search from "../pages/SearchPage/SearchPage";
 import ShoppingList from "../pages/ShoppingListPage/ShoppingListPage";
 import Account from "../pages/AccountPage/AccountPage";
+import Store from "../pages/StorePage/StorePage";
 
 const AppRoutes: React.FC = () => (
     <IonRouterOutlet>
-    <Redirect exact path="/" to="/home" />
-
+    <Redirect exact path="/" to="/stores" />
+    <Route path="/stores" render={() => <Store />} exact={true} />
     <Route path="/home" render={() => <Home />} exact={true} />
     <Route path="/search" render={() => <Search />} exact={true} />
     <Route path="/shoppinglist" render={() => <ShoppingList />} exact={true} />
