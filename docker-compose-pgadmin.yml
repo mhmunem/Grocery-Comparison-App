@@ -1,7 +1,12 @@
+include:
+  - ./docker-compose-db.yml
+  - ./docker-compose-server.yml
+
 services:
-  pgadmin:
+  drizzle-studio:
       container_name: pgadmin4_container
       image: dpage/pgadmin4
+      tty: true
       restart: always
       ports:
         - "8888:80"
@@ -10,7 +15,21 @@ services:
       volumes:
         - pgadmin-data:/var/lib/pgadmin
       networks:
-        - project_network 
+        - project_network
+
+  pgadmin:
+      container_name: pgadmin4_container
+      image: dpage/pgadmin4
+      tty: true
+      restart: always
+      ports:
+        - "8888:80"
+      env_file:
+        - ./server/.env
+      volumes:
+        - pgadmin-data:/var/lib/pgadmin
+      networks:
+        - project_network
 
 volumes:
   pgadmin-data:

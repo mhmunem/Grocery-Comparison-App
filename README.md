@@ -11,6 +11,11 @@ However, to run the entire stack (client, server, and pgadmin) in parallel run `
 
 NOTE: On Windows `sudo` is not required.
 
+## Running Tests
+
+From the root directory run: `sudo docker compose -f docker-compose-server-test.yml up --watch`.
+The tests will automatically rerun when any files in `server/` change.
+
 # Overview
 
 We will develop a grocery price comparison app to help users find the best prices for their grocery items across multiple supermarkets.
