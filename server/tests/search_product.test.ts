@@ -27,31 +27,37 @@ const db = drizzle(pool)
 const schema = { products, stores, store_products, chains, units, shopping_list, category, price_history }
 
 describe('search_product', () => {
-    beforeEach(async () => {
+    beforeAll(async () => {
+        await reset(db, schema)
         await seed(db, schema, { seed: 42 }).refine(f => ({
             products: {
-                count: 5,
+                count: 3,
                 columns: {
                     brand: f.valuesFromArray({
                         values: [
-                            "Value"
+                            "value"
                         ],
                     }),
                     details: f.valuesFromArray({
                         values: [
-                            "description 1",
+                            "description",
                         ],
                     }),
-                    amount: f.number({
-                        minValue: 1,
-                        precision: 100,
-                        maxValue: 10,
+                    amount: f.valuesFromArray({
+                        values: [
+                            1.1,
+                            2.1,
+                            3.1,
+                        ],
+                        isUnique: true
                     }),
                     name: f.valuesFromArray({
                         values: [
-                            "Organic Bananas", "Whole Milk", "Large Brown Eggs", "Wheat Bread", "Ground Coffee",
+                            "AMilk",
+                            "BMilk",
+                            "CMilk",
                         ],
-                        isUnique: true,
+                        isUnique: true
                     }),
                 },
             },
@@ -60,7 +66,7 @@ describe('search_product', () => {
                 columns: {
                     name: f.valuesFromArray({
                         values: [
-                            "store 1"
+                            "store"
                         ],
                     }),
                 },
@@ -70,18 +76,26 @@ describe('search_product', () => {
                 columns: {
                     name: f.valuesFromArray({
                         values: [
-                            "chain 1",
+                            "chain",
                         ],
                     }),
                 },
             },
             store_products: {
-                count: 1,
+                count: 3,
                 columns: {
                     price: f.number({
                         minValue: 1,
                         precision: 100,
                         maxValue: 20,
+                    }),
+                    productID: f.valuesFromArray({
+                        values: [
+                            1,
+                            2,
+                            3,
+                        ],
+                        isUnique: true
                     }),
                 },
             },
@@ -90,7 +104,7 @@ describe('search_product', () => {
                 columns: {
                     name: f.valuesFromArray({
                         values: [
-                            "category 1",
+                            "category",
                         ],
                     }),
                 },
@@ -100,35 +114,119 @@ describe('search_product', () => {
                 columns: {
                     name: f.valuesFromArray({
                         values: [
-                            "kg",
+                            "l",
                         ],
-                    }),
-                },
-            },
-            price_history: {
-                count: 0,
-                columns: {
-                    date: f.date({
-                        minDate: "2025-01-01",
-                        maxDate: "2025-01-01",
-                    }),
-                    price: f.number({
-                        minValue: 1,
-                        precision: 100,
-                        maxValue: 1000,
                     }),
                 },
             },
         }))
     });
 
-    afterEach(async () => {
-        reset(db, schema)
+    afterAll(async () => {
+        await reset(db, schema)
+        await pool.end()
     });
 
-    test('test caseinsensitive', async () => {
+    const results = [
+        {
+            products: {
+                id: 1,
+                name: 'CMilk',
+                brand: 'value',
+                details: 'description',
+                amount: 1.1,
+                image: 'fTSUZJ7m8v',
+                unitID: 1,
+                categoryID: 1
+            },
+            store_products: { id: 2, storeID: 1, productID: 1, price: 2.47 },
+            units: { id: 1, name: 'l' },
+            category: { id: 1, name: 'category' },
+            stores: { id: 1, name: 'store', chainID: 1 },
+            chains: { id: 1, name: 'chain', image_logo: 'TWE6QX3hhNxoyXL' }
+        },
+        {
+            products: {
+                id: 2,
+                name: 'AMilk',
+                brand: 'value',
+                details: 'description',
+                amount: 2.1,
+                image: 'ATO5ylEVYH7',
+                unitID: 1,
+                categoryID: 1
+            },
+            store_products: { id: 1, storeID: 1, productID: 2, price: 12.24 },
+            units: { id: 1, name: 'l' },
+            category: { id: 1, name: 'category' },
+            stores: { id: 1, name: 'store', chainID: 1 },
+            chains: { id: 1, name: 'chain', image_logo: 'TWE6QX3hhNxoyXL' }
+        },
+        {
+            products: {
+                id: 3,
+                name: 'BMilk',
+                brand: 'value',
+                details: 'description',
+                amount: 3.1,
+                image: 'O8H0p74ucWkxTCCd4T',
+                unitID: 1,
+                categoryID: 1
+            },
+            store_products: { id: 3, storeID: 1, productID: 3, price: 18.38 },
+            units: { id: 1, name: 'l' },
+            category: { id: 1, name: 'category' },
+            stores: { id: 1, name: 'store', chainID: 1 },
+            chains: { id: 1, name: 'chain', image_logo: 'TWE6QX3hhNxoyXL' }
+        }
+    ]
+
+    test('all results', async () => {
+        return await search_product(db, '', 'price' as SortBy, 'ASC' as SortDirection).then(data => {
+            expect(data).toStrictEqual(results)
+        })
+    });
+
+    test('no results', async () => {
+        return await search_product(db, 'SHOE', 'price' as SortBy, 'ASC' as SortDirection).then(data => {
+            expect(data).toStrictEqual([])
+        })
+    });
+
+    test('sorting by name DESC', async () => {
+        return await search_product(db, 'MILK', 'name' as SortBy, 'DESC' as SortDirection).then(data => {
+            expect(data).toStrictEqual(results.slice().sort((a, b) => a.products.name.localeCompare(b.products.name)).reverse())
+        })
+    });
+
+    test('sorting by amount DESC', async () => {
+        return await search_product(db, 'MILK', 'amount' as SortBy, 'DESC' as SortDirection).then(data => {
+            expect(data).toStrictEqual(results.slice().reverse());
+        })
+    });
+
+    test('case insensitive DESC', async () => {
+        return await search_product(db, 'MILK', 'price' as SortBy, 'DESC' as SortDirection).then(data => {
+            expect(data).toStrictEqual(results.slice().reverse());
+        })
+    });
+
+    test('sorting by name ASC', async () => {
+        return await search_product(db, 'MILK', 'name' as SortBy, 'ASC' as SortDirection).then(data => {
+            expect(data).toStrictEqual(results.slice().sort((a, b) => a.products.name.localeCompare(b.products.name)))
+        })
+    });
+
+    test('sorting by amount ASC', async () => {
+        return await search_product(db, 'MILK', 'amount' as SortBy, 'ASC' as SortDirection).then(data => {
+            expect(data).toStrictEqual(results);
+        })
+    });
+
+    test('case insensitive ASC', async () => {
         return await search_product(db, 'MILK', 'price' as SortBy, 'ASC' as SortDirection).then(data => {
-            expect(data).toStrictEqual([{ "products": { "amount": 1.55, "brand": "Value", "categoryID": 1, "details": "description 1", "id": 5, "image": "LB6EInJgCGsW", "name": "Whole Milk", "unitID": 1 }, "store_products": { "id": 1, "price": 12.24, "productID": 5, "storeID": 1 } }]);
+            expect(data).toStrictEqual(results);
         })
     });
 })
+
