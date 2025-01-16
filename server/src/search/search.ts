@@ -3,6 +3,7 @@ import { ilike, asc, desc, eq } from "drizzle-orm";
 import { products } from "../db/schema/products";
 import { store_products } from "../db/schema/store_products";
 import { units } from "../db/schema/units";
+import { category } from "../db/schema/category";
 
 
 export async function search_product(db: NodePgDatabase, name: string, sort_by: 'name' | 'price' | 'amount', sort_direction: 'ASC' | 'DESC') {
@@ -27,6 +28,8 @@ export async function search_product(db: NodePgDatabase, name: string, sort_by: 
         .where(ilike(products.name, `%${name}%`))
         .innerJoin(store_products, eq(products.id, store_products.productID))
         .innerJoin(units, eq(products.unitID, units.id))
+        .innerJoin(category, eq(products.categoryID, category.id))
+        .innerJoin(store_products, eq(products.id, store_products.productID))
         .orderBy(sort(column))
 
     return search_results
