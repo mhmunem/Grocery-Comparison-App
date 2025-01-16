@@ -237,7 +237,6 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                 }
             },
         }))
-        console.log("Database seeded succesfully")
     } catch (_) {
         console.log("WARNING: found deplicate keys while trying to seed the database. Remove the duplicate keys first. You can reset the database with `reset()` from drizzle-seed.");
     }
