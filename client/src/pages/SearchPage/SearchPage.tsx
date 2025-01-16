@@ -39,7 +39,7 @@ const SearchPage: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
-    const [query, setQuery] = useState<string>('   ');
+    const [query, setQuery] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [searchAttempted, setSearchAttempted] = useState<boolean>(false);
 
@@ -62,6 +62,7 @@ const SearchPage: React.FC = () => {
             selectedCategories.includes(product.products.categoryID.toString())
         )
         : products;
+
 
 
     const sortOptions = [
@@ -131,7 +132,7 @@ const SearchPage: React.FC = () => {
     const handleSearch = async () => {
         setSearchAttempted(true);
         if (query.length < 3 || query.length > 50) {
-            setError(`Search query must be between 3 and 50 characters.Current length: ${query.length}`);
+            setError(`Search query must be between 3 and 50 characters.`);
             return;
         }
 
@@ -212,11 +213,12 @@ const SearchPage: React.FC = () => {
     useEffect(() => {
         const total = Math.ceil(filteredProducts.length / itemsPerPage);
         setTotalPages(total);
-        if (currentPage > total) {
-            setCurrentPage(1); // Reset to the first page if the current page exceeds the new total
+        if (currentPage < 1) {
+            setCurrentPage(1);
+        } else if (currentPage > total) {
+            setCurrentPage(total);
         }
-    }, [filteredProducts, itemsPerPage]);
-
+    }, [filteredProducts, itemsPerPage, currentPage]);
 
     const nextPage = () => {
         setCurrentPage((prev) => Math.min(prev + 1, totalPages));
@@ -227,7 +229,9 @@ const SearchPage: React.FC = () => {
     };
 
     const goToPage = (page: number) => {
-        setCurrentPage(page);
+        if (page >= 1 && page <= totalPages) {
+            setCurrentPage(page);
+        }
     };
 
 

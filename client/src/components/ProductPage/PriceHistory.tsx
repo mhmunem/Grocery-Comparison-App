@@ -21,7 +21,7 @@ interface PriceHistoryData {
 export function PriceHistory({product}:any) {
     const [dailyPriceHistory, setDailyPriceHistory] = useState<PriceHistory[]>([]);
     const [filteredPriceHistory, setFilteredPriceHistory] = useState<PriceHistory[]>([]);
-    const [timeRange, setTimeRange] = useState('3M');
+    const [timeRange, setTimeRange] = useState('4W');
 
     useEffect(() => {
         const generateDummyData = () => {
@@ -39,10 +39,10 @@ export function PriceHistory({product}:any) {
     useEffect(() => {
         const filterDataByRange = () => {
             const ranges: Record<string, number> = {
-                '1M': 30,
+                '1W': 7,
+                '4W': 28,
                 '3M': 90,
                 '6M': 180,
-                '12M': 365,
             };
             const days = ranges[timeRange] || 365;
             const filtered = dailyPriceHistory.slice(-days);

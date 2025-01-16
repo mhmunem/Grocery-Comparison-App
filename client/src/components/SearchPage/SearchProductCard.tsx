@@ -35,9 +35,9 @@ export function SearchProductCard({
 
                     <div>
                         <IonLabel className="brandText">{product.products.brand}</IonLabel>
-                        <IonLabel className="sizeText">{product.products.amount}{product.products.units.name}</IonLabel>
+                        <IonLabel className="sizeText">{product.products.amount} {product.units.name}</IonLabel>
                     </div>
-
+                    
                     <IonLabel className="priceLabel">${productPrice}</IonLabel>
                     {quantities[product.store_products.productID] > 0 ? (
                         <div

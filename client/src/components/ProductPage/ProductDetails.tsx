@@ -12,7 +12,7 @@ export function ProductDetails({ decreaseQuantity, increaseQuantity, quantities,
                     <IonLabel className="brandText">Brand: {selectedProduct.products.brand}</IonLabel>
                     </IonRow>
                     <IonRow>
-                    <IonLabel className="sizeText">Unit size: {selectedProduct.products.amount}g</IonLabel>
+                    <IonLabel className="sizeText">Size: {selectedProduct.products.amount}g</IonLabel>
                     </IonRow>
                     <IonRow>
                     <IonLabel className="priceLabel">${selectedProduct.store_products.price}</IonLabel>
