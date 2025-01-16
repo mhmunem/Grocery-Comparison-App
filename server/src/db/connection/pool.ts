@@ -2,17 +2,13 @@ import { Pool } from 'pg'
 import { chains } from '../schema/chains'
 import { drizzle } from 'drizzle-orm/node-postgres'
 import { products } from '../schema/products'
-import { seed_db, reset_db } from '../seed/seed'
+import { seed_db } from '../seed/seed'
 import { shopping_list } from '../schema/shopping_list'
 import { store_products } from '../schema/store_products'
 import { stores } from '../schema/stores'
 import { units } from '../schema/units'
 import { category } from '../schema/category'
-import { reset } from 'drizzle-seed'
 import { price_history } from '../schema/price_history'
-import { search_product } from '../../search/search'
-import { SortBy } from '../../types/routes'
-import { SortDirection } from '../../types/routes'
 
 
 const env = process.env.NODE_ENV!
@@ -40,9 +36,6 @@ const createDatabases = async () => {
             const res = await pool.query(query, [dbName])
             if (res.rowCount === 0) {
                 await pool.query(`CREATE DATABASE ${dbName}`)
-                console.log(`Database ${dbName} created successfully.`)
-            } else {
-                console.log(`Database ${dbName} already exists.`)
             }
         } catch (error) {
             console.error(`Error while creating database ${dbName}:`, error)
@@ -58,12 +51,13 @@ const finalPool = new Pool({
 
 const db = drizzle(finalPool)
 
-// reset_db(db, { products, stores, store_products, chains, units, shopping_list, category, price_history })
-seed_db(db, { products, stores, store_products, chains, units, shopping_list, category, price_history })
 
-async function f() {
-    console.log(await search_product(db, 'chicken', 'price' as SortBy, 'ASC' as SortDirection))
+if (env.toLowerCase().includes('prod')) {
+    console.error("DO NOT ALTER THE PRODUCTION DATABASE")
+    process.exit(1)
+} else {
+    seed_db(db, { products, stores, store_products, chains, units, shopping_list, category, price_history })
 }
-f()
+
 
 export default db

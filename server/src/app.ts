@@ -28,7 +28,7 @@ corsMiddleware(app)
 bodyParserMiddleware(app)
 
 db.execute('SELECT NOW()')
-    .then(() => console.log('Database connection is working'))
+    .then(() => console.log('Database connection is succesfull'))
     .catch((err) => console.error('Database connection check failed:', err))
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs))
