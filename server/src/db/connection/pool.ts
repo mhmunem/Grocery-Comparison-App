@@ -17,6 +17,8 @@ console.log("Running in environment:", env)
 
 const dbUrl = process.env[`${env?.toUpperCase()}_DATABASE_URL`]
 
+console.log("Connect to:", dbUrl);
+
 const databases = ['cosc680_dev_db', 'cosc680_test_db', 'cosc680_prod_db']
 
 const config = {
@@ -51,11 +53,7 @@ const finalPool = new Pool({
 
 const db = drizzle(finalPool)
 
-
-if (env.toLowerCase().includes('prod')) {
-    console.error("DO NOT ALTER THE PRODUCTION DATABASE")
-    process.exit(1)
-} else {
+if (env === 'dev') {
     seed_db(db, { products, stores, store_products, chains, units, shopping_list, category, price_history })
 }
 
