@@ -29,7 +29,6 @@ export async function search_product(db: NodePgDatabase, name: string, sort_by: 
         .innerJoin(store_products, eq(products.id, store_products.productID))
         .innerJoin(units, eq(products.unitID, units.id))
         .innerJoin(category, eq(products.categoryID, category.id))
-        .innerJoin(store_products, eq(products.id, store_products.productID))
         .orderBy(sort(column))
 
     return search_results
