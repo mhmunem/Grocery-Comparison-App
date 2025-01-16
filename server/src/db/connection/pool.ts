@@ -60,5 +60,9 @@ const db = drizzle(finalPool)
 // reset_db(db, { products, stores, store_products, chains, units, shopping_list, category, price_history })
 seed_db(db, { products, stores, store_products, chains, units, shopping_list, category, price_history })
 
+async function f() {
+    console.log(await search_product(db, 'chicken', 'price' as SortBy, 'ASC' as SortDirection))
+}
+f()
 
 export default db
