@@ -1,22 +1,18 @@
 services:
-  fullstack_server:
-    container_name: fullstack_server
+  drizzle-kit-studio:
+    container_name: drizzle-kit-studio
     tty: true
     build:
       context: ./server
       dockerfile: Dockerfile
     restart: unless-stopped
-    volumes:
-      - ./server/src:/server/src
+    command: npx drizzle-kit studio --config drizzle.config.ts --host 0.0.0.0 --port 4983
     ports:
-      - "5000:5000"
+      - "4983:4983"
     env_file:
       - ./server/.env
     networks:
       - project_network
-
-volumes:
-  cosc680-db:
 
 networks:
   project_network:
