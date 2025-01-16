@@ -100,7 +100,6 @@ const SearchPage: React.FC = () => {
                 console.error('Error fetching data:', error);
             } finally {
                 setLoading(false);
-
             }
 
         };
@@ -269,9 +268,9 @@ const SearchPage: React.FC = () => {
                         placeholder="Search for products..."
                         debounce={300}
                         className="searchbar" />
-                    <IonButtons slot="end">
+                    <IonButtons slot="end" >
                         <IonButton
-                            style={{ position: 'relative' }}
+                            style={{ position: 'relative'}}
                         >
                             <IonIcon icon={cartOutline} />
                             {Object.keys(addedToCart).filter((key) => addedToCart[key]).length > 0 && (
@@ -360,6 +359,7 @@ const SearchPage: React.FC = () => {
                                             size-sm="4"
                                             size-md="4"
                                             size-lg="3"
+                                            size-xl='3'
                                             key={index}
                                             class="ion-no-margin"
                                         >

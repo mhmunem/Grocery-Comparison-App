@@ -5,7 +5,7 @@ ion-header {
 
 .searchbar {
     margin: 4px auto;
-    width: 90%;
+    width: 70%;
     max-width: 600px;
 }
 
@@ -32,8 +32,8 @@ ion-header {
 /* Grid Container */
 .grid-container {
     width: 100%;
-    max-width: 1100px;
-    margin: 0 auto;
+    max-width: 1300px;
+    margin: 20px auto;
     padding: 0;
     box-sizing: border-box;
 
@@ -70,7 +70,7 @@ ion-grid {
 
 .one-line-title {
     font-size: 1rem;
-    margin: 12px 0;
+    margin: 8px 0;
     font-family: 'Noto Sans';
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -105,11 +105,12 @@ ion-grid {
     margin: auto;
     gap: 2px;
     font-family: 'Noto Sans';
+    height: 80px;
 }
 
 .priceLabel {
     font-family: 'Noto Sans';
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: bold;
     color: #4caf50;
     text-align: center;
@@ -133,7 +134,7 @@ ion-grid {
     align-items: center;
     justify-content: center;
     transition: background-color 0.2s ease, color 0.2s ease;
-    font-size: 12px;
+    font-size: 15px;
 }
 
 
@@ -144,11 +145,11 @@ ion-grid {
 
 /* Add to List button */
 .add-to-list-button {
-    width: 100px;
-    height: 50px; /* Adjust as needed */
-    font-size: 15px; /* Adjust as needed */
+    width: 115px;
+    height: 40px;
+    font-size: 13px;
     padding: 0;
-    --border-radius: 4px; /* Adjust as needed */
+    --border-radius: 4px;
   }
 
 
@@ -213,20 +214,26 @@ ion-grid {
 }
 
 
-/* error message */
-.error-message {
-    color: var(--ion-color-danger);
-    font-size: 14px;
-    text-align: center;
-    margin: 10px auto;
-    display: block;
+/* Error Message Container */
+.error-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 99, 71, 0.9); /* Tomato color for visibility */
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 10000; /* Ensure it overlays content */
 }
 
-.error-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 50px;
+/* Error Message Text */
+.error-message {
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0;
 }
 
 
@@ -236,46 +243,65 @@ ion-grid {
 /* --- 下拉框容器（包裹按钮 + 下拉菜单）--- */
 /* 修改重点：让它固定在右上角(可根据需求改动top/right值) */
 .sortDropdown-container {
-    position: fixed;
+    position: absolute;
     /* 固定定位，相对于浏览器窗口 */
-    top: 90px;
-    /* 根据需要微调，让它在搜索栏下方 */
-    right: 30px;
+    left: 190px;
+    right: 7500px;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0px;
     /* 靠屏幕右侧 */
     z-index: 9999;
     /* 确保浮在搜索结果等之上 */
     width: fit-content;
-    margin: 0;
     /* 去掉auto居中和上下间距 */
 }
 
+.sortDropdown-container {
+    position: relative; /* Positioned within its parent */
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px;
+    z-index: 9999; /* Ensure it's above other elements */
+}
+
 .categoryDropdown-container {
-    position: fixed;
-    top: 130px;
-    right: 50px;
+    position: absolute;
+    left: 200px;
+    right: 1100px;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0px;
     z-index: 9999;
     width: 170px;
-    margin: 0;
 }
 
 
+
 .sortDropdown-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: space-between;
-    min-width: 160px;
     padding: 8px 12px;
+    background-color: #ffffff;
     border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #fff;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 14px;
-    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    transition: background-color 0.2s, border-color 0.2s;
 }
 
 .sortDropdown-toggle:hover,
 .sortDropdown-toggle:focus {
     background-color: #f5f5f5;
+}
+
+.sortDropdown-toggle:hover {
+    background-color: #f5f5f5;
+    border-color: #aaa;
 }
 
 
@@ -302,37 +328,41 @@ ion-grid {
 
 
 .sortDropdown-menu {
-    position: static;
-    /* 在容器内相对布局即可，也可absolute若想离按钮稍远 */
-    width: 180px;
-    max-height: 0;
-    overflow: hidden;
+    position: absolute;
+    top: 100%; /* Align below the button */
+    right: 0;
+    margin-top: 8px;
+    background-color: #ffffff;
     border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #fff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    opacity: 0;
-    transition: max-height 0.2s ease, opacity 0.2s ease;
-    z-index: 9999;
-    margin-top: 4px;
-    /* 若想菜单和按钮之间留点缝 */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 200px;
+    padding: 8px 0;
+    display: none; /* Hidden by default */
 }
 
 .sortDropdown-menu.open {
-    max-height: 300px;
-    /* 足够容纳选项 */
-    opacity: 1;
-    overflow: auto;
+    display: block; /* Show when open */
 }
 
+/* Dropdown Items */
 .sortDropdown-item {
     padding: 8px 12px;
     font-size: 14px;
+    color: #333;
     cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
 }
 
 .sortDropdown-item:hover {
     background-color: #f0f0f0;
+    color: #000;
+}
+
+.sortDropdown-item.selected {
+    background-color: #4caf50;
+    color: #ffffff;
+    font-weight: bold;
 }
 
 .sortDropdown-item.selected {
@@ -361,7 +391,7 @@ ion-grid {
 
 @media (min-width: 1440px) {
     .grid-container {
-        max-width: 1200px;
+        max-width: 1300px;
     }
 
     .listCard {
@@ -372,14 +402,12 @@ ion-grid {
 @media (max-width: 767px) {
     .productDetails {
         flex-direction: column;
+        height: 140px;
 
-        .listCard {
-            height: 400px;
-        }
     }
 
     .listCard {
-        height: 400px;
+        height: 420px;
     }
 
     .priceAndQuantity {
