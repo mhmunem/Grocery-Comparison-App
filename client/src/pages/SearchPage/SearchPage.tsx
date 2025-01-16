@@ -54,7 +54,6 @@ const SearchPage: React.FC = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const itemsPerPage = 20;
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const paginatedProducts = products.slice(startIndex, startIndex + itemsPerPage);
     const [totalPages, setTotalPages] = useState(0);
 
     const filteredProducts = selectedCategories.length
@@ -62,8 +61,6 @@ const SearchPage: React.FC = () => {
             selectedCategories.includes(product.products.categoryID.toString())
         )
         : products;
-
-
 
     const sortOptions = [
         { label: 'Most relevant', value: 'relevance' },
@@ -81,7 +78,10 @@ const SearchPage: React.FC = () => {
         { label: 'Lowest to highest unit price', value: 'lowest-highest' },
         { label: 'Highest to lowest unit price', value: 'highest-lowest' },
     ];
+
     const dropdownRef = useRef<HTMLDivElement>(null);
+
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -107,13 +107,26 @@ const SearchPage: React.FC = () => {
         fetchData();
     }, []);
 
+
     useEffect(() => {
         localStorage.setItem('addedToCart', JSON.stringify(addedToCart));
     }, [addedToCart]);
 
+
     useEffect(() => {
         localStorage.setItem('quantities', JSON.stringify(quantities));
     }, [quantities]);
+
+    
+    useEffect(() => {
+        const total = Math.ceil(filteredProducts.length / itemsPerPage);
+        setTotalPages(total);
+        if (currentPage < 1) {
+            setCurrentPage(1);
+        } else if (currentPage > total) {
+            setCurrentPage(total);
+        }
+    }, [filteredProducts]);
 
 
     const handleClickOutside = useCallback((e: MouseEvent) => {
@@ -122,12 +135,15 @@ const SearchPage: React.FC = () => {
         }
     }, []);
 
+
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [handleClickOutside]);
+
+
 
     const handleSearch = async () => {
         setSearchAttempted(true);
@@ -138,9 +154,14 @@ const SearchPage: React.FC = () => {
 
         let results = await getSearch(query, "name", "ASC").then(re => re)
         setProducts(results);
+
+        if (results.length === 0) {
+            setQuery(''); // Clear the query if no results are found
+        }
         productapi: ", results";
         setError('');
     };
+
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
         if (event.key === 'Enter') {
@@ -148,6 +169,7 @@ const SearchPage: React.FC = () => {
             handleSearch();
         }
     };
+
 
     const handleBlur = () => {
         handleSearch();
@@ -157,6 +179,7 @@ const SearchPage: React.FC = () => {
     const toggleDropdown = () => {
         setIsDropdownOpen((prev) => !prev);
     };
+
 
     const selectSortOption = (value: string) => {
         setSortValue(value);
@@ -169,19 +192,18 @@ const SearchPage: React.FC = () => {
         // etc.
     };
 
+
     const openProductDetails = (product: Product) => {
-
-
         setSelectedProduct(product);
         console.log("openProductDetails:", selectedProduct)
         setShowProductDetails(true);
-
-
     };
+
 
     const closeProductDetails = () => {
         setShowProductDetails(false);
     };
+
 
     const increaseQuantity = (productId: string) => {
         setQuantities((prevQuantities) => ({
@@ -191,6 +213,7 @@ const SearchPage: React.FC = () => {
         console.log("Quantities State:", quantities);
 
     };
+
 
     const decreaseQuantity = (productId: string) => {
         setQuantities((prev) => {
@@ -210,15 +233,6 @@ const SearchPage: React.FC = () => {
     };
 
 
-    useEffect(() => {
-        const total = Math.ceil(filteredProducts.length / itemsPerPage);
-        setTotalPages(total);
-        if (currentPage < 1) {
-            setCurrentPage(1);
-        } else if (currentPage > total) {
-            setCurrentPage(total);
-        }
-    }, [filteredProducts, itemsPerPage, currentPage]);
 
     const nextPage = () => {
         setCurrentPage((prev) => Math.min(prev + 1, totalPages));
