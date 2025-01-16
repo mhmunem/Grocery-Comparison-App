@@ -10,20 +10,12 @@ services:
       - cosc680-db:/var/lib/postgresql/data
     ports:
       - "${DB_PORT}:${DB_PORT}"
-    # healthcheck:
-    #   test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"]
-    #   interval: 10s
-    #   timeout: 5s
-    #   retries: 5
     networks:
       - project_network
 
   db_migrate:
     container_name: db_migrate
     tty: true
-    # depends_on:
-    #   fullstack_db:
-    #     condition: service_healthy
     build:
       context: ./server
       dockerfile: Dockerfile

@@ -1,7 +1,6 @@
 include:
   - ./docker-compose-db.yml
 
-  # USAGE: sudo docker compose -f docker-compose-server-test.yml up --watch
 services:
   test_fullstack_server:
     container_name: test_fullstack_server
