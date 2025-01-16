@@ -1,0 +1,31 @@
+include:
+  - ./docker-compose-db.yml
+
+  # USAGE: sudo docker compose -f docker-compose-server-test.yml up --watch
+services:
+  test_fullstack_server:
+    container_name: test_fullstack_server
+    tty: true
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./server
+          target: /server
+          ignore:
+            - node_modules/
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    env_file:
+      - ./server/.env
+    command: sh -c "npm run tests"
+    volumes:
+      - ./server/src:/server/src
+    networks:
+      - project_network
+
+volumes:
+  cosc680-db:
+
+networks:
+  project_network:

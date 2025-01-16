@@ -35,9 +35,6 @@ const createDatabases = async () => {
             const res = await pool.query(query, [dbName])
             if (res.rowCount === 0) {
                 await pool.query(`CREATE DATABASE ${dbName}`)
-                console.log(`Database ${dbName} created successfully.`)
-            } else {
-                console.log(`Database ${dbName} already exists.`)
             }
         } catch (error) {
             console.error(`Error while creating database ${dbName}:`, error)
