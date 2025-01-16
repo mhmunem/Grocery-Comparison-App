@@ -6,18 +6,8 @@ export function PaginationControls({ currentPage, totalPages, nextPage, prevPage
   const halfRange = Math.floor(pagesToShow / 2); // Half of the range for centering the current page
 
   // Calculate the start and end page numbers to show, always including the currentPage
-  let startPage = currentPage - halfRange; // Start page is currentPage - halfRange
-  let endPage = currentPage + halfRange; // End page is currentPage + halfRange
-
-  // Ensure startPage is at least 1, and endPage doesn't exceed totalPages
-  if (startPage < 1) {
-    startPage = 1;
-    endPage = pagesToShow; // If near the beginning, show the first 10 pages
-  }
-  if (endPage > totalPages) {
-    endPage = totalPages;
-    startPage = totalPages - pagesToShow + 1; // If near the end, show the last 10 pages
-  }
+  let startPage = Math.max(1, currentPage - halfRange); // Ensure startPage is at least 1
+  let endPage = Math.min(totalPages, currentPage + halfRange); // Ensure endPage doesn't exceed totalPages
 
   // If the calculated range is less than pagesToShow, adjust the start and end page accordingly
   if (endPage - startPage + 1 < pagesToShow) {
