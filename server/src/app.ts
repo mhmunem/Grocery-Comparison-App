@@ -31,7 +31,6 @@ db.execute('SELECT NOW()')
     .then(() => console.log('Database connection is working'))
     .catch((err) => console.error('Database connection check failed:', err))
 
-// BUG: page is empty
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs))
 
 app.use('/', routes, storesRouter)
