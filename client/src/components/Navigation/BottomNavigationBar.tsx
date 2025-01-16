@@ -1,8 +1,13 @@
 import { IonIcon, IonLabel, IonTabBar, IonTabButton } from "@ionic/react";
-import { home, search, list, person } from "ionicons/icons";
+import { home, search, list, person, storefront } from "ionicons/icons";
 
 const BottomNavigationBar: React.FC = () => (
     <IonTabBar slot="bottom" color="primary">
+
+        <IonTabButton tab="stores" href="/stores">
+            <IonIcon aria-hidden="true" icon={storefront} />
+            <IonLabel>Stores</IonLabel>
+        </IonTabButton>
 
         <IonTabButton tab="home" href="/home">
             <IonIcon aria-hidden="true" icon={home} />

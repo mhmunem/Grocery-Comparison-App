@@ -15,5 +15,5 @@ export default defineConfig({
     dbCredentials: {
         url: dbUrl,
     },
-    out: "./drizzle",
+    out: "./src/db/drizzle",
 })

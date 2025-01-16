@@ -6,6 +6,7 @@ import express from 'express'
 import routes from './routes/initialsetup'
 import swaggerJsdoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
+import storesRouter from './routes/storesRouter'
 
 const app = express()
 
@@ -18,7 +19,7 @@ const options = {
             description: 'API documentation for the Grocery Comparison server',
         },
     },
-    apis: ['./src/routes/initialsetup.ts'],
+    apis: ['./src/routes/*'],
 }
 
 const specs = swaggerJsdoc(options)
@@ -32,8 +33,7 @@ db.execute('SELECT NOW()')
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs))
 
-app.use('/', routes)
-
+app.use('/', routes, storesRouter)
 app.use('/search_product', routes)
 
 app.use(errorHandler)

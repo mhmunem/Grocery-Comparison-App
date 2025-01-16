@@ -70,10 +70,22 @@ ion-grid {
     text-overflow: ellipsis;
 }
 
-.brandSize {
+.brandText {
+    font-size: 0.8rem;
+    display: flex;
+    font-weight: 500;
+    flex-direction: column;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    align-items: left;
+}
+
+.sizeText {
     font-size: 0.8rem;
     display: flex;
     flex-direction: column;
+    align-items: left;
+    font-weight: 300;
 }
 
 .productDetails {
@@ -120,6 +132,15 @@ ion-grid {
     background-color: #A594F9;
     color: #fff;
 }
+
+/* Add to List button */
+.add-to-list-button {
+    width: 100px;
+    height: 50px; /* Adjust as needed */
+    font-size: 15px; /* Adjust as needed */
+    padding: 0;
+    --border-radius: 4px; /* Adjust as needed */
+  }
 
 
 
@@ -217,6 +238,15 @@ ion-grid {
     width: fit-content;
     margin: 0;
     /* 去掉auto居中和上下间距 */
+}
+
+.categoryDropdown-container {
+    position: fixed;
+    top: 130px;
+    right: 50px;
+    z-index: 9999;
+    width: 170px;
+    margin: 0;
 }
 
 

@@ -1,38 +1,16 @@
-import './SearchPage.css';
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-import { IonContent, IonItem, IonSelect, IonSelectOption, IonBadge, IonButtons, IonButton, IonIcon, IonHeader, IonPage, IonToolbar, IonSearchbar, IonLabel, IonImg, IonGrid, IonCol, IonRow } from '@ionic/react';
+import { IonBadge, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonItem, IonLabel, IonPage, IonRow, IonSearchbar, IonSelect, IonSelectOption, IonToolbar } from '@ionic/react';
+import { CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from 'chart.js';
 import { cartOutline } from 'ionicons/icons';
-import { LoadingContainer } from '../../components/SharedComponents/loadingContainer';
-import { PaginationControls } from '../../components/SearchPage/PaginationControls';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ProductDetailsModal } from '../../components/ProductPage/ProductDetailsModal';
+import { PaginationControls } from '../../components/SearchPage/PaginationControls';
 import { SearchProductCard } from '../../components/SearchPage/SearchProductCard';
-import { getSearch } from "../../services/InitialSetupService"
+import { LoadingContainer } from '../../components/SharedComponents/loadingContainer';
+import { getSearch } from "../../services/InitialSetupService";
+import './SearchPage.css';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-interface PriceHistory {
-    date: Date;
-    price: number;
-}
-
-interface PriceHistoryData {
-    labels: string[];
-    datasets: Array<{
-        label: string;
-        data: number[];
-        borderColor: string;
-        backgroundColor: string;
-        tension: number;
-    }>;
-}
-
-
-
-interface CartItem {
-    product: any;
-    quantity: number;
-}
 
 type Product = {
     products: {
@@ -68,6 +46,8 @@ const SearchPage: React.FC = () => {
     const [selectedProduct, setSelectedProduct] = useState<Product>();
     const [showProductDetails, setShowProductDetails] = useState(false);
 
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [sortValue, setSortValue] = useState('relevance');
 
@@ -75,7 +55,15 @@ const SearchPage: React.FC = () => {
     const itemsPerPage = 20;
     const startIndex = (currentPage - 1) * itemsPerPage;
     const paginatedProducts = products.slice(startIndex, startIndex + itemsPerPage);
-    const totalPages = Math.ceil(products.length / itemsPerPage);
+    const [totalPages, setTotalPages] = useState(0);
+
+    const filteredProducts = selectedCategories.length
+        ? products.filter((product) =>
+            selectedCategories.includes(product.products.categoryID.toString())
+        )
+        : products;
+
+
 
     const sortOptions = [
         { label: 'Most relevant', value: 'relevance' },
@@ -112,7 +100,7 @@ const SearchPage: React.FC = () => {
                 console.error('Error fetching data:', error);
             } finally {
                 setLoading(false);
-                
+
             }
 
         };
@@ -144,20 +132,19 @@ const SearchPage: React.FC = () => {
     const handleSearch = async () => {
         setSearchAttempted(true);
         if (query.length < 3 || query.length > 50) {
-            // BUG: it always gives this error on the first search
-            setError('Search query must be between 3 and 50 characters.');
+            setError(`Search query must be between 3 and 50 characters.`);
             return;
         }
 
         let results = await getSearch(query, "name", "ASC").then(re => re)
         setProducts(results);
-        // console.log(products);
         productapi: ", results";
         setError('');
     };
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
         if (event.key === 'Enter') {
+            event.preventDefault();
             handleSearch();
         }
     };
@@ -183,32 +170,18 @@ const SearchPage: React.FC = () => {
     };
 
     const openProductDetails = (product: Product) => {
-        
+
 
         setSelectedProduct(product);
         console.log("openProductDetails:", selectedProduct)
         setShowProductDetails(true);
 
-        
+
     };
-
-
 
     const closeProductDetails = () => {
         setShowProductDetails(false);
     };
-
-    const handleAddToCart = (productId: string) => {
-        setAddedToCart((prev) => ({
-            ...prev,
-            [productId]: true,
-        }));
-        setQuantities((prev) => ({
-            ...prev,
-            [productId]: prev[productId] > 0 ? prev[productId] : 1,
-        }));
-    };
-
 
     const increaseQuantity = (productId: string) => {
         setQuantities((prevQuantities) => ({
@@ -216,7 +189,7 @@ const SearchPage: React.FC = () => {
             [productId]: (prevQuantities[productId] || 0) + 1,
         }));
         console.log("Quantities State:", quantities);
-        
+
     };
 
     const decreaseQuantity = (productId: string) => {
@@ -236,6 +209,17 @@ const SearchPage: React.FC = () => {
         });
     };
 
+
+    useEffect(() => {
+        const total = Math.ceil(filteredProducts.length / itemsPerPage);
+        setTotalPages(total);
+        if (currentPage < 1) {
+            setCurrentPage(1);
+        } else if (currentPage > total) {
+            setCurrentPage(total);
+        }
+    }, [filteredProducts, itemsPerPage, currentPage]);
+
     const nextPage = () => {
         setCurrentPage((prev) => Math.min(prev + 1, totalPages));
     };
@@ -245,7 +229,9 @@ const SearchPage: React.FC = () => {
     };
 
     const goToPage = (page: number) => {
-        setCurrentPage(page);
+        if (page >= 1 && page <= totalPages) {
+            setCurrentPage(page);
+        }
     };
 
 
@@ -263,14 +249,13 @@ const SearchPage: React.FC = () => {
                     <IonSearchbar
                         value={query}
                         onIonChange={(e) => setQuery(e.detail.value!)}
-                        onKeyDown={handleKeyDown}
+                        onKeyUp={handleKeyDown}
                         onIonBlur={handleBlur}
                         placeholder="Search for products..."
                         debounce={300}
                         className="searchbar" />
                     <IonButtons slot="end">
                         <IonButton
-                            // onClick={() => (window.location.href = '/shoppinglist')}
                             style={{ position: 'relative' }}
                         >
                             <IonIcon icon={cartOutline} />
@@ -286,15 +271,30 @@ const SearchPage: React.FC = () => {
 
 
             <IonContent>
-                <IonRow>
+                <div className="categoryDropdown-container">
                     <IonItem>
-                        <IonSelect multiple={true} label="Filter by Category" label-placement="floating">
-                            <IonSelectOption value="Produce">Produce</IonSelectOption>
-                            <IonSelectOption value="Meat">Meat</IonSelectOption>
-                            <IonSelectOption value="Dairy">Dairy</IonSelectOption>
+                        <IonSelect
+                            multiple={true}
+                            value={selectedCategories}
+                            onIonChange={(e) => setSelectedCategories(e.detail.value)}
+                            label="Category"
+                            labelPlacement="floating"
+                        >
+                            <IonSelectOption value="1">Fish</IonSelectOption>
+                            <IonSelectOption value="2">Meat</IonSelectOption>
+                            <IonSelectOption value="3">Frozen</IonSelectOption>
+                            <IonSelectOption value="4">Fruit & Veg</IonSelectOption>
+                            <IonSelectOption value="5">Bakery</IonSelectOption>
+                            <IonSelectOption value="6">Deli</IonSelectOption>
+                            <IonSelectOption value="7">Drinks</IonSelectOption>
+                            <IonSelectOption value="8">Household</IonSelectOption>
+                            <IonSelectOption value="9">Health & Body</IonSelectOption>
+                            <IonSelectOption value="10">Beer & Wine</IonSelectOption>
+                            <IonSelectOption value="11">Pantry</IonSelectOption>
+                            <IonSelectOption value="12">Baby & Child</IonSelectOption>
                         </IonSelect>
                     </IonItem>
-                </IonRow>
+                </div>
                 <div className="sortDropdown-container" ref={dropdownRef}>
                     <button
                         type="button"
@@ -337,7 +337,7 @@ const SearchPage: React.FC = () => {
                     <div className="grid-container">
                         <IonGrid>
                             <IonRow>
-                                {paginatedProducts.map((product, index) => {
+                                {filteredProducts.slice(startIndex, startIndex + itemsPerPage).map((product, index) => {
                                     console.log('Rendering Product:', product, 'Index:', index); // Logs each product and its index
                                     return (
                                         <IonCol
