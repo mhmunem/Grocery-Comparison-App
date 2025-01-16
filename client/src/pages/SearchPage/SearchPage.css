@@ -4,7 +4,7 @@ ion-header {
 }
 
 .searchbar {
-    margin: 16px auto;
+    margin: 4px auto;
     width: 90%;
     max-width: 600px;
 }
@@ -17,7 +17,16 @@ ion-header {
     height: 40px;
     width: auto;
     margin: 20px 20px;
-}
+    position: absolute;
+    left: 10px;
+  }
+  
+  .title-center {
+    margin-left: auto;
+    /* Push the centered element to the middle */
+    margin-right: auto;
+  }
+  
 
 
 /* Grid Container */

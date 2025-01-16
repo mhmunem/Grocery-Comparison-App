@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonImg } from '@ionic/react';
 import './HomePage.css';
 import { useEffect, useState } from 'react';
 import { getInitialSetupMessage } from '../../services/InitialSetupService';
@@ -21,8 +21,15 @@ function HomePage() {
     return (
         <IonPage>
             <IonHeader>
-                <IonToolbar>
-                    <IonTitle>Home</IonTitle>
+                <IonToolbar color="primary">
+                    <div className="title-center">
+                        <IonImg
+                            src="680logocropped.png"
+                            alt="App Logo"
+                            className='headerLogo'
+                        />
+                        <IonTitle slot="end" >Home</IonTitle>
+                    </div>
                 </IonToolbar>
             </IonHeader>
             <IonContent fullscreen>

@@ -1,3 +1,17 @@
+.headerLogo {
+  height: 40px;
+  width: auto;
+  margin: 20px 20px;
+  position: absolute;
+  left: 10px;
+}
+
+.title-center {
+  margin-left: auto;
+  /* Push the centered element to the middle */
+  margin-right: auto;
+}
+
 ion-header {
     --opacity: 0.9;
   }

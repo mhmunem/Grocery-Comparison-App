@@ -1,33 +1,47 @@
 .container {
-    text-align: center;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-  
-  .container strong {
-    font-size: 20px;
-    line-height: 26px;
-  }
-  
-  .container p {
-    font-size: 16px;
-    line-height: 22px;
-    color: #8c8c8c;
-    margin: 0;
-  }
-  
-  .container a {
-    text-decoration: none;
-  }
+  text-align: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
 
-  .centered-text{
-    text-align: center;
-    padding: 80px;
-  }
+.container strong {
+  font-size: 20px;
+  line-height: 26px;
+}
 
-.store-icon{
-    font-size: 350px;
+.container p {
+  font-size: 16px;
+  line-height: 22px;
+  color: #8c8c8c;
+  margin: 0;
+}
+
+.container a {
+  text-decoration: none;
+}
+
+.centered-text {
+  text-align: center;
+  padding: 80px;
+}
+
+.store-icon {
+  font-size: 350px;
+}
+
+.headerLogo {
+  height: 40px;
+  width: auto;
+  margin: 20px 20px;
+  position: absolute;
+  left: 10px;
+}
+
+.title-center {
+  margin-left: auto;
+  /* Push the centered element to the middle */
+  margin-right: auto;
 }

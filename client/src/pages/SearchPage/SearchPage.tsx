@@ -253,13 +253,14 @@ const SearchPage: React.FC = () => {
     return (
         <IonPage>
             <IonHeader>
-                <IonToolbar color="primary">
-                    <IonImg
-                        src="680logocropped.png"
-                        alt="App Logo"
-                        className="headerLogo"
-                        slot="start"
-                    />
+                <IonToolbar className="toolbar" color="primary">
+                    <div className="title-center">
+                        <IonImg
+                            src="680logocropped.png"
+                            alt="App Logo"
+                            className='headerLogo'
+                        />
+                    </div>
                     <IonSearchbar
                         value={query}
                         onIonChange={(e) => setQuery(e.detail.value!)}
