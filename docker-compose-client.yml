@@ -1,6 +1,7 @@
 services:
   fullstack_client:
     container_name: fullstack_client
+    tty: true
     # depends_on:
     #   fullstack_db:
     #     condition: service_healthy

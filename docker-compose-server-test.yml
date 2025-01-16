@@ -8,9 +8,9 @@ services:
     tty: true
     develop:
       watch:
-        - action: sync+restart
+        - action: rebuild
           path: ./server
-          target: /server
+          target: ./server
           ignore:
             - node_modules/
     build:

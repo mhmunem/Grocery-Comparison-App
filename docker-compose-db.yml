@@ -2,11 +2,12 @@ services:
   fullstack_db:
     container_name: fullstack_db
     image: postgres:17.2
+    tty: true
     restart: always
     env_file:
       - ./server/.env
     volumes:
-      - cosc680-db:/var/lib/postgresql/data  
+      - cosc680-db:/var/lib/postgresql/data
     ports:
       - "${DB_PORT}:${DB_PORT}"
     # healthcheck:
@@ -16,9 +17,10 @@ services:
     #   retries: 5
     networks:
       - project_network
-    
+
   db_migrate:
     container_name: db_migrate
+    tty: true
     # depends_on:
     #   fullstack_db:
     #     condition: service_healthy
