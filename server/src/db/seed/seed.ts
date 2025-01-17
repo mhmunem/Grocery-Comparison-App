@@ -5,7 +5,7 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
     try {
         await seed(db, tables).refine(f => ({
             products: {
-                count: 500,
+                count: 71,
                 columns: {
                     brand: f.valuesFromArray({
                         values: [
@@ -103,6 +103,7 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                             "Dried Cranberries", "Dried Apricots", "Dried Mango", "Dried Pineapple", "Raisins",
                             "Dates", "Figs", "Prunes", "Coconut Flakes", "Goji Berries",
                         ],
+                        isUnique: true,
                     }),
                 },
                 with: {
