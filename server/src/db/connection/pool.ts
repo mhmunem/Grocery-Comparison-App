@@ -61,7 +61,7 @@ async function reset_db(db: NodePgDatabase, tables: Object) {
 
 const tables = { products, stores, store_products, chains, units, shopping_list, category, price_history }
 if (env === 'dev') {
-    reset_db(db, tables)
+    // reset_db(db, tables)
     seed_db(db, tables)
 }
 

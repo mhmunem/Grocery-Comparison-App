@@ -63,16 +63,17 @@ const SearchPage: React.FC = () => {
         { label: 'Alphabetical Z-A', value: 'za' },
         { label: 'Lowest to highest price', value: 'lowest-highest price' },
         { label: 'Highest to lowest price', value: 'highest-lowest price' },
-        { label: 'Lowest to highest unit price', value: 'lowest-highest unit price' },
-        { label: 'Highest to lowest unit price', value: 'highest-lowest unit price' },
-        { label: 'discounts L-H', value: 'lowd to highd' },
-        { label: 'discounts H-L', value: 'highd to lowd' },
-        { label: 'popularity L-H', value: 'lowp to highp' },
-        { label: 'popularity H-L', value: 'highp to lowp' },
-        { label: 'distance L-H', value: 'lowe to highe' },
-        { label: 'distance H-L', value: 'highe to lowe' },
-        { label: 'weight or volume L-H', value: 'loww to highw' },
-        { label: 'weight or volume H-L', value: 'highw to loww' },
+        // NOTE: not yet implemented
+        // { label: 'Lowest to highest unit price', value: 'lowest-highest unit price' },
+        // { label: 'Highest to lowest unit price', value: 'highest-lowest unit price' },
+        // { label: 'discounts L-H', value: 'lowd to highd' },
+        // { label: 'discounts H-L', value: 'highd to lowd' },
+        // { label: 'popularity L-H', value: 'lowp to highp' },
+        // { label: 'popularity H-L', value: 'highp to lowp' },
+        // { label: 'distance L-H', value: 'lowe to highe' },
+        // { label: 'distance H-L', value: 'highe to lowe' },
+        // { label: 'weight or volume L-H', value: 'loww to highw' },
+        // { label: 'weight or volume H-L', value: 'highw to loww' },
     ];
 
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -119,7 +120,7 @@ const SearchPage: React.FC = () => {
         localStorage.setItem('quantities', JSON.stringify(quantities));
     }, [quantities]);
 
-    
+
     useEffect(() => {
         const total = Math.ceil(sortedAndFilteredProducts.length / itemsPerPage);
         setTotalPages(total);
@@ -179,16 +180,16 @@ const SearchPage: React.FC = () => {
     const toggleDropdown = () => {
         setIsDropdownOpen((prev) => !prev);
     };
-   
+
 
     const openProductDetails = (product: Product) => {
-        
+
 
         setSelectedProduct(product);
         console.log("openProductDetails:", selectedProduct)
         setShowProductDetails(true);
 
-        
+
     };
 
 
@@ -215,7 +216,7 @@ const SearchPage: React.FC = () => {
             [productId]: (prevQuantities[productId] || 0) + 1,
         }));
         console.log("Quantities State:", quantities);
-        
+
     };
 
 
@@ -256,21 +257,21 @@ const SearchPage: React.FC = () => {
         setCurrentPage(1);
 
         let updatedProducts = products.slice();
-    
+
         // Filter products based on the search query first, if there is one
         if (query) {
             updatedProducts = updatedProducts.filter(product =>
                 product.products.name.toLowerCase().includes(query.toLowerCase())
             );
         }
-    
+
         // Filter products based on selected categories
         if (selectedCategories.length > 0) {
             updatedProducts = updatedProducts.filter(product =>
                 selectedCategories.includes(product.products.categoryID.toString())
             );
         }
-    
+
         // Sort products according to the sorting value
         updatedProducts = updatedProducts.sort((a, b) => {
             switch (sortValue) {
@@ -292,7 +293,7 @@ const SearchPage: React.FC = () => {
 
         // Update the sorted and filtered product list
         setSortedAndFilteredProducts(updatedProducts);
-    
+
         // Update total pages
         const total = Math.ceil(sortedAndFilteredProducts.length / itemsPerPage);
         setTotalPages(total);
@@ -300,7 +301,7 @@ const SearchPage: React.FC = () => {
         setCurrentPage(current => Math.max(1, Math.min(current, total)));
 
     }, [products, sortValue, selectedCategories, query, itemsPerPage]);
-    
+
 
 
     return (
