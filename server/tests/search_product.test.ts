@@ -17,6 +17,7 @@ import { shopping_list } from "../src/db/schema/shopping_list"
 import { store_products } from "../src/db/schema/store_products"
 import { stores } from "../src/db/schema/stores"
 import { units } from "../src/db/schema/units"
+import { Server } from "http"
 
 
 
@@ -236,7 +237,7 @@ describe('Function tests', () => {
 })
 
 describe('search_product get endpoint', () => {
-    let server: any
+    let server: Server
 
     beforeAll((done) => {
         const app = express()

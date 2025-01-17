@@ -9,6 +9,7 @@ import { shopping_list } from './db/schema/shopping_list'
 import { store_products } from './db/schema/store_products'
 import { stores } from './db/schema/stores'
 import { units } from './db/schema/units'
+import { Server } from 'http'
 
 const PORT: number = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000
 
@@ -17,6 +18,7 @@ const env = process.env.NODE_ENV
 
 console.log("Running in environment:", env)
 
+let server: Server
 
 // This is to facilitate automating seeding of the dev database using docker compose
 if (env === 'dev' && arg === 'reset') {
