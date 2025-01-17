@@ -1,16 +1,16 @@
 services:
   web_scraper:   
       build:
-        context: ./server  
+        context: .  
         dockerfile: Dockerfile   
       container_name: web_scraper
       depends_on:
         db_migrate:
           condition: service_completed_successfully
       volumes:
-        - ./server/src/web-scraping:/server/src/web-scraping
+        - ./src/web-scraping:/src/web-scraping
       env_file:
-        - ./server/.env 
+        - ./.env 
       command: ["npm", "run", "scrape"]
       networks:
         - project_network

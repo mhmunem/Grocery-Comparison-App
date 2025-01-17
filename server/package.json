@@ -121,7 +121,6 @@
     "supertest": "^7.0.0",
     "swagger-ui-express": "^5.0.1",
     "ts-jest": "^29.2.5",
-    "ts-node": "^10.9.2",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   },
@@ -136,7 +135,9 @@
     "db:drop": "npx drizzle-kit drop --config ./drizzle.config.ts",
     "db:pull": "npx drizzle-kit pull --config ./drizzle.config.ts",
     "db:push": "npx drizzle-kit push --config ./drizzle.config.ts",
-    "db:show": "npx drizzle-kit studio --config ./drizzle-dev.config.ts"
+    "db:show": "npx drizzle-kit studio --config ./drizzle-dev.config.ts",
+    "db:reset": "npx ts-node src/server.ts reset",
+    "db:seed": "npx ts-node src/server.ts seed"
   },
   "repository": {
     "type": "git",

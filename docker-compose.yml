@@ -1,6 +1,6 @@
 include:
-  - ./docker-compose-db.yml
-  - ./docker-compose-drizzlestudio.yml
-  - ./docker-compose-server.yml
-  - ./docker-compose-pgadmin.yml
-  - ./docker-compose-client.yml
+  - ./server/docker-compose-db.yml
+  - ./server/docker-compose-drizzlestudio.yml
+  - ./server/docker-compose-server.yml
+  - ./server/docker-compose-pgadmin.yml
+  - ./client/docker-compose-client.yml

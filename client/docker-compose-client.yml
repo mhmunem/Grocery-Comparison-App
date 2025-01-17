@@ -3,15 +3,15 @@ services:
     container_name: fullstack_client
     tty: true
     build:
-      context: ./client
+      context: .
       dockerfile: Dockerfile
     restart: unless-stopped
     env_file:
-      - ./client/.env
+      - ./.env
     ports:
       - "5173:5173"
     volumes:
-      - ./client/src:/client/src
+      - ./src:/src
     networks:
       - project_network
 
