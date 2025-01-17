@@ -54,7 +54,7 @@ const SearchPage: React.FC = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const itemsPerPage = 20;
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const [totalPages, setTotalPages] = useState(0);
+    const [totalPages, setTotalPages] = useState(1);
 
     const filteredProducts = selectedCategories.length
         ? products.filter((product) =>
@@ -91,7 +91,7 @@ const SearchPage: React.FC = () => {
                 setProducts(results);
 
                 const initialQuantities = products.reduce((acc: { [key: string]: number }, product: Product) => {
-                    acc[product.store_products.productID] = 0;
+                    acc[product.store_products.id] = 0;
                     return acc;
                 }, {});
 
@@ -142,6 +142,8 @@ const SearchPage: React.FC = () => {
         };
     }, [handleClickOutside]);
 
+    
+
 
 
     const handleSearch = async () => {
@@ -154,9 +156,6 @@ const SearchPage: React.FC = () => {
         let results = await getSearch(query, "name", "ASC").then(re => re)
         setProducts(results);
 
-        if (results.length === 0) {
-            setQuery(''); // Clear the query if no results are found
-        }
         productapi: ", results";
         setError('');
     };
@@ -209,7 +208,6 @@ const SearchPage: React.FC = () => {
             ...prevQuantities,
             [productId]: (prevQuantities[productId] || 0) + 1,
         }));
-        console.log("Quantities State:", quantities);
 
     };
 
@@ -267,19 +265,8 @@ const SearchPage: React.FC = () => {
                         onIonBlur={handleBlur}
                         placeholder="Search for products..."
                         debounce={300}
+                        disabled={false}
                         className="searchbar" />
-                    <IonButtons slot="end" >
-                        <IonButton
-                            style={{ position: 'relative'}}
-                        >
-                            <IonIcon icon={cartOutline} />
-                            {Object.keys(addedToCart).filter((key) => addedToCart[key]).length > 0 && (
-                                <IonBadge color="danger">
-                                    {Object.keys(addedToCart).filter((key) => addedToCart[key]).length}
-                                </IonBadge>
-                            )}
-                        </IonButton>
-                    </IonButtons>
                 </IonToolbar>
             </IonHeader>
 
@@ -293,6 +280,7 @@ const SearchPage: React.FC = () => {
                             onIonChange={(e) => setSelectedCategories(e.detail.value)}
                             label="Category"
                             labelPlacement="floating"
+                            
                         >
                             <IonSelectOption value="1">Fish</IonSelectOption>
                             <IonSelectOption value="2">Meat</IonSelectOption>
@@ -341,7 +329,7 @@ const SearchPage: React.FC = () => {
                     </div>
                 )}
 
-                {loading ? (<LoadingContainer />) : products.length === 0 ? (
+                {loading ? (<LoadingContainer />) : filteredProducts.length === 0 ? (
                     // Show "No results found" message if no products are returned
                     <div className="no-results-container">
                         <IonLabel>No results found</IonLabel>
@@ -352,7 +340,6 @@ const SearchPage: React.FC = () => {
                         <IonGrid>
                             <IonRow>
                                 {filteredProducts.slice(startIndex, startIndex + itemsPerPage).map((product, index) => {
-                                    console.log('Rendering Product:', product, 'Index:', index); // Logs each product and its index
                                     return (
                                         <IonCol
                                             size="6"

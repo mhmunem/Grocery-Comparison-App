@@ -272,7 +272,7 @@ const ShoppingListPage: React.FC = () => {
           </div>
         ) : cartItems.length === 0 ? (
           <div className="no-results-container">
-            <IonLabel>Your cart is empty.</IonLabel>
+            <IonLabel>Your shopping list is empty</IonLabel>
           </div>
         ) : (
           <IonGrid>

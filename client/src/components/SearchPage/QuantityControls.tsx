@@ -2,25 +2,27 @@ import { IonIcon, IonButton } from '@ionic/react';
 import { add, remove } from 'ionicons/icons';
 
 export function QuantityControls({ decreaseQuantity, increaseQuantity, quantities, product }: any) {
-    console.log("Quantities State:", quantities[product.store_products.productID]);
     return (
         <div className="quantityControls">
             <IonButton
                 shape="round"
                 className="controlButton"
                 aria-label="Decrease quantity"
-                onClick={() => decreaseQuantity(product.store_products.productID)}
+                onClick={() => decreaseQuantity(product.store_products.id)}
             >
                 <IonIcon slot="icon-only" icon={remove} />
             </IonButton>
 
-            <p className="quantityText">{quantities[product.store_products.productID]}</p>
+            <p className="quantityText">{quantities[product.store_products.id]}</p>
 
             <IonButton
                 shape="round"
                 className="controlButton"
                 aria-label="Increase quantity"
-                onClick={() => increaseQuantity(product.store_products.productID)}
+                onClick={() => {increaseQuantity(product.store_products.id)
+                    console.log(product);
+                    
+                }}
             >
                 <IonIcon slot="icon-only" icon={add} />
             </IonButton>

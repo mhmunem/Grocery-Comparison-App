@@ -69,19 +69,6 @@ export function PriceHistory({product}:any) {
     return (
         <div>
             <IonRow>
-                <Line data={priceHistoryData} />
-            </IonRow>
-            <IonRow style={{ justifyContent: 'center', marginBottom: '16px' }}>
-                {['1W', '4W', '3M', '6M'].map(range => (
-                    <IonButton
-                        key={range}
-                        color={timeRange === range ? 'primary' : 'medium'}
-                        onClick={() => setTimeRange(range)}>
-                        {range}
-                    </IonButton>
-                ))}
-            </IonRow>
-            <IonRow>
                 <IonList style={{ width: '100%' }}>
                     <IonItem>
                         <IonCol size="1">
@@ -96,6 +83,20 @@ export function PriceHistory({product}:any) {
                     </IonItem>
                 </IonList>
             </IonRow>
+            <IonRow>
+                <Line data={priceHistoryData} />
+            </IonRow>
+            <IonRow style={{ justifyContent: 'center', marginBottom: '16px' }}>
+                {['1W', '4W', '3M', '6M'].map(range => (
+                    <IonButton
+                        key={range}
+                        color={timeRange === range ? 'primary' : 'medium'}
+                        onClick={() => setTimeRange(range)}>
+                        {range}
+                    </IonButton>
+                ))}
+            </IonRow>
+            
         </div>
     )
 }
