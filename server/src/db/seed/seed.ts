@@ -5,7 +5,7 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
     try {
         await seed(db, tables).refine(f => ({
             products: {
-                count: 71,
+                count: 426,
                 columns: {
                     brand: f.valuesFromArray({
                         values: [
@@ -224,6 +224,5 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
         }))
     } catch (_) {
         console.log("Database seeded");
-
     }
 }

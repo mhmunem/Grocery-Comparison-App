@@ -55,15 +55,15 @@ const SearchPage: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [sortedAndFilteredProducts, setSortedAndFilteredProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-    const [sortValue, setSortValue] = useState('relevance');
+    const [sortValue, setSortValue] = useState('lowest-highest price');
 
     const sortOptions = [
-        { label: 'Most relevant', value: 'relevance' },
         { label: 'Alphabetical A-Z', value: 'az' },
         { label: 'Alphabetical Z-A', value: 'za' },
         { label: 'Lowest to highest price', value: 'lowest-highest price' },
         { label: 'Highest to lowest price', value: 'highest-lowest price' },
         // NOTE: not yet implemented
+        // { label: 'Most relevant', value: 'relevance' },
         // { label: 'Lowest to highest unit price', value: 'lowest-highest unit price' },
         // { label: 'Highest to lowest unit price', value: 'highest-lowest unit price' },
         // { label: 'discounts L-H', value: 'lowd to highd' },
@@ -88,7 +88,7 @@ const SearchPage: React.FC = () => {
                 setProducts(results);
 
                 const initialQuantities = products.reduce((acc: { [key: string]: number }, product: Product) => {
-                    acc[product.store_products.productID] = 0;
+                    acc[product.store_products.id] = 0;
                     return acc;
                 }, {});
 

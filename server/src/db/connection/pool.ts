@@ -54,14 +54,9 @@ const finalPool = new Pool({
 
 const db = drizzle(finalPool)
 
-// The database is reset like to prevent race conditions
-async function reset_db(db: NodePgDatabase, tables: Object) {
-    await reset(db, tables)
-}
 
 const tables = { products, stores, store_products, chains, units, shopping_list, category, price_history }
 if (env === 'dev') {
-    // reset_db(db, tables)
     seed_db(db, tables)
 }
 
