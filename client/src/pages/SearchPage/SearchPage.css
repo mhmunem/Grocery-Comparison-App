@@ -38,7 +38,7 @@ ion-header {
 .grid-container {
     width: 100%;
     max-width: 1300px;
-    margin: 50px auto;
+    margin: 0px auto;
     padding: 0;
     box-sizing: border-box;
 
@@ -110,6 +110,7 @@ ion-grid {
     font-weight: bold;
     color: #4caf50;
     text-align: center;
+    margin-top: 10px;
 }
 
 /* product card product details (everything under the title/photo) */
@@ -177,11 +178,12 @@ ion-grid {
     margin-bottom: 20px;
 }
 
-/* pagination buttons */
+/* pagination numbers */
 .pagination-button {
-    width: 40px;
-    min-width: 40px;
+    width: 30px;
+    min-width: 30px;
     text-align: center;
+    font-size: 13px;
 }
 
 
@@ -243,28 +245,14 @@ ion-grid {
 
 
 /* sort dropdown container */
+.categoryDropdown-container,
 .sortDropdown-container {
-    position: absolute;
-    left: 70px;
-    right: 7500px;
-    margin-top: 20px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 0px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin: 10px auto;
     z-index: 9999;
-}
-
-/*category dropdown container */
-.categoryDropdown-container {
-    position: absolute;
-    left: 200px;
-    right: 7500px;
-    margin-top: 10px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 0px;
-    z-index: 9999;
-    width: 170px;
+    width: fit-content;
 }
 
 .sortDropdown-toggle {
@@ -313,9 +301,10 @@ ion-grid {
 }
 
 
-.sortDropdown-menu {
+.sortDropdown-menu,
+.categoryDropdown-menu {
     position: absolute;
-    top: 100%;
+    left: 0;
     right: 0;
     margin-top: 8px;
     background-color: #ffffff;
@@ -323,13 +312,16 @@ ion-grid {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 200px;
-    padding: 8px 0;
     display: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    transform: translateY(-10px);
+    opacity: 0;
 }
-
-.sortDropdown-menu.open {
+.sortDropdown-menu.open,
+.categoryDropdown-menu.open {
     display: block;
-    /* Show when open */
+    transform: translateY(0);
+    opacity: 1;
 }
 
 /* Dropdown Items */

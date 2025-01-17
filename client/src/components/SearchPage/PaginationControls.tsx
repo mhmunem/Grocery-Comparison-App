@@ -2,7 +2,7 @@ import { IonButton, IonIcon } from '@ionic/react';
 import { arrowForward, arrowBack } from 'ionicons/icons';
 
 export function PaginationControls({ currentPage, totalPages, nextPage, prevPage, goToPage }: any) {
-  const pagesToShow = 10; // Number of pages to display around the current page
+  const pagesToShow = 6; // Number of pages to display around the current page
   const halfRange = Math.floor(pagesToShow / 2); // Half of the range for centering the current page
 
   // Calculate the start and end page numbers to show, always including the currentPage

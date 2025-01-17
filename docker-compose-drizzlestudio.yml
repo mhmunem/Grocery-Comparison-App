@@ -6,7 +6,7 @@ services:
       context: ./server
       dockerfile: Dockerfile
     restart: unless-stopped
-    command: npx drizzle-kit studio --config drizzle.config.ts --host 0.0.0.0 --port 4983
+    command: npx drizzle-kit studio --config drizzle.config.ts --host 0.0.0.0
     ports:
       - "4983:4983"
     env_file:
