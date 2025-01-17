@@ -1,4 +1,4 @@
-import express from 'express';
+import { Router } from 'express';
 import { search_product } from "../search/search";
 import { Request, Response } from 'express';
 import db from "../db/connection/pool";
@@ -6,7 +6,7 @@ import { SortDirection } from '../types/routes';
 import { SortBy } from '../types/routes';
 
 
-const router = express.Router();
+const router = Router()
 
 /**
  * @swagger

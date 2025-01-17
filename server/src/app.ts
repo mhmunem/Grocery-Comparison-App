@@ -1,12 +1,12 @@
-import bodyParserMiddleware from './middlewares/bodyParserMiddleware'
-import corsMiddleware from './middlewares/corsMiddleware'
+import bodyParser from 'body-parser';
+import cors from 'cors';
 import db from './db/connection/pool'
 import errorHandler from './middlewares/errorHandler'
 import express from 'express'
 import routes from './routes/initialsetup'
+import storesRouter from './routes/storesRouter'
 import swaggerJsdoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
-import storesRouter from './routes/storesRouter'
 
 const app = express()
 
@@ -24,8 +24,13 @@ const options = {
 
 const specs = swaggerJsdoc(options)
 
-corsMiddleware(app)
-bodyParserMiddleware(app)
+app.use(cors());
+app.use(bodyParser.json());
+app.use(
+    bodyParser.urlencoded({
+        extended: true,
+    })
+);
 
 db.execute('SELECT NOW()')
     .then(() => console.log('Database connection is succesfull'))
