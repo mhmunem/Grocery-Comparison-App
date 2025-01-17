@@ -1,6 +1,8 @@
-import app from "../src/app"
 import dotenv from "dotenv"
+import express from "express"
 import request from "supertest"
+import routes from '../src/routes/initialsetup'
+import storesRouter from "../src/routes/storesRouter"
 import { Pool } from "pg"
 import { SortBy } from "../src/types/routes"
 import { SortDirection } from "../src/types/routes"
@@ -17,18 +19,19 @@ import { stores } from "../src/db/schema/stores"
 import { units } from "../src/db/schema/units"
 
 
-dotenv.config()
-
-const dbUrl = process.env['TEST_DATABASE_URL']
-
-const pool = new Pool({
-    connectionString: dbUrl
-})
-
-const db = drizzle(pool)
-const schema = { products, stores, store_products, chains, units, shopping_list, category, price_history }
 
 describe('Function tests', () => {
+    dotenv.config()
+
+    const dbUrl = process.env['TEST_DATABASE_URL']
+
+    const pool = new Pool({
+        connectionString: dbUrl
+    })
+
+    const db = drizzle(pool)
+    const schema = { products, stores, store_products, chains, units, shopping_list, category, price_history }
+
     beforeAll(async () => {
         await reset(db, schema)
         await seed(db, schema, { seed: 42 }).refine(f => ({
@@ -233,10 +236,31 @@ describe('Function tests', () => {
 })
 
 describe('search_product get endpoint', () => {
+    let server: any
+
+    beforeAll((done) => {
+        const app = express()
+
+        app.use('/', routes, storesRouter)
+        app.use('/search_product', routes)
+
+        server = app.listen(3000, () => {
+            done();
+        });
+    });
+
+    afterAll((done) => {
+        server.close(() => {
+            done();
+        });
+    });
+
+    // TODO: close the connection to the database after the tests end to fix "Jest did not exit one second after the test run has completed." `app` uses a database connection.
+
     const correct_result = [{ "category": { "id": 11, "name": "Pantry" }, "chains": { "id": 2, "image_logo": "Fn5UddmJn1BlPWRArbh", "name": "New World" }, "products": { "amount": 8.23, "brand": "Value", "categoryID": 11, "details": "description 1", "id": 322, "image": "cxU9kT7bNp9fyR", "name": "Chicken Stock", "unitID": 3 }, "store_products": { "id": 342, "price": 3.29, "productID": 322, "storeID": 46 }, "stores": { "chainID": 2, "id": 46, "name": "PAK'nSAVE Hawera" }, "units": { "id": 3, "name": "l" } }, { "category": { "id": 11, "name": "Pantry" }, "chains": { "id": 2, "image_logo": "Fn5UddmJn1BlPWRArbh", "name": "New World" }, "products": { "amount": 8.23, "brand": "Value", "categoryID": 11, "details": "description 1", "id": 322, "image": "cxU9kT7bNp9fyR", "name": "Chicken Stock", "unitID": 3 }, "store_products": { "id": 718, "price": 7.36, "productID": 322, "storeID": 3 }, "stores": { "chainID": 2, "id": 3, "name": "New World Birkenhead" }, "units": { "id": 3, "name": "l" } }]
 
     test('should create a new post', async () => {
-        const res = await request(app)
+        const res = await request(server)
             .get('/search_product?name=chicken&sort_by=price&sort_direction=ASC')
         expect(res.body).toStrictEqual(correct_result)
     })
