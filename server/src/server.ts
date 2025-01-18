@@ -11,10 +11,10 @@ import { stores } from './db/schema/stores'
 import { units } from './db/schema/units'
 import { Server } from 'http'
 
-const PORT: number = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000
+const PORT: number = process.env["PORT"] ? parseInt(process.env["PORT"], 10) : 3000;
 
 const arg = process.argv.slice(2)[0]
-const env = process.env.NODE_ENV
+const env = process.env["NODE_ENV"]
 
 console.log("Running in environment:", env)
 

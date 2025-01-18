@@ -3,7 +3,7 @@ import { reset, seed } from "drizzle-seed"
 
 export async function reset_db(db: NodePgDatabase, tables: Object) {
     // only the dev database should be reset
-    if (process.env.NODE_ENV !== 'dev') {
+    if (process.env["NODE_ENV"] !== 'dev') {
         return
     }
 
@@ -12,7 +12,7 @@ export async function reset_db(db: NodePgDatabase, tables: Object) {
 
 export async function seed_db(db: NodePgDatabase, tables: Object) {
     // only the dev database should be seeded
-    if (process.env.NODE_ENV !== 'dev') {
+    if (process.env["NODE_ENV"] !== 'dev') {
         return
     }
 
