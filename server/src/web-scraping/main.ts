@@ -1,15 +1,15 @@
 import chainScraper from "./scraper/chainScraper";
 import storeScraper from "./scraper/storeScraper";
 
-async function runScrapers() {
+async function runScrapers(): Promise<undefined> {
     try {
-      await chainScraper;
-      console.log("Chain scraping completed");
-      await storeScraper;
-      console.log("Store scraping completed");
+        await chainScraper;
+        console.log("Chain scraping completed");
+        await storeScraper;
+        console.log("Store scraping completed");
     } catch (error) {
-      console.error("Error during scraping:", error);
+        console.error("Error during scraping:", error);
     }
-  }
-  
+}
+
 runScrapers();

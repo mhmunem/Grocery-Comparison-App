@@ -6,9 +6,9 @@ import { units } from "../db/schema/units";
 import { category } from "../db/schema/category";
 import { stores } from "../db/schema/stores";
 import { chains } from "../db/schema/chains";
+import { ProductSearchResult } from "../types/schema";
 
-
-export async function search_product(db: NodePgDatabase, name: string, sort_by: 'name' | 'price' | 'amount', sort_direction: 'ASC' | 'DESC') {
+export async function search_product(db: NodePgDatabase, name: string, sort_by: 'name' | 'price' | 'amount', sort_direction: 'ASC' | 'DESC'): Promise<ProductSearchResult[]> {
     const sort = sort_direction == 'ASC' ? asc : desc
     let column
 

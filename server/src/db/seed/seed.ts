@@ -1,7 +1,7 @@
 import { NodePgDatabase } from "drizzle-orm/node-postgres"
 import { reset, seed } from "drizzle-seed"
 
-export async function reset_db(db: NodePgDatabase, tables: Object) {
+export async function reset_db(db: NodePgDatabase, tables: Object): Promise<undefined> {
     // only the dev database should be reset
     if (process.env["NODE_ENV"] !== 'dev') {
         return
@@ -10,7 +10,7 @@ export async function reset_db(db: NodePgDatabase, tables: Object) {
     await reset(db, tables)
 }
 
-export async function seed_db(db: NodePgDatabase, tables: Object) {
+export async function seed_db(db: NodePgDatabase, tables: Object): Promise<undefined> {
     // only the dev database should be seeded
     if (process.env["NODE_ENV"] !== 'dev') {
         return
