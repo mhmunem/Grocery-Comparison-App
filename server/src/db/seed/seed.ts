@@ -137,7 +137,7 @@ export async function seed_db(db: NodePgDatabase, tables: Object): Promise<undef
     ]
 
     try {
-        // count needs to be equal or less than the number of values
+        // count needs to be equal or less than the number of values when `isUnique: true`
         await seed(db, tables).refine(f => ({
             products: {
                 count: products.length,
