@@ -24,7 +24,7 @@ export function ProductDetails({ decreaseQuantity, increaseQuantity, quantities,
 
                 
 
-                {quantities[selectedProduct.store_products.productID] > 0 ? (
+                {quantities[selectedProduct.store_products.id] > 0 ? (
                     <QuantityControls
                         decreaseQuantity={decreaseQuantity}
                         increaseQuantity={increaseQuantity}
@@ -32,7 +32,7 @@ export function ProductDetails({ decreaseQuantity, increaseQuantity, quantities,
                         product={selectedProduct}
                     />
                 ) : (
-                    <IonButton className='add-to-list-button' onClick={() => increaseQuantity(selectedProduct.store_products.productID)}>
+                    <IonButton className='add-to-list-button' onClick={() => increaseQuantity(selectedProduct.store_products.id)}>
                         Add to List
                     </IonButton>
 

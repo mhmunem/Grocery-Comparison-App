@@ -1,32 +1,38 @@
 import dotenv from "dotenv"
-import { Pool } from "pg";
-import { SortBy } from "../src/types/routes";
-import { SortDirection } from "../src/types/routes";
-import { category } from "../src/db/schema/category";
-import { chains } from "../src/db/schema/chains";
-import { drizzle } from "drizzle-orm/node-postgres";
-import { price_history } from "../src/db/schema/price_history";
-import { products } from "../src/db/schema/products";
-import { search_product } from "../src/search/search";
-import { shopping_list } from "../src/db/schema/shopping_list";
-import { store_products } from "../src/db/schema/store_products";
-import { stores } from "../src/db/schema/stores";
-import { units } from "../src/db/schema/units";
-import { reset, seed } from "drizzle-seed";
+import express from "express"
+import request from "supertest"
+import routes from '../src/routes/initialsetup'
+import storesRouter from "../src/routes/storesRouter"
+import { Pool } from "pg"
+import { SortBy } from "../src/types/routes"
+import { SortDirection } from "../src/types/routes"
+import { category } from "../src/db/schema/category"
+import { chains } from "../src/db/schema/chains"
+import { drizzle } from "drizzle-orm/node-postgres"
+import { price_history } from "../src/db/schema/price_history"
+import { products } from "../src/db/schema/products"
+import { reset, seed } from "drizzle-seed"
+import { search_product } from "../src/search/search"
+import { shopping_list } from "../src/db/schema/shopping_list"
+import { store_products } from "../src/db/schema/store_products"
+import { stores } from "../src/db/schema/stores"
+import { units } from "../src/db/schema/units"
+import { Server } from "http"
 
 
-dotenv.config()
 
-const dbUrl = process.env['TEST_DATABASE_URL']
+describe('Function tests', () => {
+    dotenv.config()
 
-const pool = new Pool({
-    connectionString: dbUrl
-})
+    const dbUrl = process.env['TEST_DATABASE_URL']
 
-const db = drizzle(pool)
-const schema = { products, stores, store_products, chains, units, shopping_list, category, price_history }
+    const pool = new Pool({
+        connectionString: dbUrl
+    })
 
-describe('search_product', () => {
+    const db = drizzle(pool)
+    const schema = { products, stores, store_products, chains, units, shopping_list, category, price_history }
+
     beforeAll(async () => {
         await reset(db, schema)
         await seed(db, schema, { seed: 42 }).refine(f => ({
@@ -120,12 +126,12 @@ describe('search_product', () => {
                 },
             },
         }))
-    });
+    })
 
     afterAll(async () => {
         await reset(db, schema)
         await pool.end()
-    });
+    })
 
     const results = [
         {
@@ -185,48 +191,78 @@ describe('search_product', () => {
         return await search_product(db, '', 'price' as SortBy, 'ASC' as SortDirection).then(data => {
             expect(data).toStrictEqual(results)
         })
-    });
+    })
 
     test('no results', async () => {
         return await search_product(db, 'SHOE', 'price' as SortBy, 'ASC' as SortDirection).then(data => {
             expect(data).toStrictEqual([])
         })
-    });
+    })
 
     test('sorting by name DESC', async () => {
         return await search_product(db, 'MILK', 'name' as SortBy, 'DESC' as SortDirection).then(data => {
             expect(data).toStrictEqual(results.slice().sort((a, b) => a.products.name.localeCompare(b.products.name)).reverse())
         })
-    });
+    })
 
     test('sorting by amount DESC', async () => {
         return await search_product(db, 'MILK', 'amount' as SortBy, 'DESC' as SortDirection).then(data => {
-            expect(data).toStrictEqual(results.slice().reverse());
+            expect(data).toStrictEqual(results.slice().reverse())
         })
-    });
+    })
 
-    test('case insensitive DESC', async () => {
+    test('sort by price DESC', async () => {
         return await search_product(db, 'MILK', 'price' as SortBy, 'DESC' as SortDirection).then(data => {
-            expect(data).toStrictEqual(results.slice().reverse());
+            expect(data).toStrictEqual(results.slice().reverse())
         })
-    });
+    })
 
     test('sorting by name ASC', async () => {
         return await search_product(db, 'MILK', 'name' as SortBy, 'ASC' as SortDirection).then(data => {
             expect(data).toStrictEqual(results.slice().sort((a, b) => a.products.name.localeCompare(b.products.name)))
         })
-    });
+    })
 
     test('sorting by amount ASC', async () => {
         return await search_product(db, 'MILK', 'amount' as SortBy, 'ASC' as SortDirection).then(data => {
-            expect(data).toStrictEqual(results);
+            expect(data).toStrictEqual(results)
         })
-    });
+    })
 
-    test('case insensitive ASC', async () => {
+    test('sort by price ASC', async () => {
         return await search_product(db, 'MILK', 'price' as SortBy, 'ASC' as SortDirection).then(data => {
-            expect(data).toStrictEqual(results);
+            expect(data).toStrictEqual(results)
         })
-    });
+    })
 })
 
+describe('search_product get endpoint', () => {
+    let server: Server
+
+    beforeAll((done) => {
+        const app = express()
+
+        app.use('/', routes, storesRouter)
+        app.use('/search_product', routes)
+
+        server = app.listen(3000, () => {
+            done();
+        });
+    });
+
+    afterAll((done) => {
+        server.close(() => {
+            done();
+        });
+    });
+
+    // TODO: close the connection to the database after the tests end to fix "Jest did not exit one second after the test run has completed." `app` uses a database connection.
+
+    const correct_result = [{ "category": { "id": 11, "name": "Pantry" }, "chains": { "id": 2, "image_logo": "Fn5UddmJn1BlPWRArbh", "name": "New World" }, "products": { "amount": 8.23, "brand": "Value", "categoryID": 11, "details": "description 1", "id": 322, "image": "cxU9kT7bNp9fyR", "name": "Chicken Stock", "unitID": 3 }, "store_products": { "id": 342, "price": 3.29, "productID": 322, "storeID": 46 }, "stores": { "chainID": 2, "id": 46, "name": "PAK'nSAVE Hawera" }, "units": { "id": 3, "name": "l" } }, { "category": { "id": 11, "name": "Pantry" }, "chains": { "id": 2, "image_logo": "Fn5UddmJn1BlPWRArbh", "name": "New World" }, "products": { "amount": 8.23, "brand": "Value", "categoryID": 11, "details": "description 1", "id": 322, "image": "cxU9kT7bNp9fyR", "name": "Chicken Stock", "unitID": 3 }, "store_products": { "id": 718, "price": 7.36, "productID": 322, "storeID": 3 }, "stores": { "chainID": 2, "id": 3, "name": "New World Birkenhead" }, "units": { "id": 3, "name": "l" } }]
+
+    test('should create a new post', async () => {
+        const res = await request(server)
+            .get('/search_product?name=chicken&sort_by=price&sort_direction=ASC')
+        expect(res.body).toStrictEqual(correct_result)
+    })
+})

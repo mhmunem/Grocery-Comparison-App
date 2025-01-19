@@ -16,7 +16,6 @@ export function SearchProductCard({
  }: any) {
     return (
         <IonCard className="listCard" onClick={() => {openProductDetails(product)
-            console.log("openProductDetails (card):", product);
             
         }}>
             <IonImg
@@ -39,7 +38,7 @@ export function SearchProductCard({
                     </div>
                     
                     <IonLabel className="priceLabel">${productPrice}</IonLabel>
-                    {quantities[product.store_products.productID] > 0 ? (
+                    {quantities[product.store_products.id] > 0 ? (
                         <div
                             onClick={(event) => event.stopPropagation()} // Prevents opening details when interacting with quantity controls
                         >
@@ -54,7 +53,7 @@ export function SearchProductCard({
                         <IonButton className='add-to-list-button'
                             onClick={(event) => {
                                 event.stopPropagation(); // Prevents opening details when clicking "Add to List"
-                                increaseQuantity(product.store_products.productID);
+                                increaseQuantity(product.store_products.id);
                             }}
 
                         >

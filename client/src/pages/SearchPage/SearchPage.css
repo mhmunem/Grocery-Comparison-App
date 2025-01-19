@@ -3,37 +3,42 @@ ion-header {
     --opacity: 0.5;
 }
 
+/* search bar syling */
 .searchbar {
     margin: 4px auto;
-    width: 90%;
+    width: 70%;
     max-width: 600px;
 }
 
+/* Unneeded?
+
 .pageTitle {
     justify-content: center;
-}
+} */
 
+
+/* logo in top left corner of screen */
 .headerLogo {
     height: 40px;
     width: auto;
     margin: 20px 20px;
     position: absolute;
     left: 10px;
-  }
-  
-  .title-center {
+}
+
+/* title at very top/centre of pages */
+.title-center {
     margin-left: auto;
-    /* Push the centered element to the middle */
     margin-right: auto;
-  }
-  
+}
 
 
-/* Grid Container */
+
+/* Grid Container of products*/
 .grid-container {
     width: 100%;
-    max-width: 1100px;
-    margin: 0 auto;
+    max-width: 1300px;
+    margin: 0px auto;
     padding: 0;
     box-sizing: border-box;
 
@@ -43,9 +48,7 @@ ion-grid {
     width: 100%;
 }
 
-
-
-/* Card Styling */
+/* Product card Styling (outer card) */
 .listCard {
     display: flex;
     flex-direction: column;
@@ -56,21 +59,22 @@ ion-grid {
     margin: 0.2em;
     cursor: pointer;
 }
-
 .listCard:hover {
     transform: scale(1.03);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* product image on search page card */
 .productImage {
     height: 200px;
     object-fit: cover;
     border-bottom: 1px solid #e0e0e0;
 }
 
+/* product card title */
 .one-line-title {
     font-size: 1rem;
-    margin: 12px 0;
+    margin: 8px 0;
     font-family: 'Noto Sans';
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -79,6 +83,7 @@ ion-grid {
     text-overflow: ellipsis;
 }
 
+/* product card brand text */
 .brandText {
     font-size: 0.8rem;
     display: flex;
@@ -89,6 +94,7 @@ ion-grid {
     align-items: left;
 }
 
+/* product card size text */
 .sizeText {
     font-size: 0.8rem;
     display: flex;
@@ -97,6 +103,17 @@ ion-grid {
     font-weight: 300;
 }
 
+/* product card price text */
+.priceLabel {
+    font-family: 'Noto Sans';
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #4caf50;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* product card product details (everything under the title/photo) */
 .productDetails {
     display: flex;
     justify-content: space-between;
@@ -105,19 +122,12 @@ ion-grid {
     margin: auto;
     gap: 2px;
     font-family: 'Noto Sans';
-}
-
-.priceLabel {
-    font-family: 'Noto Sans';
-    font-size: 1rem;
-    font-weight: bold;
-    color: #4caf50;
-    text-align: center;
+    height: 80px;
 }
 
 
 
-/* Quantity Controls */
+/* Quantity Controls (-/+) */
 .quantityControls {
     display: flex;
     align-items: center;
@@ -125,6 +135,7 @@ ion-grid {
     gap: 5px;
 }
 
+/* Quantity Control (-/+) */
 .controlButton {
     background-color: #f5f5f5;
     color: #FFFFFF;
@@ -133,10 +144,8 @@ ion-grid {
     align-items: center;
     justify-content: center;
     transition: background-color 0.2s ease, color 0.2s ease;
-    font-size: 12px;
+    font-size: 15px;
 }
-
-
 .controlButton:hover {
     background-color: #A594F9;
     color: #fff;
@@ -144,15 +153,14 @@ ion-grid {
 
 /* Add to List button */
 .add-to-list-button {
-    width: 100px;
-    height: 50px; /* Adjust as needed */
-    font-size: 15px; /* Adjust as needed */
+    width: 115px;
+    height: 40px;
+    font-size: 13px;
     padding: 0;
-    --border-radius: 4px; /* Adjust as needed */
-  }
+    --border-radius: 4px;
+}
 
-
-
+/* quantity of added product */
 .quantityText {
     font-size: 14px;
     font-weight: bold;
@@ -160,7 +168,7 @@ ion-grid {
 
 
 
-/* Pagination */
+/* Pagination container*/
 .pagination {
     display: flex;
     justify-content: center;
@@ -170,11 +178,13 @@ ion-grid {
     margin-bottom: 20px;
 }
 
+/* pagination numbers */
 .pagination-button {
-    width: 40px;  /* Width for a consistent button size (adjust as needed) */
-    min-width: 40px; /* Prevent shrinking below this width */
-    text-align: center; /* Center the text inside the button */
-  }
+    width: 30px;
+    min-width: 30px;
+    text-align: center;
+    font-size: 13px;
+}
 
 
 
@@ -189,19 +199,16 @@ ion-grid {
     background: #f8f9fa;
     color: #444;
 }
-
 .loading-spinner {
     font-size: 48px;
     animation: spin 1.5s linear infinite;
     color: primary;
 }
-
 .loading-message {
     margin-top: 16px;
     font-size: 18px;
     color: #444;
 }
-
 @keyframes spin {
     0% {
         transform: rotate(0deg);
@@ -213,69 +220,63 @@ ion-grid {
 }
 
 
-/* error message */
-.error-message {
-    color: var(--ion-color-danger);
-    font-size: 14px;
-    text-align: center;
-    margin: 10px auto;
-    display: block;
+
+/* Error Message Container */
+.error-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 99, 71, 0.9);
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 10000;
 }
 
-.error-container {
+/* Error Message Text */
+.error-message {
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0;
+}
+
+
+/* sort dropdown container */
+.categoryDropdown-container,
+.sortDropdown-container {
+    position: relative;
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 50px;
-}
-
-
-
-
-
-/* --- 下拉框容器（包裹按钮 + 下拉菜单）--- */
-/* 修改重点：让它固定在右上角(可根据需求改动top/right值) */
-.sortDropdown-container {
-    position: fixed;
-    /* 固定定位，相对于浏览器窗口 */
-    top: 90px;
-    /* 根据需要微调，让它在搜索栏下方 */
-    right: 30px;
-    /* 靠屏幕右侧 */
+    margin: 10px auto;
     z-index: 9999;
-    /* 确保浮在搜索结果等之上 */
     width: fit-content;
-    margin: 0;
-    /* 去掉auto居中和上下间距 */
 }
-
-.categoryDropdown-container {
-    position: fixed;
-    top: 130px;
-    right: 50px;
-    z-index: 9999;
-    width: 170px;
-    margin: 0;
-}
-
 
 .sortDropdown-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: space-between;
-    min-width: 160px;
     padding: 8px 12px;
+    background-color: #ffffff;
     border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #fff;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 14px;
-    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    transition: background-color 0.2s, border-color 0.2s;
 }
 
 .sortDropdown-toggle:hover,
 .sortDropdown-toggle:focus {
     background-color: #f5f5f5;
+}
+
+.sortDropdown-toggle:hover {
+    background-color: #f5f5f5;
+    border-color: #aaa;
 }
 
 
@@ -290,7 +291,6 @@ ion-grid {
 
 .sortDropdown-chevron {
     font-size: 12px;
-    /* 也可使用 IonIcon */
     transition: transform 0.2s;
     margin-left: auto;
 }
@@ -301,38 +301,47 @@ ion-grid {
 }
 
 
-.sortDropdown-menu {
-    position: static;
-    /* 在容器内相对布局即可，也可absolute若想离按钮稍远 */
-    width: 180px;
-    max-height: 0;
-    overflow: hidden;
+.sortDropdown-menu,
+.categoryDropdown-menu {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-top: 8px;
+    background-color: #ffffff;
     border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #fff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 200px;
+    display: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    transform: translateY(-10px);
     opacity: 0;
-    transition: max-height 0.2s ease, opacity 0.2s ease;
-    z-index: 9999;
-    margin-top: 4px;
-    /* 若想菜单和按钮之间留点缝 */
 }
-
-.sortDropdown-menu.open {
-    max-height: 300px;
-    /* 足够容纳选项 */
+.sortDropdown-menu.open,
+.categoryDropdown-menu.open {
+    display: block;
+    transform: translateY(0);
     opacity: 1;
-    overflow: auto;
 }
 
+/* Dropdown Items */
 .sortDropdown-item {
     padding: 8px 12px;
     font-size: 14px;
+    color: #333;
     cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
 }
 
 .sortDropdown-item:hover {
     background-color: #f0f0f0;
+    color: #000;
+}
+
+.sortDropdown-item.selected {
+    background-color: #4caf50;
+    color: #ffffff;
+    font-weight: bold;
 }
 
 .sortDropdown-item.selected {
@@ -340,13 +349,11 @@ ion-grid {
     font-weight: bold;
 }
 
-/* Media Queries (响应式适配) */
+/* Media Queries */
 @media (max-width: 761px) {
     .listCard {
         height: 400px;
     }
-
-    /* 移动端可调小下拉宽度 */
     .sortDropdown-toggle,
     .sortDropdown-menu {
         width: 150px;
@@ -361,7 +368,7 @@ ion-grid {
 
 @media (min-width: 1440px) {
     .grid-container {
-        max-width: 1200px;
+        max-width: 1300px;
     }
 
     .listCard {
@@ -372,14 +379,12 @@ ion-grid {
 @media (max-width: 767px) {
     .productDetails {
         flex-direction: column;
+        height: 140px;
 
-        .listCard {
-            height: 400px;
-        }
     }
 
     .listCard {
-        height: 400px;
+        height: 420px;
     }
 
     .priceAndQuantity {

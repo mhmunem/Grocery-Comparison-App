@@ -1,0 +1,95 @@
+services:
+  fullstack_db:
+    container_name: fullstack_db
+    image: postgres:17.2
+    tty: true
+    restart: always
+    env_file:
+      - ./.env
+    volumes:
+      - cosc680-db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - project_network
+
+  db_reset:
+    container_name: db_reset
+    tty: true
+    command: npm run db:reset
+    develop:
+      watch:
+        - action: rebuild
+          path: ./src/db/seed
+          target: ./src/db/seed
+          ignore:
+            - node_modules/
+    depends_on:
+        - fullstack_db
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/src
+    env_file:
+      - ./.env
+    networks:
+      - project_network
+
+  db_migrate:
+    container_name: db_migrate
+    tty: true
+    depends_on:
+        db_reset:
+          condition: service_completed_successfully
+        fullstack_db:
+          condition: service_started
+    develop:
+      watch:
+        - action: rebuild
+          path: ./src/db/seed
+          target: ./src/db/seed
+          ignore:
+            - node_modules/
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - ./.env
+    command: sh -c "npm run db:generate && npm run db:push"
+    volumes:
+      - ./src:/src
+    networks:
+      - project_network
+
+  db_seed:
+    container_name: db_seed
+    tty: true
+    command: npm run db:seed
+    develop:
+      watch:
+        - action: rebuild
+          path: ./src/db/seed
+          target: ./src/db/seed
+          ignore:
+            - node_modules/
+    depends_on:
+        db_reset:
+          condition: service_completed_successfully
+        fullstack_db:
+          condition: service_started
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/src
+    env_file:
+      - ./.env
+    networks:
+      - project_network
+
+volumes:
+  cosc680-db:
+
+networks:
+  project_network:
