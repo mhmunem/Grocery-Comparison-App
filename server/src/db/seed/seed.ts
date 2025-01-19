@@ -115,6 +115,7 @@ export async function seed_db(db: NodePgDatabase, tables: Object): Promise<undef
         "Fresh Choice",
         "Super Value",
     ]
+
     const category = [
         "Fruit & Veg",
         "Meat",

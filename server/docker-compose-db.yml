@@ -4,6 +4,11 @@ services:
     image: postgres:17.2
     tty: true
     restart: always
+    # healthcheck:
+    #   test: ["CMD", "pg_isready", "-U", "postgres"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
     env_file:
       - ./.env
     volumes:
@@ -19,9 +24,9 @@ services:
     command: npm run db:reset
     develop:
       watch:
-        - action: rebuild
-          path: ./src/db/seed
-          target: ./src/db/seed
+        - action: sync+restart
+          path: ./src/db
+          target: ./src/db
           ignore:
             - node_modules/
     depends_on:
@@ -29,8 +34,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    volumes:
-      - ./src:/src
     env_file:
       - ./.env
     networks:
@@ -40,15 +43,15 @@ services:
     container_name: db_migrate
     tty: true
     depends_on:
-        db_reset:
-          condition: service_completed_successfully
         fullstack_db:
           condition: service_started
+        db_reset:
+          condition: service_completed_successfully
     develop:
       watch:
         - action: rebuild
-          path: ./src/db/seed
-          target: ./src/db/seed
+          path: ./src/db
+          target: ./src/db
           ignore:
             - node_modules/
     build:
@@ -57,8 +60,6 @@ services:
     env_file:
       - ./.env
     command: sh -c "npm run db:generate && npm run db:push"
-    volumes:
-      - ./src:/src
     networks:
       - project_network
 
@@ -69,20 +70,18 @@ services:
     develop:
       watch:
         - action: rebuild
-          path: ./src/db/seed
-          target: ./src/db/seed
+          path: ./src/db
+          target: ./src/db
           ignore:
             - node_modules/
     depends_on:
         db_reset:
           condition: service_completed_successfully
-        fullstack_db:
-          condition: service_started
+        db_migrate:
+          condition: service_completed_successfully
     build:
       context: .
       dockerfile: Dockerfile
-    volumes:
-      - ./src:/src
     env_file:
       - ./.env
     networks:

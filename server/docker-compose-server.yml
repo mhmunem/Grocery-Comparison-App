@@ -2,13 +2,6 @@ services:
   fullstack_server:
     container_name: fullstack_server
     tty: true
-    develop:
-      watch:
-        - action: rebuild
-          path: .
-          target: .
-          ignore:
-            - node_modules/
     build:
       context: .
       dockerfile: Dockerfile
