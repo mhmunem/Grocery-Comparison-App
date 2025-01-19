@@ -1,5 +1,5 @@
-import bodyParser from 'body-parser';
-import cors from 'cors';
+import bodyParser from 'body-parser'
+import cors from 'cors'
 import db from './db/connection/pool'
 import errorHandler from './middlewares/errorHandler'
 import express from 'express'
@@ -24,13 +24,13 @@ const options = {
 
 const specs = swaggerJsdoc(options)
 
-app.use(cors());
-app.use(bodyParser.json());
+app.use(cors())
+app.use(bodyParser.json())
 app.use(
     bodyParser.urlencoded({
         extended: true,
     })
-);
+)
 
 db.execute('SELECT NOW()')
     .then(() => console.log('Database connection is succesfull'))

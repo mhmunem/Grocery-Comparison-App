@@ -8,18 +8,18 @@ services:
     develop:
       watch:
         - action: rebuild
-          path: ./server
-          target: ./server
+          path: .
+          target: .
           ignore:
             - node_modules/
     build:
-      context: ./server
+      context: .
       dockerfile: Dockerfile
     env_file:
-      - ./server/.env
+      - ./.env
     command: sh -c "npm run tests"
     volumes:
-      - ./server/src:/server/src
+      - ./src:/src
     networks:
       - project_network
 

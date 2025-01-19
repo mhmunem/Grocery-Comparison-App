@@ -1,7 +1,21 @@
 import { NodePgDatabase } from "drizzle-orm/node-postgres"
-import { seed } from "drizzle-seed"
+import { reset, seed } from "drizzle-seed"
+
+export async function reset_db(db: NodePgDatabase, tables: Object) {
+    // only the dev database should be reset
+    if (process.env["NODE_ENV"] !== 'dev') {
+        return
+    }
+
+    await reset(db, tables)
+}
 
 export async function seed_db(db: NodePgDatabase, tables: Object) {
+    // only the dev database should be seeded
+    if (process.env["NODE_ENV"] !== 'dev') {
+        return
+    }
+
     const products = [
         "Organic Bananas", "Whole Milk", "Large Brown Eggs", "Wheat Bread", "Ground Coffee",
         "Red Apples", "Greek Yogurt", "Chicken Breast", "Baby Spinach", "Orange Juice",
@@ -125,8 +139,12 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
         // count needs to be equal or less than the number of values
         await seed(db, tables).refine(f => ({
             products: {
-                count: products.length + 1, // except this one for some unknown reason
+                count: products.length,
                 columns: {
+                    name: f.valuesFromArray({
+                        values: products,
+                        isUnique: true,
+                    }),
                     brand: f.valuesFromArray({
                         values: [
                             "Value", "Pams", "Maggi", "Pams Finest", "Copenhagen",
@@ -148,10 +166,6 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
                         minValue: 1,
                         precision: 100,
                         maxValue: 10,
-                    }),
-                    name: f.valuesFromArray({
-                        values: products,
-                        isUnique: true,
                     }),
                 },
                 with: {
@@ -230,6 +244,6 @@ export async function seed_db(db: NodePgDatabase, tables: Object) {
             },
         }))
     } catch (_) {
-        console.log("Database seeded");
+        console.log("Database seeded")
     }
 }
