@@ -32,7 +32,6 @@ type Product = {
 }
 
 const SearchPage: React.FC = () => {
-
     const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
     const [addedToCart, setAddedToCart] = useState<{ [key: string]: boolean }>({});
 
@@ -69,24 +68,9 @@ const SearchPage: React.FC = () => {
         { label: 'Alphabetical Z-A', value: 'za' },
         { label: 'Lowest to highest price', value: 'lowest-highest price' },
         { label: 'Highest to lowest price', value: 'highest-lowest price' },
-        // NOTE: not yet implemented
-        // { label: 'Most relevant', value: 'relevance' },
-        // { label: 'Lowest to highest unit price', value: 'lowest-highest unit price' },
-        // { label: 'Highest to lowest unit price', value: 'highest-lowest unit price' },
-        // { label: 'discounts L-H', value: 'lowd to highd' },
-        // { label: 'discounts H-L', value: 'highd to lowd' },
-        // { label: 'popularity L-H', value: 'lowp to highp' },
-        // { label: 'popularity H-L', value: 'highp to lowp' },
-        // { label: 'distance L-H', value: 'lowe to highe' },
-        // { label: 'distance H-L', value: 'highe to lowe' },
-        // { label: 'weight or volume L-H', value: 'loww to highw' },
-        // { label: 'weight or volume H-L', value: 'highw to loww' },
     ];
 
-
-
     const dropdownRef = useRef<HTMLDivElement>(null);
-
 
 
     useEffect(() => {
@@ -112,11 +96,11 @@ const SearchPage: React.FC = () => {
         fetchData();
     }, []);
 
+
     const selectSortOption = (value: string) => {
         setSortValue(value);
         setIsDropdownOpen(false);
     };
-
 
 
     useEffect(() => {
@@ -155,17 +139,13 @@ const SearchPage: React.FC = () => {
     }, [handleClickOutside]);
 
 
-
-
-
-
     const handleSearch = async () => {
         setSearchAttempted(true);
         if (query.length === 0) {
             let results: Product[] = await getSearch("", "name", "ASC");
             setProducts(results);
-          } else if
-        (query.length < 3 || query.length > 50) {
+        } else if
+            (query.length < 3 || query.length > 50) {
             setError(`Search query must be between 3 and 50 characters.`);
             return;
         }
@@ -176,6 +156,7 @@ const SearchPage: React.FC = () => {
 
         setError('');
     };
+
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
         if (event.key === 'Enter') {
@@ -208,8 +189,6 @@ const SearchPage: React.FC = () => {
     };
 
 
-
-
     const increaseQuantity = (productId: string) => {
         setQuantities((prevQuantities) => ({
             ...prevQuantities,
@@ -237,14 +216,15 @@ const SearchPage: React.FC = () => {
     };
 
 
-
     const nextPage = () => {
         setCurrentPage((prev) => Math.min(prev + 1, totalPages));
     };
 
+
     const prevPage = () => {
         setCurrentPage((prev) => Math.max(prev - 1, 1));
     };
+
 
     const goToPage = (page: number) => {
         if (page >= 1 && page <= totalPages) {
@@ -303,8 +283,6 @@ const SearchPage: React.FC = () => {
     }, [products, sortValue, selectedCategories, query, itemsPerPage]);
 
 
-
-
     return (
         <IonPage>
             <IonHeader>
@@ -327,8 +305,6 @@ const SearchPage: React.FC = () => {
                         className="searchbar" />
                 </IonToolbar>
             </IonHeader>
-
-
             <IonContent>
                 <div className="categoryDropdown-container">
                     <IonItem>
@@ -380,13 +356,11 @@ const SearchPage: React.FC = () => {
                         ))}
                     </div>
                 </div>
-
                 {searchAttempted && error && (
                     <div className="error-container">
                         <IonLabel className="error-message">{error}</IonLabel>
                     </div>
                 )}
-
                 {loading ? (<LoadingContainer />) : sortedAndFilteredProducts.length === 0 ? (
                     // Show "No results found" message if no products are returned
                     <div className="no-results-container">
@@ -428,7 +402,6 @@ const SearchPage: React.FC = () => {
                         </IonGrid>
                     </div>
                 )}
-
                 {!loading && products.length > 0 && (<PaginationControls
                     currentPage={currentPage}
                     totalPages={totalPages}
@@ -436,7 +409,6 @@ const SearchPage: React.FC = () => {
                     prevPage={prevPage}
                     goToPage={goToPage}
                 />)}
-
                 <ProductDetailsModal
                     decreaseQuantity={decreaseQuantity}
                     increaseQuantity={increaseQuantity}
