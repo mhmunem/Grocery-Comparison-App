@@ -8,13 +8,25 @@ The run the client, server, or pgadmin separately simple run `sudo docker compos
 One can also run multiple docker compose files at the same time.
 E.g. `sudo docker compose -f ./docker-compose-db.yml -f ./docker-compose-server.yml up` to run the server with database.
 However, to run the entire stack (client, server, and pgadmin) in parallel run `sudo docker compose up`.
+To automatically restart the containers in case of any changes use `--watch`. E.g. `sudo docker compose up --watch`.
 
 NOTE: On Windows `sudo` is not required.
 
 ## Running Tests
 
+**Server**
+
 From the root directory run: `sudo docker compose -f docker-compose-server-test.yml up --watch`.
 The tests will automatically rerun when any files in `server/` change.
+
+**Client**
+
+ETA: soon
+
+**End-to-end Tests**
+
+From the root directory run: `sudo docker compose -f client/docker-compose-e2e.yml -f client/compose-override-e2e.yml up --watch`.
+The tests will automatically rerun when any files in `server/` or `client/` change.
 
 # Overview
 

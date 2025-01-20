@@ -1,17 +1,13 @@
-include:
-  - ./docker-compose-db.yml
-  - ./docker-compose-server.yml
-
 services:
   pgadmin:
-      container_name: pgadmin4_container
+      container_name: pgadmin4
       image: dpage/pgadmin4
       tty: true
       restart: always
       ports:
         - "8888:80"
       env_file:
-        - ./server/.env
+        - ./.env
       volumes:
         - pgadmin-data:/var/lib/pgadmin
       networks:

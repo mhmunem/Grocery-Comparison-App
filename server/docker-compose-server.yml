@@ -1,17 +1,17 @@
 services:
-  fullstack_server:
-    container_name: fullstack_server
+  server:
+    container_name: server
     tty: true
     build:
-      context: ./server
+      context: .
       dockerfile: Dockerfile
     restart: unless-stopped
     volumes:
-      - ./server/src:/server/src
+      - ./src:/src
     ports:
       - "5000:5000"
     env_file:
-      - ./server/.env
+      - ./.env
     networks:
       - project_network
 
