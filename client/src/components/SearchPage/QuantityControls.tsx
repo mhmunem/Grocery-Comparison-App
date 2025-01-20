@@ -19,10 +19,7 @@ export function QuantityControls({ decreaseQuantity, increaseQuantity, quantitie
                 shape="round"
                 className="controlButton"
                 aria-label="Increase quantity"
-                onClick={() => {increaseQuantity(product.store_products.id)
-                    console.log(product);
-                    
-                }}
+                onClick={() => increaseQuantity(product.store_products.id)}
             >
                 <IonIcon slot="icon-only" icon={add} />
             </IonButton>
