@@ -34,9 +34,6 @@ const SearchPage: React.FC = () => {
     const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
     const [addedToCart, setAddedToCart] = useState<{ [key: string]: boolean }>({});
 
-    const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
-    const [addedToCart, setAddedToCart] = useState<{ [key: string]: boolean }>({});
-
     const [query, setQuery] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [searchAttempted, setSearchAttempted] = useState<boolean>(false);
@@ -152,8 +149,8 @@ const SearchPage: React.FC = () => {
         if (query.length === 0) {
             let results: Product[] = await getSearch("", "name", "ASC");
             setProducts(results);
-          } else if
-        (query.length < 3 || query.length > 50) {
+        } else if
+            (query.length < 3 || query.length > 50) {
             setError(`Search query must be between 3 and 50 characters.`);
             return;
         }
