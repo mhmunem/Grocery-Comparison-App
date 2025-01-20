@@ -9,7 +9,6 @@ describe("test /home", () => {
     })
 
     it("display welcome message", () => {
-        cy.task('log', Cypress.config().baseUrl)
         cy.visit("/home").get(".container").contains("Welcome to the Grocery Comparison from server!")
     })
 })
