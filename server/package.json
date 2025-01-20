@@ -134,7 +134,7 @@
     "db:generate": "npx drizzle-kit generate --config ./drizzle.config.ts",
     "db:drop": "npx drizzle-kit drop --config ./drizzle.config.ts",
     "db:pull": "npx drizzle-kit pull --config ./drizzle.config.ts",
-    "db:push": "npx drizzle-kit push --config ./drizzle.config.ts",
+    "db:push": "npx drizzle-kit push --force --config ./drizzle.config.ts",
     "db:show": "npx drizzle-kit studio --config ./drizzle-dev.config.ts",
     "db:reset": "npx ts-node src/server.ts reset",
     "db:seed": "npx ts-node src/server.ts seed"

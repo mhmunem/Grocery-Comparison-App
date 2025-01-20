@@ -148,7 +148,11 @@ const SearchPage: React.FC = () => {
 
     const handleSearch = async () => {
         setSearchAttempted(true);
-        if (query.length < 3 || query.length > 50) {
+        if (query.length === 0) {
+            let results: Product[] = await getSearch("", "name", "ASC");
+            setProducts(results);
+          } else if
+        (query.length < 3 || query.length > 50) {
             setError(`Search query must be between 3 and 50 characters.`);
             return;
         }
@@ -254,9 +258,9 @@ const SearchPage: React.FC = () => {
     };
 
     useEffect(() => {
-        setCurrentPage(1);
-
         let updatedProducts = products.slice();
+
+        setCurrentPage(1);
 
         // Filter products based on the search query first, if there is one
         if (query) {
@@ -300,7 +304,7 @@ const SearchPage: React.FC = () => {
         // Ensure current page is valid
         setCurrentPage(current => Math.max(1, Math.min(current, total)));
 
-    }, [products, sortValue, selectedCategories, query, itemsPerPage]);
+    }, [products, sortValue, selectedCategories, itemsPerPage]);
 
 
 

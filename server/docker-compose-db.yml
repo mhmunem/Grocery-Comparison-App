@@ -1,14 +1,9 @@
 services:
-  fullstack_db:
-    container_name: fullstack_db
+  db:
+    container_name: db
     image: postgres:17.2
     tty: true
     restart: always
-    # healthcheck:
-    #   test: ["CMD", "pg_isready", "-U", "postgres"]
-    #   interval: 10s
-    #   timeout: 5s
-    #   retries: 5
     env_file:
       - ./.env
     volumes:
@@ -18,55 +13,10 @@ services:
     networks:
       - project_network
 
-  db_reset:
-    container_name: db_reset
-    tty: true
-    command: npm run db:reset
-    develop:
-      watch:
-        - action: sync+restart
-          path: ./src/db
-          target: ./src/db
-          ignore:
-            - node_modules/
-    depends_on:
-        - fullstack_db
-    build:
-      context: .
-      dockerfile: Dockerfile
-    env_file:
-      - ./.env
-    networks:
-      - project_network
-
   db_migrate:
     container_name: db_migrate
     tty: true
-    depends_on:
-        fullstack_db:
-          condition: service_started
-        db_reset:
-          condition: service_completed_successfully
-    develop:
-      watch:
-        - action: rebuild
-          path: ./src/db
-          target: ./src/db
-          ignore:
-            - node_modules/
-    build:
-      context: .
-      dockerfile: Dockerfile
-    env_file:
-      - ./.env
-    command: sh -c "npm run db:generate && npm run db:push"
-    networks:
-      - project_network
-
-  db_seed:
-    container_name: db_seed
-    tty: true
-    command: npm run db:seed
+    command: sh -c 'npm run db:generate && npm run db:push && npm run db:reset && npm run db:seed'
     develop:
       watch:
         - action: rebuild
@@ -75,10 +25,7 @@ services:
           ignore:
             - node_modules/
     depends_on:
-        db_reset:
-          condition: service_completed_successfully
-        db_migrate:
-          condition: service_completed_successfully
+      - db
     build:
       context: .
       dockerfile: Dockerfile

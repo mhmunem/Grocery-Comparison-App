@@ -2,8 +2,8 @@ include:
   - ./docker-compose-db.yml
 
 services:
-  test_fullstack_server:
-    container_name: test_fullstack_server
+  test_server:
+    container_name: test_server
     tty: true
     develop:
       watch:
