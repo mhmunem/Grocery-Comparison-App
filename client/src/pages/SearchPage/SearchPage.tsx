@@ -27,7 +27,7 @@ type Product = {
         id: number;
         storeID: number;
         productID: number;
-        price: string;
+        price: number;
     };
 }
 
@@ -49,12 +49,14 @@ const SearchPage: React.FC = () => {
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [sortValue, setSortValue] = useState('relevance');
 
     const [currentPage, setCurrentPage] = useState<number>(1);
     const itemsPerPage = 20;
     const startIndex = (currentPage - 1) * itemsPerPage;
     const [totalPages, setTotalPages] = useState(1);
+
+    const [sortedAndFilteredProducts, setSortedAndFilteredProducts] = useState<Product[]>([]);
+    const [sortValue, setSortValue] = useState('lowest-highest price');
 
     const filteredProducts = selectedCategories.length
         ? products.filter((product) =>
@@ -63,21 +65,25 @@ const SearchPage: React.FC = () => {
         : products;
 
     const sortOptions = [
-        { label: 'Most relevant', value: 'relevance' },
-        { label: 'Most recent', value: 'recent' },
         { label: 'Alphabetical A-Z', value: 'az' },
         { label: 'Alphabetical Z-A', value: 'za' },
-        { label: 'discounts L-H', value: 'lowd to highd' },
-        { label: 'discounts H-L', value: 'highd to lowd' },
-        { label: 'popularity L-H', value: 'lowp to highp' },
-        { label: 'popularity H-L', value: 'highp to lowp' },
-        { label: 'distance L-H', value: 'lowe to highe' },
-        { label: 'distance H-L', value: 'highe to lowe' },
-        { label: 'weight or volume L-H', value: 'loww to highw' },
-        { label: 'weight or volume H-L', value: 'highw to loww' },
-        { label: 'Lowest to highest unit price', value: 'lowest-highest' },
-        { label: 'Highest to lowest unit price', value: 'highest-lowest' },
+        { label: 'Lowest to highest price', value: 'lowest-highest price' },
+        { label: 'Highest to lowest price', value: 'highest-lowest price' },
+        // NOTE: not yet implemented
+        // { label: 'Most relevant', value: 'relevance' },
+        // { label: 'Lowest to highest unit price', value: 'lowest-highest unit price' },
+        // { label: 'Highest to lowest unit price', value: 'highest-lowest unit price' },
+        // { label: 'discounts L-H', value: 'lowd to highd' },
+        // { label: 'discounts H-L', value: 'highd to lowd' },
+        // { label: 'popularity L-H', value: 'lowp to highp' },
+        // { label: 'popularity H-L', value: 'highp to lowp' },
+        // { label: 'distance L-H', value: 'lowe to highe' },
+        // { label: 'distance H-L', value: 'highe to lowe' },
+        // { label: 'weight or volume L-H', value: 'loww to highw' },
+        // { label: 'weight or volume H-L', value: 'highw to loww' },
     ];
+
+
 
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -106,6 +112,12 @@ const SearchPage: React.FC = () => {
         fetchData();
     }, []);
 
+    const selectSortOption = (value: string) => {
+        setSortValue(value);
+        setIsDropdownOpen(false);
+    };
+
+
 
     useEffect(() => {
         localStorage.setItem('addedToCart', JSON.stringify(addedToCart));
@@ -116,16 +128,16 @@ const SearchPage: React.FC = () => {
         localStorage.setItem('quantities', JSON.stringify(quantities));
     }, [quantities]);
 
-    
+
     useEffect(() => {
-        const total = Math.ceil(filteredProducts.length / itemsPerPage);
+        const total = Math.ceil(sortedAndFilteredProducts.length / itemsPerPage);
         setTotalPages(total);
         if (currentPage < 1) {
             setCurrentPage(1);
         } else if (currentPage > total) {
             setCurrentPage(total);
         }
-    }, [filteredProducts]);
+    }, [sortedAndFilteredProducts]);
 
 
     const handleClickOutside = useCallback((e: MouseEvent) => {
@@ -142,7 +154,7 @@ const SearchPage: React.FC = () => {
         };
     }, [handleClickOutside]);
 
-    
+
 
 
 
@@ -153,8 +165,12 @@ const SearchPage: React.FC = () => {
             return;
         }
 
+
+
         let results = await getSearch(query, "name", "ASC").then(re => re)
         setProducts(results);
+
+
 
         productapi: ", results";
         setError('');
@@ -169,6 +185,7 @@ const SearchPage: React.FC = () => {
     };
 
 
+
     const handleBlur = () => {
         handleSearch();
     };
@@ -176,18 +193,6 @@ const SearchPage: React.FC = () => {
 
     const toggleDropdown = () => {
         setIsDropdownOpen((prev) => !prev);
-    };
-
-
-    const selectSortOption = (value: string) => {
-        setSortValue(value);
-        setIsDropdownOpen(false);
-        console.log('You selected sort:', value);
-        // TODO: implement sort logic here
-        // if (value === 'recent') {...}
-        // if (value === 'az') {...}
-        // if (value === 'za') {...}
-        // etc.
     };
 
 
@@ -201,6 +206,8 @@ const SearchPage: React.FC = () => {
     const closeProductDetails = () => {
         setShowProductDetails(false);
     };
+
+
 
 
     const increaseQuantity = (productId: string) => {
@@ -246,6 +253,57 @@ const SearchPage: React.FC = () => {
     };
 
 
+    useEffect(() => {
+        setCurrentPage(1);
+
+        let updatedProducts = products.slice();
+
+        // Filter products based on the search query first, if there is one
+        if (query) {
+            updatedProducts = updatedProducts.filter(product =>
+                product.products.name.toLowerCase().includes(query.toLowerCase())
+            );
+        }
+
+        // Filter products based on selected categories
+        if (selectedCategories.length > 0) {
+            updatedProducts = updatedProducts.filter(product =>
+                selectedCategories.includes(product.products.categoryID.toString())
+            );
+        }
+
+        // Sort products according to the sorting value
+        updatedProducts = updatedProducts.sort((a, b) => {
+            switch (sortValue) {
+                case 'lowest-highest price':
+                    return a.store_products.price - b.store_products.price;;
+                case 'highest-lowest price':
+                    return b.store_products.price - a.store_products.price;
+                case 'az':
+                    return a.products.name.localeCompare(b.products.name);
+                case 'za':
+                    return b.products.name.localeCompare(a.products.name);
+                case 'relevance':
+                    updatedProducts = products.slice();
+                    return 0;
+                default:
+                    return 0;
+            }
+        });
+
+        // Update the sorted and filtered product list
+        setSortedAndFilteredProducts(updatedProducts);
+
+        // Update total pages
+        const total = Math.ceil(sortedAndFilteredProducts.length / itemsPerPage);
+        setTotalPages(total);
+        // Ensure current page is valid
+        setCurrentPage(current => Math.max(1, Math.min(current, total)));
+
+    }, [products, sortValue, selectedCategories, query, itemsPerPage]);
+
+
+
 
     return (
         <IonPage>
@@ -280,7 +338,7 @@ const SearchPage: React.FC = () => {
                             onIonChange={(e) => setSelectedCategories(e.detail.value)}
                             label="Category"
                             labelPlacement="floating"
-                            
+
                         >
                             <IonSelectOption value="1">Fish</IonSelectOption>
                             <IonSelectOption value="2">Meat</IonSelectOption>
@@ -329,7 +387,7 @@ const SearchPage: React.FC = () => {
                     </div>
                 )}
 
-                {loading ? (<LoadingContainer />) : filteredProducts.length === 0 ? (
+                {loading ? (<LoadingContainer />) : sortedAndFilteredProducts.length === 0 ? (
                     // Show "No results found" message if no products are returned
                     <div className="no-results-container">
                         <IonLabel>No results found</IonLabel>
@@ -339,7 +397,7 @@ const SearchPage: React.FC = () => {
                     <div className="grid-container">
                         <IonGrid>
                             <IonRow>
-                                {filteredProducts.slice(startIndex, startIndex + itemsPerPage).map((product, index) => {
+                                {sortedAndFilteredProducts.slice(startIndex, startIndex + itemsPerPage).map((product, index) => {
                                     return (
                                         <IonCol
                                             size="6"
