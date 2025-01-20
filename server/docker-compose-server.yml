@@ -1,6 +1,6 @@
 services:
-  fullstack_server:
-    container_name: fullstack_server
+  server:
+    container_name: server
     tty: true
     build:
       context: .
