@@ -6,6 +6,13 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
+    develop:
+      watch:
+        - action: rebuild
+          path: ./src
+          target: ./src
+          ignore:
+            - node_modules/
     healthcheck:
       test: ["CMD", "curl", "-f", "http://client:5173"]
       interval: 1s
