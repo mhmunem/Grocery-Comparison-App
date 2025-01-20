@@ -19,18 +19,18 @@ services:
           ignore:
             - node_modules/
         - action: rebuild
-          path: ./cypress/e2e
-          target: ./cypress/e2e
-          ignore:
-            - node_modules/
-        - action: rebuild
           path: ../server/src
           target: ../server/src
           ignore:
             - node_modules/
+        - action: rebuild
+          path: ./cypress/e2e
+          target: ./cypress/e2e
+          ignore:
+            - node_modules/
     depends_on:
-      db_migrate:
-          condition: service_completed_successfully
+      db:
+          condition: service_healthy
       client:
           condition: service_healthy
     working_dir : /e2e
