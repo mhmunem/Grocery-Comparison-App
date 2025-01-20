@@ -1,6 +1,5 @@
-import { IonBadge, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonItem, IonLabel, IonPage, IonRow, IonSearchbar, IonSelect, IonSelectOption, IonToolbar } from '@ionic/react';
+import { IonCol, IonContent, IonGrid, IonHeader, IonImg, IonItem, IonLabel, IonPage, IonRow, IonSearchbar, IonSelect, IonSelectOption, IonToolbar } from '@ionic/react';
 import { CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from 'chart.js';
-import { cartOutline } from 'ionicons/icons';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ProductDetailsModal } from '../../components/ProductPage/ProductDetailsModal';
 import { PaginationControls } from '../../components/SearchPage/PaginationControls';
