@@ -34,6 +34,9 @@ const SearchPage: React.FC = () => {
     const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
     const [addedToCart, setAddedToCart] = useState<{ [key: string]: boolean }>({});
 
+    const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
+    const [addedToCart, setAddedToCart] = useState<{ [key: string]: boolean }>({});
+
     const [query, setQuery] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [searchAttempted, setSearchAttempted] = useState<boolean>(false);
@@ -60,9 +63,23 @@ const SearchPage: React.FC = () => {
         { label: 'Alphabetical Z-A', value: 'za' },
         { label: 'Lowest to highest price', value: 'lowest-highest price' },
         { label: 'Highest to lowest price', value: 'highest-lowest price' },
+        // NOTE: not yet implemented
+        // { label: 'Most relevant', value: 'relevance' },
+        // { label: 'Lowest to highest unit price', value: 'lowest-highest unit price' },
+        // { label: 'Highest to lowest unit price', value: 'highest-lowest unit price' },
+        // { label: 'discounts L-H', value: 'lowd to highd' },
+        // { label: 'discounts H-L', value: 'highd to lowd' },
+        // { label: 'popularity L-H', value: 'lowp to highp' },
+        // { label: 'popularity H-L', value: 'highp to lowp' },
+        // { label: 'distance L-H', value: 'lowe to highe' },
+        // { label: 'distance H-L', value: 'highe to lowe' },
+        // { label: 'weight or volume L-H', value: 'loww to highw' },
+        // { label: 'weight or volume H-L', value: 'highw to loww' },
     ];
 
     const dropdownRef = useRef<HTMLDivElement>(null);
+
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -82,6 +99,7 @@ const SearchPage: React.FC = () => {
                 console.error('Error fetching data:', error);
             } finally {
                 setLoading(false);
+
             }
 
         };
@@ -93,13 +111,16 @@ const SearchPage: React.FC = () => {
         setIsDropdownOpen(false);
     };
 
+
     useEffect(() => {
         localStorage.setItem('addedToCart', JSON.stringify(addedToCart));
     }, [addedToCart]);
 
+
     useEffect(() => {
         localStorage.setItem('quantities', JSON.stringify(quantities));
     }, [quantities]);
+
 
     useEffect(() => {
         const total = Math.ceil(sortedAndFilteredProducts.length / itemsPerPage);
@@ -110,6 +131,7 @@ const SearchPage: React.FC = () => {
             setCurrentPage(total);
         }
     }, [sortedAndFilteredProducts]);
+
 
     const handleClickOutside = useCallback((e: MouseEvent) => {
         if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -130,8 +152,8 @@ const SearchPage: React.FC = () => {
         if (query.length === 0) {
             let results: Product[] = await getSearch("", "name", "ASC");
             setProducts(results);
-        } else if
-            (query.length < 3 || query.length > 50) {
+          } else if
+        (query.length < 3 || query.length > 50) {
             setError(`Search query must be between 3 and 50 characters.`);
             return;
         }
@@ -139,8 +161,13 @@ const SearchPage: React.FC = () => {
         let results = await getSearch(query, "name", "ASC").then(re => re)
         setProducts(results);
 
+        if (results.length === 0) {
+            setQuery(''); // Clear the query if no results are found
+        }
+        productapi: ", results";
         setError('');
     };
+
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
         if (event.key === 'Enter') {
@@ -149,29 +176,54 @@ const SearchPage: React.FC = () => {
         }
     };
 
+
     const handleBlur = () => {
         handleSearch();
     };
+
 
     const toggleDropdown = () => {
         setIsDropdownOpen((prev) => !prev);
     };
 
+
     const openProductDetails = (product: Product) => {
+
+
         setSelectedProduct(product);
+        console.log("openProductDetails:", selectedProduct)
         setShowProductDetails(true);
+
+
     };
+
+
 
     const closeProductDetails = () => {
         setShowProductDetails(false);
     };
+
+    const handleAddToCart = (productId: string) => {
+        setAddedToCart((prev) => ({
+            ...prev,
+            [productId]: true,
+        }));
+        setQuantities((prev) => ({
+            ...prev,
+            [productId]: prev[productId] > 0 ? prev[productId] : 1,
+        }));
+    };
+
 
     const increaseQuantity = (productId: string) => {
         setQuantities((prevQuantities) => ({
             ...prevQuantities,
             [productId]: (prevQuantities[productId] || 0) + 1,
         }));
+        console.log("Quantities State:", quantities);
+
     };
+
 
     const decreaseQuantity = (productId: string) => {
         setQuantities((prev) => {
@@ -255,54 +307,7 @@ const SearchPage: React.FC = () => {
 
     }, [products, sortValue, selectedCategories, itemsPerPage]);
 
-    useEffect(() => {
-        setCurrentPage(1);
 
-        let updatedProducts = products.slice();
-
-        // Filter products based on the search query first, if there is one
-        if (query) {
-            updatedProducts = updatedProducts.filter(product =>
-                product.products.name.toLowerCase().includes(query.toLowerCase())
-            );
-        }
-
-        // Filter products based on selected categories
-        if (selectedCategories.length > 0) {
-            updatedProducts = updatedProducts.filter(product =>
-                selectedCategories.includes(product.products.categoryID.toString())
-            );
-        }
-
-        // Sort products according to the sorting value
-        updatedProducts = updatedProducts.sort((a, b) => {
-            switch (sortValue) {
-                case 'lowest-highest price':
-                    return a.store_products.price - b.store_products.price;;
-                case 'highest-lowest price':
-                    return b.store_products.price - a.store_products.price;
-                case 'az':
-                    return a.products.name.localeCompare(b.products.name);
-                case 'za':
-                    return b.products.name.localeCompare(a.products.name);
-                case 'relevance':
-                    updatedProducts = products.slice();
-                    return 0;
-                default:
-                    return 0;
-            }
-        });
-
-        // Update the sorted and filtered product list
-        setSortedAndFilteredProducts(updatedProducts);
-
-        // Update total pages
-        const total = Math.ceil(sortedAndFilteredProducts.length / itemsPerPage);
-        setTotalPages(total);
-        // Ensure current page is valid
-        setCurrentPage(current => Math.max(1, Math.min(current, total)));
-
-    }, [products, sortValue, selectedCategories, query, itemsPerPage]);
 
     return (
         <IonPage>
@@ -317,12 +322,24 @@ const SearchPage: React.FC = () => {
                     </div>
                     <IonSearchbar
                         value={query}
-                        onIonChange={e => setQuery(e.detail.value!)}
+                        onIonChange={(e) => setQuery(e.detail.value!)}
                         onKeyUp={handleKeyDown}
                         onIonBlur={handleBlur}
                         placeholder="Search for products..."
                         debounce={300}
                         className="searchbar" />
+                    <IonButtons slot="end">
+                        <IonButton
+                            style={{ position: 'relative' }}
+                        >
+                            <IonIcon icon={cartOutline} />
+                            {Object.keys(addedToCart).filter((key) => addedToCart[key]).length > 0 && (
+                                <IonBadge color="danger">
+                                    {Object.keys(addedToCart).filter((key) => addedToCart[key]).length}
+                                </IonBadge>
+                            )}
+                        </IonButton>
+                    </IonButtons>
                 </IonToolbar>
             </IonHeader>
 
@@ -377,12 +394,16 @@ const SearchPage: React.FC = () => {
                         ))}
                     </div>
                 </div>
+
+
+
                 {searchAttempted && error && (
                     <div className="error-container">
                         <IonLabel className="error-message">{error}</IonLabel>
                     </div>
                 )}
-                {loading ? (<LoadingContainer />) : sortedAndFilteredProducts.length === 0 ? (
+
+                {loading ? (<LoadingContainer />) : products.length === 0 ? (
                     // Show "No results found" message if no products are returned
                     <div className="no-results-container">
                         <IonLabel>No results found</IonLabel>
@@ -393,6 +414,7 @@ const SearchPage: React.FC = () => {
                         <IonGrid>
                             <IonRow>
                                 {sortedAndFilteredProducts.slice(startIndex, startIndex + itemsPerPage).map((product, index) => {
+                                    console.log('Rendering Product:', product, 'Index:', index); // Logs each product and its index
                                     return (
                                         <IonCol
                                             size="6"
