@@ -1,6 +1,6 @@
 services:
-  fullstack_db:
-    container_name: fullstack_db
+  db:
+    container_name: db
     image: postgres:17.2
     tty: true
     restart: always
@@ -13,8 +13,8 @@ services:
     networks:
       - project_network
 
-  db_migrate:
-    container_name: db_migrate
+  migrate:
+    container_name: migrate
     tty: true
     command: sh -c 'npm run db:reset && npm run db:generate && npm run db:push && npm run db:seed'
     # command: sh -c 'npm run db:generate && npm run db:push && npm run db:seed' # use only if the volume is deleted
@@ -26,7 +26,7 @@ services:
           ignore:
             - node_modules/
     depends_on:
-      - fullstack_db
+      - db
     build:
       context: .
       dockerfile: Dockerfile

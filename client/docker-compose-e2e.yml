@@ -4,8 +4,9 @@ include:
   - ./docker-compose-client.yml
 
 services:
-  client_e2e_test:
-    container_name: client_e2e_test
+  e2e_test:
+    container_name: e2e
+    command: echo hiiii
     tty: true
     build: 
       context: .
@@ -18,8 +19,8 @@ services:
           ignore:
             - node_modules/
         - action: rebuild
-          path: ./cypress
-          target: ./cypress
+          path: ./cypress/e2e
+          target: ./cypress/e2e
           ignore:
             - node_modules/
         - action: rebuild
@@ -30,11 +31,11 @@ services:
     depends_on:
       db_migrate:
           condition: service_completed_successfully
-      fullstack_client:
+      client:
           condition: service_healthy
+    working_dir : /e2e
     volumes:
-      - ./cypress:/cypress
-      - /cypress.config.ts:/cypress.config.ts
+      - ./:/e2e
     networks:
       - project_network
 

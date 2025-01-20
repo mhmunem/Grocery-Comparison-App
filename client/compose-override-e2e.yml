@@ -1,0 +1,4 @@
+services:
+  client:
+    env_file:
+        - ./.env.e2e

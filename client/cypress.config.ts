@@ -1,8 +1,19 @@
 import { defineConfig } from "cypress";
-// import dotenv from "dotenv";
+
 
 export default defineConfig({
+    // setupNodeEvents can be defined in either
+    // the e2e or component configuration
     e2e: {
-        baseUrl: "http://fullstack_client:5173/",
+        baseUrl: "http://client:5173/",
+        setupNodeEvents(on, _) {
+            on('task', {
+                log(message) {
+                    console.log(message)
+
+                    return null
+                },
+            })
+        },
     },
-});
+})

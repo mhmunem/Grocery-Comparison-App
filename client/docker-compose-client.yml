@@ -1,18 +1,21 @@
 services:
-  fullstack_client:
-    container_name: fullstack_client
+  client:
+    container_name: client
     tty: true
     build:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://fullstack_client:5173"]
+      test: ["CMD", "curl", "-f", "http://client:5173"]
       interval: 1s
       timeout: 10s
       retries: 3
       start_period: 0s
       start_interval: 0s
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
     env_file:
       - ./.env
     ports:
