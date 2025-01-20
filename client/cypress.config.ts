@@ -1,10 +1,8 @@
 import { defineConfig } from "cypress";
+// import dotenv from "dotenv";
 
 export default defineConfig({
     e2e: {
-        baseUrl: "http://localhost:5173",
-        setupNodeEvents(on, config) {
-            // implement node event listeners here
-        },
+        baseUrl: "http://fullstack_client:5173/",
     },
 });

@@ -6,6 +6,13 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://fullstack_client:5173"]
+      interval: 1s
+      timeout: 10s
+      retries: 3
+      start_period: 0s
+      start_interval: 0s
     env_file:
       - ./.env
     ports:
