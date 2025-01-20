@@ -1,6 +1,6 @@
 services:
   pgadmin:
-      container_name: pgadmin4_container
+      container_name: pgadmin4
       image: dpage/pgadmin4
       tty: true
       restart: always
