@@ -11,7 +11,6 @@ import './SearchPage.css';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-
 type Product = {
     products: {
         id: number;
@@ -32,7 +31,6 @@ type Product = {
 }
 
 const SearchPage: React.FC = () => {
-
     const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
     const [addedToCart, setAddedToCart] = useState<{ [key: string]: boolean }>({});
 
@@ -151,8 +149,8 @@ const SearchPage: React.FC = () => {
         if (query.length === 0) {
             let results: Product[] = await getSearch("", "name", "ASC");
             setProducts(results);
-          } else if
-        (query.length < 3 || query.length > 50) {
+        } else if
+            (query.length < 3 || query.length > 50) {
             setError(`Search query must be between 3 and 50 characters.`);
             return;
         }
