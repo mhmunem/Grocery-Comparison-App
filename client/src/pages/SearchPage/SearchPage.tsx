@@ -280,7 +280,7 @@ const SearchPage: React.FC = () => {
         // Ensure current page is valid
         setCurrentPage(current => Math.max(1, Math.min(current, total)));
 
-    }, [products, sortValue, selectedCategories, query, itemsPerPage]);
+    }, [products, sortValue, selectedCategories, itemsPerPage]);
 
 
     return (
