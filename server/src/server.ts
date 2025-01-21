@@ -27,7 +27,7 @@ switch (env) {
     case "test":
         seed_data = seed_data_e2e_tests
         break;
-    default: // test
+    default: // dev
         seed_data = seed_data_dev
         break;
 }
