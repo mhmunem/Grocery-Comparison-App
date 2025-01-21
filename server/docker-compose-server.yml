@@ -6,6 +6,13 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
+    develop:
+      watch:
+        - action: rebuild
+          path: ./src
+          target: ./src
+          ignore:
+            - node_modules/
     volumes:
       - ./src:/src
     ports:
