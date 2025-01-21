@@ -32,3 +32,6 @@ yarn-error.log*
 
 # IDE config files
 org.eclipse.buildship.core.prefs
+
+# Cypress
+cypress/screenshots/

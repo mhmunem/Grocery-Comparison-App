@@ -1,4 +1,11 @@
 services:
+  server:
+    env_file:
+        - ../server/.env.e2e
+  db_migrate:
+    env_file:
+        - ../server/.env.e2e
+    command: sh -c 'npm run db:reset && npm run db:generate && npm run db:push && npm run db:seed'
   client:
     env_file:
         - ./.env.e2e
