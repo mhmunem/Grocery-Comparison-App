@@ -2,12 +2,6 @@ import { Pool } from 'pg'
 import { drizzle } from 'drizzle-orm/node-postgres'
 
 
-const env = process.env["NODE_ENV"]!
-
-const dbUrl = process.env[`${env?.toUpperCase()}_DATABASE_URL`]
-
-const databases = ['cosc680_dev_db', 'cosc680_test_db', 'cosc680_prod_db']
-
 const config = {
     user: process.env["DB_USER"],
     host: process.env["DB_HOST"],
@@ -18,7 +12,9 @@ const config = {
 
 const pool = new Pool(config)
 
-const createDatabases = async () => {
+async function createDatabases(pool: Pool) {
+    const databases = ['cosc680_dev_db', 'cosc680_test_db', 'cosc680_prod_db']
+
     for (const dbName of databases) {
         try {
             const query = `SELECT 1 FROM pg_database WHERE datname = $1 LIMIT 1`
@@ -32,13 +28,15 @@ const createDatabases = async () => {
     }
 }
 
-createDatabases()
+createDatabases(pool)
+
+const env = process.env["NODE_ENV"]!
+const dbUrl = process.env[`${env?.toUpperCase()}_DATABASE_URL`]
 
 const finalPool = new Pool({
     connectionString: dbUrl
 })
 
 const db = drizzle(finalPool)
-
 
 export default db
