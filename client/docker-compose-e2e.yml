@@ -1,5 +1,6 @@
 include:
   - ../server/docker-compose-db.yml
+  - ../server/docker-compose-db-migrate.yml
   - ../server/docker-compose-server.yml
   - ./docker-compose-client.yml
 
@@ -30,6 +31,8 @@ services:
     depends_on:
       db:
           condition: service_healthy
+      db_migrate:
+          condition: service_completed_successfully
       client:
           condition: service_healthy
     working_dir : /e2e

@@ -2,7 +2,6 @@ import { defineConfig } from "drizzle-kit";
 
 
 const env = process.env["NODE_ENV"]!
-
 const dbUrl = process.env[`${env.toUpperCase()}_DATABASE_URL`];
 
 if (!dbUrl) {

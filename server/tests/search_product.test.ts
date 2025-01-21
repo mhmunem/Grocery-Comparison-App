@@ -20,7 +20,6 @@ import { units } from "../src/db/schema/units"
 import { Server } from "http"
 
 
-
 describe('Function tests', () => {
     dotenv.config()
 
@@ -255,8 +254,6 @@ describe('search_product get endpoint', () => {
             done();
         });
     });
-
-    // TODO: close the connection to the database after the tests end to fix "Jest did not exit one second after the test run has completed." `app` uses a database connection.
 
     const correct_result = [{ "category": { "id": 11, "name": "Pantry" }, "chains": { "id": 2, "image_logo": "Fn5UddmJn1BlPWRArbh", "name": "New World" }, "products": { "amount": 8.23, "brand": "Value", "categoryID": 11, "details": "description 1", "id": 322, "image": "cxU9kT7bNp9fyR", "name": "Chicken Stock", "unitID": 3 }, "store_products": { "id": 342, "price": 3.29, "productID": 322, "storeID": 46 }, "stores": { "chainID": 2, "id": 46, "name": "PAK'nSAVE Hawera" }, "units": { "id": 3, "name": "l" } }, { "category": { "id": 11, "name": "Pantry" }, "chains": { "id": 2, "image_logo": "Fn5UddmJn1BlPWRArbh", "name": "New World" }, "products": { "amount": 8.23, "brand": "Value", "categoryID": 11, "details": "description 1", "id": 322, "image": "cxU9kT7bNp9fyR", "name": "Chicken Stock", "unitID": 3 }, "store_products": { "id": 718, "price": 7.36, "productID": 322, "storeID": 3 }, "stores": { "chainID": 2, "id": 3, "name": "New World Birkenhead" }, "units": { "id": 3, "name": "l" } }]
 

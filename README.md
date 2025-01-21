@@ -10,7 +10,7 @@ E.g. `sudo docker compose -f ./docker-compose-db.yml -f ./docker-compose-server.
 However, to run the entire stack (client, server, and pgadmin) in parallel run `sudo docker compose up`.
 To automatically restart the containers in case of any changes use `--watch`. E.g. `sudo docker compose up --watch`.
 
-NOTE: On Windows `sudo` is not required.
+On Windows `sudo` is not required.
 
 ## Running Tests
 
