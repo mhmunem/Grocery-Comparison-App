@@ -6,7 +6,6 @@ include:
 services:
   e2e_test:
     container_name: e2e
-    command: echo hiiii
     tty: true
     build: 
       context: .

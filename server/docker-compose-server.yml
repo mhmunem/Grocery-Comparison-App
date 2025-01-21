@@ -13,6 +13,11 @@ services:
           target: ./src
           ignore:
             - node_modules/
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://server:5000"]
+      interval: 1s
+      timeout: 10s
+      retries: 3
     volumes:
       - ./src:/src
     ports:
