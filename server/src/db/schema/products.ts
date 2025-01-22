@@ -5,11 +5,11 @@ import { numericCasted } from "../../types/schema"
 
 export const products = pgTable('products', {
     id: serial().primaryKey(),
-    name: text().notNull(),
-    brand: text().notNull(),
-    details: text().notNull(),
-    amount: numericCasted().notNull(),
-    image: text().notNull(),
+    name: text().notNull().unique(),
+    brand: text(),
+    details: text(),
+    amount: numericCasted(),
+    image: text(),
     unitID: integer().notNull().references(() => units.id),
     categoryID: integer().notNull().references(() => category.id),
 })
