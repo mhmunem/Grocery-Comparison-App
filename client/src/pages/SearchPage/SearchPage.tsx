@@ -336,9 +336,9 @@ const SearchPage: React.FC = () => {
                             <IonSelectOption value="12">Baby & Child</IonSelectOption>
                         </IonSelect>
                     </IonItem>
-                    <IonButton onClick={handleClearSelection} className="categories-clear-button">
+                    <button type="button" onClick={handleClearSelection} className="categories-clear-button">
                      Clear All
-                    </IonButton>
+                    </button>
                 </div>
                 <div className="spacer"></div>
                 <div className="sortDropdown-container" ref={dropdownRef}>
