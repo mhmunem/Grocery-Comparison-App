@@ -245,11 +245,15 @@ ion-grid {
 
 
 /* sort dropdown container */
-.categoryDropdown-container,
+.categoryDropdown-container {
+    display: flex;
+    align-items: center; /* Vertically aligns items in the center */
+    gap: 10px; /* Adds spacing between the dropdown and the button */
+}
 .sortDropdown-container {
     position: relative;
     display: flex;
-    justify-content: center;
+    align-items: center; /* Vertically align the dropdown */
     margin: 10px auto;
     z-index: 9999;
     width: fit-content;
@@ -301,7 +305,17 @@ ion-grid {
 }
 
 
-.sortDropdown-menu,
+.sortDropdown-menu {
+    position: absolute;
+    z-index: 1000; 
+    top: 100%; 
+    left: 0;
+    width: 100%; 
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: none; 
+}
 .categoryDropdown-menu {
     position: absolute;
     left: 0;
@@ -339,15 +353,59 @@ ion-grid {
 }
 
 .sortDropdown-item.selected {
-    background-color: #4caf50;
+    background-color: #6f6ff1;
     color: #ffffff;
     font-weight: bold;
 }
 
-.sortDropdown-item.selected {
-    background-color: #e6f7ff;
-    font-weight: bold;
+.spacer {
+    flex-grow: 1; 
 }
+
+.clear-sort-btn, .categories-clear-button {
+    margin-left: 5px;  
+    margin-right: 2.5px;
+    background-color: #9898f5; 
+    color: white; 
+    padding: 1px 2px;  
+    font-size: 10px;  
+    border: none; 
+    border-radius: 4px;  
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s; 
+    height: 18px; 
+    line-height: 18px;  
+    width: 60px;  
+}
+
+.categories-clear-button:hover, .clear-sort-btn:hover {
+    background-color: #5252f6; 
+    transform: scale(1.05);  
+}
+
+.categories-clear-button ion-icon, .clear-sort-btn ion-icon {
+    font-size: 7px;  
+    vertical-align: middle; 
+}
+
+
+
+.toolbar-container {
+    display: flex;
+    align-items: center; /* Vertically align items */
+    justify-content: space-between; /* Push left and right containers to opposite ends */
+    width: 100%; /* Ensure the container spans the full width of its parent */
+  }
+
+.no-results-container {
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;           
+  width: 100vw;
+  transform: translateY(-20%);  
+  font-size: 20px;        
+  }
 
 /* Media Queries */
 @media (max-width: 761px) {

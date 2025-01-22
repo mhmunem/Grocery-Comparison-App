@@ -11,7 +11,8 @@ services:
           ignore:
             - node_modules/
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     build:
       context: .
       dockerfile: Dockerfile
