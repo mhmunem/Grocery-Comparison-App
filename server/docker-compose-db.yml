@@ -2,6 +2,11 @@ services:
   db:
     container_name: db
     image: postgres:17.2
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 1s
+      timeout: 10s
+      retries: 5
     tty: true
     restart: always
     env_file:
