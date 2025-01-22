@@ -5,6 +5,7 @@ import errorHandler from './middlewares/errorHandler'
 import express from 'express'
 import routes from './routes/initialsetup'
 import storesRouter from './routes/storesRouter'
+import categoryRouter from './routes/categoryRouter'
 import swaggerJsdoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
 
@@ -38,8 +39,7 @@ db.execute('SELECT NOW()')
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs))
 
-app.use('/', routes, storesRouter)
-app.use('/search_product', routes)
+app.use('/', routes, storesRouter, categoryRouter)
 
 app.use(errorHandler)
 
