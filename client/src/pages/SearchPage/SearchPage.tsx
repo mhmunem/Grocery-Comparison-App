@@ -271,6 +271,20 @@ const SearchPage: React.FC = () => {
 		setSortedAndFilteredProducts(updatedProducts);
 	}, [products, sortValue, selectedCategories, itemsPerPage]);
 
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+		  if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node) && isDropdownOpen) {
+			setIsDropdownOpen(false);
+		  }
+		};
+	
+		document.addEventListener('mousedown', handleClickOutside);
+	
+		return () => {
+		  document.removeEventListener('mousedown', handleClickOutside);
+		};
+	  }, [isDropdownOpen]);
+
 	const startIndex = (currentPage - 1) * itemsPerPage;
 
 	return (

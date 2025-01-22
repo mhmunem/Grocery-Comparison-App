@@ -358,11 +358,6 @@ ion-grid {
     font-weight: bold;
 }
 
-.sortDropdown-item.selected {
-    background-color: #e6f7ff;
-    font-weight: bold;
-}
-
 .spacer {
     flex-grow: 1; 
 }
@@ -410,6 +405,15 @@ ion-grid {
     transform: scale(1.05); 
 }
 
+.no-results-container {
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;           
+  width: 100vw;
+  transform: translateY(-20%);  
+  font-size: 20px;        
+  }
 
 /* Media Queries */
 @media (max-width: 761px) {
