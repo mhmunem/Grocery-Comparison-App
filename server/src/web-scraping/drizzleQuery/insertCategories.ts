@@ -1,18 +1,22 @@
-import { category } from "../../db/schema/category";
 import db from "../../db/connection/pool";
-import categoriesUrl from "../constants/categoriesUrl";
+import { category } from "../../db/schema/category";
 
-const insertCategories = async (name: string) => {
-    await db.insert(category)
-        .values({ name: name })
-        .onConflictDoUpdate({
-            target: category.name,
-            set: {
-                name: category.name,
-            },
-        });
-    console.log(`Inserted ${name} successfully.`);
-
+const insertCategories = async (categoryNames: any) => {
+    for (const categoryName of categoryNames) {
+        try {
+            await db.insert(category)
+                .values({ name: categoryName })
+                .onConflictDoUpdate({
+                    target: category.name,
+                    set: {
+                        name: categoryName,
+                    },
+                });
+        } catch (error) {
+            console.error(`Error inserting category ${categoryName}:`, error);
+        }
+    }
+    console.log('All categories inserted successfully.')
 };
 
 export default insertCategories;

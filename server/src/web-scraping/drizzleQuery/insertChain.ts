@@ -13,8 +13,6 @@ const insertChains = async () => {
                                     image_logo: chain.imageurl,
                                 },
                             });
-            
-            console.log(`Inserted ${chain.name} successfully.`);
         } catch (error) {
             console.error(`Error inserting ${chain.name}:`, error);
         }
