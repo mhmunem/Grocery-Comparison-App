@@ -1,0 +1,27 @@
+services:
+  db_migrate:
+    container_name: db_migrate
+    tty: true
+    command: sh -c 'npm run db:generate && npm run db:push && exit'
+    develop:
+      watch:
+        - action: rebuild
+          path: ./src/db
+          target: ./src/db
+          ignore:
+            - node_modules/
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - ./.env
+    networks:
+      - project_network
+
+volumes:
+  cosc680-db:
+
+networks:
+  project_network:
