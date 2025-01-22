@@ -30,9 +30,9 @@ services:
             - node_modules/
     depends_on:
       db:
-          condition: service_healthy
+        condition: service_healthy
       db_migrate:
-          condition: service_completed_successfully
+        condition: service_completed_successfully
       client:
           condition: service_healthy
     working_dir : /e2e
