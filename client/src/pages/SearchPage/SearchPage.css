@@ -363,29 +363,29 @@ ion-grid {
 }
 
 .clear-sort-btn, .categories-clear-button {
-    margin-left: 5px;  /* 保持原有的左右外边距 */
+    margin-left: 5px;  
     margin-right: 2.5px;
-    background-color: #9898f5; /* 维持一致的背景颜色 */
-    color: white; /* 文本颜色保持为白色 */
-    padding: 1px 2px;  /* 垂直内边距减少以适应较小的高度 */
-    font-size: 10px;  /* 字体大小保持不变 */
-    border: none; /* 无边框 */
-    border-radius: 4px;  /* 轻微的圆角 */
-    cursor: pointer; /* 表明按钮是可点击的 */
-    transition: background-color 0.3s, transform 0.2s; /* 平滑的背景色和变形过渡 */
-    height: 18px;  /* 高度调整为原始高度的70% */
-    line-height: 18px;  /* 行高与高度相同，确保文本垂直居中 */
-    width: 60px;  /* 宽度保持为100px */
+    background-color: #9898f5; 
+    color: white; 
+    padding: 1px 2px;  
+    font-size: 10px;  
+    border: none; 
+    border-radius: 4px;  
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s; 
+    height: 18px; 
+    line-height: 18px;  
+    width: 60px;  
 }
 
 .categories-clear-button:hover, .clear-sort-btn:hover {
-    background-color: #5252f6; /* 悬停时背景颜色变暗 */
-    transform: scale(1.05);  /* 悬停时轻微放大 */
+    background-color: #5252f6; 
+    transform: scale(1.05);  
 }
 
 .categories-clear-button ion-icon, .clear-sort-btn ion-icon {
-    font-size: 7px;  /* 图标大小适当减小 */
-    vertical-align: middle; /* 确保图标与文本垂直居中对齐 */
+    font-size: 7px;  
+    vertical-align: middle; 
 }
 
 
