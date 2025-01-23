@@ -22,15 +22,20 @@ async function fetchPriceHistory(productId: number, brand: number, storeName: st
     try {
         const priceHistoryResponse = await axios.get(priceHistoryUrl);
         const priceHistoryData = priceHistoryResponse.data.data.price_history;
-
         if (priceHistoryData) {
             for (const historyEntry of priceHistoryData) {
                 await db.insert(price_history).values({
                     date: historyEntry.date,
                     price: historyEntry.price,
                     productID: insertedProductID
+                }).onConflictDoUpdate({
+                    target: [price_history.date, price_history.productID],
+                    set: {
+                        price: historyEntry.price
+                    }
                 }).execute();
             }
+            console.log(`New pricehistory inserted`);
         }else{
           console.log(`No data found for product' ${insertedProductID}` )  
         }
@@ -60,6 +65,7 @@ async function GroSaveProductsScraper() {
 
             for (const product of data.loaderSearchResults) {
                 const priceDetails = Object.values(product.price_details)[0] as {
+                    primary_image_url: string,
                     unit: string;
                     quantity: number;
                     price: number;
@@ -99,7 +105,7 @@ async function GroSaveProductsScraper() {
                         brand: product.brand,
                         details: '',
                         amount: priceDetails.quantity,
-                        image: product.image_uri,
+                        image: priceDetails.primary_image_url,
                         unitID: unitId,
                         categoryID: categoryId
                     }).onConflictDoUpdate({
@@ -108,7 +114,7 @@ async function GroSaveProductsScraper() {
                             brand: product.brand,
                             details: '',
                             amount: priceDetails.quantity,
-                            image: product.image_uri,
+                            image: priceDetails.primary_image_url,
                             unitID: unitId,
                             categoryID: categoryId
                         }

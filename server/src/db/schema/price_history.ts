@@ -1,4 +1,4 @@
-import { serial, date, integer, pgTable } from "drizzle-orm/pg-core";
+import { serial, date, integer, pgTable, unique } from "drizzle-orm/pg-core";
 import { numericCasted } from "../../types/schema";
 import { products } from "./products";
 
@@ -8,4 +8,8 @@ export const price_history = pgTable('price_history', {
     price: numericCasted().notNull(),
     productID: integer().notNull().references(() => products.id)
 
+}, (table) => {
+    return {
+        dateProduct: unique().on(table.date, table.productID),
+    }
 })
