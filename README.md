@@ -16,7 +16,7 @@ On Windows `sudo` is not required.
 
 **Server**
 
-From the root directory run: `sudo docker compose -f docker-compose-server-test.yml up --watch`.
+From the root directory run: `sudo docker compose -f server/docker-compose-server-test.yml -f server/docker-compose-server-test-override.yml up --watch --build`.
 The tests will automatically rerun when any files in `server/` change.
 
 **Client**
@@ -25,7 +25,7 @@ ETA: soon
 
 **End-to-end Tests**
 
-From the root directory run: `sudo docker compose -f client/docker-compose-e2e.yml -f client/compose-override-e2e.yml up --watch`.
+From the root directory run: `sudo docker compose -f client/docker-compose-e2e.yml -f client/compose-override-e2e.yml up --build --watch`.
 The tests will automatically rerun when any files in `server/` or `client/` change.
 
 # Overview
