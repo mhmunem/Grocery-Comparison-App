@@ -15,7 +15,7 @@ const router = Router()
 
 /**
  * @swagger
- * /chains:
+ * /category:
  *   get:
  *     tags: [Category]
  *     summary: Retrieve product category data
