@@ -11,15 +11,23 @@ export function ProductDetails({ decreaseQuantity, increaseQuantity, quantities,
                     <IonRow>
                     <IonLabel className="brandText">Brand: {selectedProduct.products.brand}</IonLabel>
                     </IonRow>
-                    <IonRow>
-                    <IonLabel className="sizeText">Size: {selectedProduct.products.amount} {selectedProduct.units.name}</IonLabel>
-                    </IonRow>
+                    <IonLabel className="sizeText"> 
+                            {selectedProduct.units.name === 'ea'
+                                ? '' // If the unit is 'ea', no amount or unit type is displayed
+                                : `Weight/Volume: ${selectedProduct.products.amount}${selectedProduct.units.name}`}
+                        </IonLabel>
+                    <IonLabel className="sizeText">Unit Price: 
+                            {selectedProduct.units.name === 'ea'
+                                ? `$${selectedProduct.store_products.price.toFixed(2)} ea` // Display price per item if unit is 'ea'
+                                : `$${(selectedProduct.store_products.price / selectedProduct.products.amount).toFixed(2)} per ${selectedProduct.units.name}`}
+                        </IonLabel>
                     <IonRow>
                     <IonLabel className="sizeText">Category: {selectedProduct.category.name}</IonLabel>
                     </IonRow>
                     <IonRow>
                     <IonLabel className="priceLabel">${selectedProduct.store_products.price}</IonLabel>
                     </IonRow>
+
                 
 
                 
