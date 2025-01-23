@@ -1,8 +1,8 @@
-import express from 'express';
+import { Router } from "express";
 import db from "../db/connection/pool";
 import { get_chain, get_stores } from '../query/storesQuery';
 
-const storesRouter = express.Router();
+const storesRouter = Router();
 
 /**
  * @swagger
