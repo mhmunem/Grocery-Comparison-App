@@ -45,3 +45,22 @@
   /* Push the centered element to the middle */
   margin-right: auto;
 }
+
+.custom-toast {
+  --background: #f8d7da; 
+  --color: #721c24; 
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center; 
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.custom-toast .toast-message {
+  text-align: center;
+  width: 100%;
+  font-weight: bold;
+  font-size: 22px;
+}
