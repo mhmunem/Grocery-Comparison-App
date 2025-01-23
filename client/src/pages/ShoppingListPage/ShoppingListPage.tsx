@@ -1,26 +1,11 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import {
-  IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-  IonGrid,
-  IonRow,
-  IonCol,
-  IonLabel,
-  IonButtons,
-  IonButton,
-  IonIcon,
-  IonItem,
-} from '@ionic/react';
-import { home } from 'ionicons/icons';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonLabel, IonButton, IonItem } from '@ionic/react';
 import { getSearch } from '../../services/InitialSetupService';
 import { SearchProductCard } from '../../components/SearchPage/SearchProductCard';
 import { ProductDetailsModal } from '../../components/ProductPage/ProductDetailsModal';
 import './ShoppingListPage.css';
 
-type Product = {
+export type Product = {
   products: {
     id: number;
     name: string;
@@ -32,7 +17,7 @@ type Product = {
     categoryID: number;
   };
   store_products: {
-    id: number; // storeProductId
+    id: number;
     storeID: number;
     productID: number;
     price: number;
@@ -60,10 +45,6 @@ const ShoppingListPage: React.FC = () => {
 
     const savedQ = localStorage.getItem('quantities');
     const savedC = localStorage.getItem('addedToCart');
-
-    console.log('=== Debug localStorage ===');
-    console.log('savedQuantities (string):', savedQ);
-    console.log('savedCart (string):', savedC);
 
     if (savedQ && savedC) {
       setQuantities(JSON.parse(savedQ));
@@ -188,7 +169,7 @@ const ShoppingListPage: React.FC = () => {
                     size-sm="4"
                     size-md="4"
                     size-lg="3"
-                    key={product.store_products.id} 
+                    key={product.store_products.id}
                     className="ion-no-margin"
                   >
                     <SearchProductCard

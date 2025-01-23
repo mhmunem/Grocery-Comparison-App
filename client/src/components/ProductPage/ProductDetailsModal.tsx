@@ -1,13 +1,8 @@
-import {
-    IonContent, IonHeader, IonPage, IonList, IonTitle, IonToolbar, IonSearchbar, IonCard,
-    IonCardContent, IonLabel, IonItem, IonIcon, IonImg, IonModal, IonThumbnail,
-    useIonViewWillEnter, IonChip, IonGrid, IonCol, IonRow, IonCardTitle, IonButtons, IonButton
-} from '@ionic/react';
+import { IonContent, IonHeader, IonList, IonTitle, IonToolbar, IonLabel, IonItem, IonModal, IonGrid, IonCol, IonRow, IonButtons, IonButton } from '@ionic/react';
 import { ProductDetails } from '../../components/ProductPage/ProductDetails';
 import { PriceHistory } from '../../components/ProductPage/PriceHistory';
 
 export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quantities, selectedProduct, showProductDetails, closeProductDetails }: any) {
-
     if (!selectedProduct) {
         return null;
     }
@@ -64,69 +59,69 @@ export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quanti
                             </IonItem>
                             {/* Nutritional Information Section */}
                             <IonItem>
-                            <IonLabel>
-                                <h2>Nutritional Information</h2>
-
-                                {/* Suggested Serving Size */}
                                 <IonLabel>
-                                    <h3>Suggested Serving Size: 100g</h3>
+                                    <h2>Nutritional Information</h2>
+
+                                    {/* Suggested Serving Size */}
+                                    <IonLabel>
+                                        <h3>Suggested Serving Size: 100g</h3>
+                                    </IonLabel>
+
+                                    {/* Nutritional Information Table */}
+                                    <IonGrid>
+                                        <IonRow>
+                                            <IonCol size="4"><strong>Nutrient</strong></IonCol>
+                                            <IonCol size="4"><strong>Per Serving</strong></IonCol>
+                                            <IonCol size="4"><strong>Per 100g</strong></IonCol>
+                                        </IonRow>
+
+                                        {/* Energy */}
+                                        <IonRow>
+                                            <IonCol size="4">Energy</IonCol>
+                                            <IonCol size="4">kJ</IonCol>
+                                            <IonCol size="4"> kJ</IonCol>
+                                        </IonRow>
+
+                                        {/* Protein */}
+                                        <IonRow>
+                                            <IonCol size="4">Protein</IonCol>
+                                            <IonCol size="4">g</IonCol>
+                                            <IonCol size="4">g</IonCol>
+                                        </IonRow>
+
+                                        {/* Carbohydrates */}
+                                        <IonRow>
+                                            <IonCol size="4">Carbohydrate</IonCol>
+                                            <IonCol size="4">g</IonCol>
+                                            <IonCol size="4">g</IonCol>
+                                        </IonRow>
+
+                                        <IonRow>
+                                            <IonCol size="4">Sugar</IonCol>
+                                            <IonCol size="4">g</IonCol>
+                                            <IonCol size="4">g</IonCol>
+                                        </IonRow>
+
+                                        {/* Fats */}
+                                        <IonRow>
+                                            <IonCol size="4">Fat</IonCol>
+                                            <IonCol size="4">g</IonCol>
+                                            <IonCol size="4">g</IonCol>
+                                        </IonRow>
+
+                                        <IonRow>
+                                            <IonCol size="4">Saturated Fat</IonCol>
+                                            <IonCol size="4">g</IonCol>
+                                            <IonCol size="4">g</IonCol>
+                                        </IonRow>
+
+                                        <IonRow>
+                                            <IonCol size="4">Salt</IonCol>
+                                            <IonCol size="4">g</IonCol>
+                                            <IonCol size="4">g</IonCol>
+                                        </IonRow>
+                                    </IonGrid>
                                 </IonLabel>
-
-                                {/* Nutritional Information Table */}
-                                <IonGrid>
-                                    <IonRow>
-                                        <IonCol size="4"><strong>Nutrient</strong></IonCol>
-                                        <IonCol size="4"><strong>Per Serving</strong></IonCol>
-                                        <IonCol size="4"><strong>Per 100g</strong></IonCol>
-                                    </IonRow>
-
-                                    {/* Energy */}
-                                    <IonRow>
-                                        <IonCol size="4">Energy</IonCol>
-                                        <IonCol size="4">kJ</IonCol>
-                                        <IonCol size="4"> kJ</IonCol>
-                                    </IonRow>
-
-                                    {/* Protein */}
-                                    <IonRow>
-                                        <IonCol size="4">Protein</IonCol>
-                                        <IonCol size="4">g</IonCol>
-                                        <IonCol size="4">g</IonCol>
-                                    </IonRow>
-
-                                    {/* Carbohydrates */}
-                                    <IonRow>
-                                        <IonCol size="4">Carbohydrate</IonCol>
-                                        <IonCol size="4">g</IonCol>
-                                        <IonCol size="4">g</IonCol>
-                                    </IonRow>
-
-                                    <IonRow>
-                                        <IonCol size="4">Sugar</IonCol>
-                                        <IonCol size="4">g</IonCol>
-                                        <IonCol size="4">g</IonCol>
-                                    </IonRow>
-
-                                    {/* Fats */}
-                                    <IonRow>
-                                        <IonCol size="4">Fat</IonCol>
-                                        <IonCol size="4">g</IonCol>
-                                        <IonCol size="4">g</IonCol>
-                                    </IonRow>
-
-                                    <IonRow>
-                                        <IonCol size="4">Saturated Fat</IonCol>
-                                        <IonCol size="4">g</IonCol>
-                                        <IonCol size="4">g</IonCol>
-                                    </IonRow>
-
-                                    <IonRow>
-                                        <IonCol size="4">Salt</IonCol>
-                                        <IonCol size="4">g</IonCol>
-                                        <IonCol size="4">g</IonCol>
-                                    </IonRow>
-                                </IonGrid>
-                            </IonLabel>
                             </IonItem>
                         </IonList>
                     </div>
