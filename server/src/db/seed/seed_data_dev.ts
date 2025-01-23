@@ -1,8 +1,3 @@
-import { NodePgDatabase } from "drizzle-orm/node-postgres"
-import { reset, seed } from "drizzle-seed"
-
-
-
 const products = [
     "Organic Bananas", "Whole Milk", "Large Brown Eggs", "Wheat Bread", "Ground Coffee",
     "Red Apples", "Greek Yogurt", "Chicken Breast", "Baby Spinach", "Orange Juice",
@@ -217,7 +212,6 @@ const seed_data_dev = (f: any) => ({
                 precision: 100,
                 maxValue: 1000,
             }),
-
         },
     },
     shopping_list: {

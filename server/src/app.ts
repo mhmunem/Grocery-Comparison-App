@@ -4,6 +4,7 @@ import cors from "cors"
 import db from "./db/connection/pool"
 import errorHandler from "./middlewares/errorHandler"
 import express from "express"
+import priceHistoryRouter from "./routes/priceHistoryRouter"
 import routes from "./routes/initialsetup"
 import searchRouter from "./routes/searchRouter"
 import storesRouter from "./routes/storesRouter"
@@ -40,7 +41,7 @@ db.execute("SELECT NOW()")
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs))
 
-app.use("/", routes, storesRouter, categoryRouter, searchRouter)
+app.use("/", routes, storesRouter, categoryRouter, searchRouter, priceHistoryRouter)
 
 app.use(errorHandler)
 

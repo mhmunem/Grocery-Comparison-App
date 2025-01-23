@@ -22,6 +22,7 @@ export type ProductSearchResult = {
     category: Category
     stores: Stores
     chains: Chains
+    products: Products
 }
 
 // A custom type which solves the issue of numeric and decimal types being infered as string.

@@ -19,7 +19,7 @@ export async function seed_db(db: NodePgDatabase, tables: Object, seed_data_call
     }
 
     try {
-        await seed(db, tables).refine(seed_data_callback)
+        await seed(db, tables, { seed: 42 }).refine(seed_data_callback)
     } catch (_) {
         console.log("Database seeded")
     }
