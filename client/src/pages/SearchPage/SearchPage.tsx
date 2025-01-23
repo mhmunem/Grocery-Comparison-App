@@ -307,7 +307,10 @@ const SearchPage: React.FC = () => {
                         debounce={300}
                         disabled={false}
                         className="searchbar"
-                        onIonClear={() => setQuery('')} // Clear the query when the 'x' is clicked
+                        onIonClear={() => {
+							setQuery('');
+							window.location.reload();
+						}} // Clear the query when the 'x' is clicked
                         />
                 </IonToolbar>
             </IonHeader>
