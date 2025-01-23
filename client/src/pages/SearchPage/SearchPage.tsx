@@ -8,7 +8,6 @@ import { ProductDetailsModal } from '../../components/ProductPage/ProductDetails
 import { SearchProductCard } from '../../components/SearchPage/SearchProductCard';
 import { getPriceHistory, getSearch } from "../../services/InitialSetupService";
 
-
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 
@@ -24,7 +23,7 @@ type Product = {
     categoryID: number;
   };
   store_products: {
-    id: number; // storeProductId
+    id: number;
     storeID: number;
     productID: number;
     price: number;
@@ -281,6 +280,20 @@ const SearchPage: React.FC = () => {
     };
   }, [isDropdownOpen]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node) && isDropdownOpen) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isDropdownOpen]);
+
   const startIndex = (currentPage - 1) * itemsPerPage;
 
   // console.log("getPriceHistory", (async () => await getPriceHistory(1, 30))()); // NOTE: remove me
@@ -437,4 +450,3 @@ const SearchPage: React.FC = () => {
 };
 
 export default SearchPage;
-

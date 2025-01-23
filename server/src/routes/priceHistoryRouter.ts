@@ -1,9 +1,9 @@
 import db from "../db/connection/pool";
-import express from 'express';
+import { Router } from 'express';
 import { Request, Response } from 'express';
 import { get_price_history_product } from '../query/priceHistory';
 
-const priceHistoryRouter = express.Router();
+const priceHistoryRouter = Router();
 
 /**
 * @swagger

@@ -12,23 +12,23 @@ async function request(method: 'get' | 'post' | 'put' | 'delete', url: string, d
 }
 
 export function getInitialSetupMessage() {
-    request('get', `${API_URL}${API_ENDPOINTS.WELCOME_API}`);
+    return request('get', `${API_URL}${API_ENDPOINTS.WELCOME_API}`);
 }
 
 export function getInitialSetup() {
-    request('get', `${API_URL}${API_ENDPOINTS.GET_DATA}`);
+    return request('get', `${API_URL}${API_ENDPOINTS.GET_DATA}`);
 }
 
 export function postInitialSetup() {
-    request('post', `${API_URL}${API_ENDPOINTS.POST_DATA}`);
+    return request('post', `${API_URL}${API_ENDPOINTS.POST_DATA}`);
 }
 
 export function putInitialSetup(id: string) {
-    request('put', `${API_URL}${API_ENDPOINTS.PUT_DATA.replace(':id', id)}`);
+    return request('put', `${API_URL}${API_ENDPOINTS.PUT_DATA.replace(':id', id)}`);
 }
 
 export function deleteInitialSetup(id: string) {
-    request('delete', `${API_URL}${API_ENDPOINTS.DELETE_DATA.replace(':id', id)}`
+    return request('delete', `${API_URL}${API_ENDPOINTS.DELETE_DATA.replace(':id', id)}`
     );
 }
 
