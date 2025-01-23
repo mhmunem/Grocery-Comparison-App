@@ -20,7 +20,7 @@ services:
             - node_modules/
     depends_on:
       db_migrate:
-        condition: service_completed_successfully
+          condition: service_completed_successfully
     build:
       context: .
       dockerfile: Dockerfile

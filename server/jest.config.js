@@ -1,11 +1,9 @@
-module.exports = {
-    preset: 'ts-jest',
-    testEnvironment: 'node',
-    moduleFileExtensions: ['ts', 'js'],
-    transform: {
-        '^.+\\.ts$': 'ts-jest',
-    },
-    testMatch: ['**/?(*.)+(spec|test).[tj]s'],
-    watchman: false,
+export const preset = 'ts-jest';
+export const testEnvironment = 'node';
+export const moduleFileExtensions = ['ts', 'js'];
+export const transform = {
+    '^.+\\.ts$': 'ts-jest',
 };
+export const testMatch = ['**/?(*.)+(spec|test).[tj]s'];
+export const watchman = false;
 

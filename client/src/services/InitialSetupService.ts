@@ -11,16 +11,35 @@ async function request(method: 'get' | 'post' | 'put' | 'delete', url: string, d
     }
 }
 
-export const getInitialSetupMessage = () => request('get', `${API_URL}${API_ENDPOINTS.WELCOME_API}`);
+export function getInitialSetupMessage() {
+    return request('get', `${API_URL}${API_ENDPOINTS.WELCOME_API}`);
+}
 
-export const getInitialSetup = () => request('get', `${API_URL}${API_ENDPOINTS.GET_DATA}`);
+export function getInitialSetup() {
+    return request('get', `${API_URL}${API_ENDPOINTS.GET_DATA}`);
+}
 
-export const postInitialSetup = () => request('post', `${API_URL}${API_ENDPOINTS.POST_DATA}`);
+export function postInitialSetup() {
+    return request('post', `${API_URL}${API_ENDPOINTS.POST_DATA}`);
+}
 
-export const putInitialSetup = (id: string) => request('put', `${API_URL}${API_ENDPOINTS.PUT_DATA.replace(':id', id)}`);
+export function putInitialSetup(id: string) {
+    return request('put', `${API_URL}${API_ENDPOINTS.PUT_DATA.replace(':id', id)}`);
+}
 
-export const deleteInitialSetup = (id: string) => request('delete', `${API_URL}${API_ENDPOINTS.DELETE_DATA.replace(':id', id)}`);
+export function deleteInitialSetup(id: string) {
+    return request('delete', `${API_URL}${API_ENDPOINTS.DELETE_DATA.replace(':id', id)}`
+    );
+}
 
-export const getSearch = (name: string, sort_by: string, sort_direction: string) => request(
-    'get', `${API_URL}${API_ENDPOINTS.SEARCH_PRODUCT}?name=${name}&sort_by=${sort_by}&sort_direction=${sort_direction}`
-);
+export function getSearch(name: string, sort_by: string, sort_direction: string) {
+    return request(
+        'get', `${API_URL}${API_ENDPOINTS.GET_SEARCH_PRODUCT}?name=${name}&sort_by=${sort_by}&sort_direction=${sort_direction}`
+    );
+}
+
+export function getPriceHistory(product_id: number, past_n_days: number) {
+    return request(
+        'get', `${API_URL}${API_ENDPOINTS.GET_PRICE_HISTORY}?product_id=${product_id}&past_n_days=${past_n_days}`
+    );
+}

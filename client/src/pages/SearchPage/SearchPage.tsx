@@ -1,12 +1,12 @@
-import { IonButton, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonItem, IonLabel, IonPage, IonRow, IonSearchbar, IonSelect, IonSelectOption, IonToolbar } from '@ionic/react';
-import { CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from 'chart.js';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ProductDetailsModal } from '../../components/ProductPage/ProductDetailsModal';
-import { PaginationControls } from '../../components/SearchPage/PaginationControls';
-import { SearchProductCard } from '../../components/SearchPage/SearchProductCard';
-import { LoadingContainer } from '../../components/SharedComponents/loadingContainer';
-import { getSearch } from "../../services/InitialSetupService";
 import './SearchPage.css';
+import React, { useEffect, useRef, useState } from 'react';
+import { CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from 'chart.js';
+import { IonCol, IonContent, IonGrid, IonHeader, IonImg, IonItem, IonLabel, IonPage, IonRow, IonSearchbar, IonSelect, IonSelectOption, IonToolbar } from '@ionic/react';
+import { LoadingContainer } from '../../components/SharedComponents/loadingContainer';
+import { PaginationControls } from '../../components/SearchPage/PaginationControls';
+import { ProductDetailsModal } from '../../components/ProductPage/ProductDetailsModal';
+import { SearchProductCard } from '../../components/SearchPage/SearchProductCard';
+import { getSearch } from "../../services/InitialSetupService";
 
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -24,7 +24,7 @@ type Product = {
 		categoryID: number;
 	};
 	store_products: {
-		id: number; // storeProductId
+		id: number;
 		storeID: number;
 		productID: number;
 		price: number;
@@ -56,15 +56,16 @@ const SearchPage: React.FC = () => {
 	const [sortValue, setSortValue] = useState('lowest-highest price');
 
 	const sortOptions = [
-        { label: 'Alphabetical A-Z', value: 'az' },
-        { label: 'Alphabetical Z-A', value: 'za' },
-        { label: 'Price (Ascending)', value: 'lowest-highest price' },
-        { label: 'Price (Descending)', value: 'highest-lowest price' },
-        { label: 'Unit Price (Ascending)', value: 'lowest-highest unit price' },
-        { label: 'Unit Price (Descending)', value: 'highest-lowest unit price' },
-        { label: 'Volume (Ascending)', value: 'lowest-highest volume' },
-        { label: 'Volume (Descending)', value: 'highest-lowest volume' },
-    ];
+		{ label: 'Alphabetical A-Z', value: 'az' },
+		{ label: 'Alphabetical Z-A', value: 'za' },
+		{ label: 'Price (Ascending)', value: 'lowest-highest price' },
+		{ label: 'Price (Descending)', value: 'highest-lowest price' },
+		{ label: 'Unit Price (Ascending)', value: 'lowest-highest unit price' },
+		{ label: 'Unit Price (Descending)', value: 'highest-lowest unit price' },
+		{ label: 'Volume (Ascending)', value: 'lowest-highest volume' },
+		{ label: 'Volume (Descending)', value: 'highest-lowest volume' },
+	];
+
 
 	const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -77,10 +78,6 @@ const SearchPage: React.FC = () => {
 
 				const savedQ = localStorage.getItem('quantities');
 				const savedC = localStorage.getItem('addedToCart');
-
-				console.log('=== Debug localStorage ===');
-				console.log('savedQ (string):', savedQ);
-				console.log('savedC (string):', savedC);
 
 				if (savedQ && savedC) {
 					setQuantities(JSON.parse(savedQ));
@@ -107,9 +104,9 @@ const SearchPage: React.FC = () => {
 		fetchData();
 	}, []);
 
-    const handleClearSelection = () => {
-        setSelectedCategories([]); // Clear the selected categories
-      };
+	const handleClearSelection = () => {
+		setSelectedCategories([]); // Clear the selected categories
+	};
 	useEffect(() => {
 		const handleCartUpdate = () => {
 			const savedQ = localStorage.getItem('quantities');
@@ -273,169 +270,198 @@ const SearchPage: React.FC = () => {
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
-		  if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node) && isDropdownOpen) {
-			setIsDropdownOpen(false);
-		  }
+			if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node) && isDropdownOpen) {
+				setIsDropdownOpen(false);
+			}
 		};
-	
+
 		document.addEventListener('mousedown', handleClickOutside);
-	
+
 		return () => {
-		  document.removeEventListener('mousedown', handleClickOutside);
+			document.removeEventListener('mousedown', handleClickOutside);
 		};
-	  }, [isDropdownOpen]);
+	}, [isDropdownOpen]);
+
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node) && isDropdownOpen) {
+				setIsDropdownOpen(false);
+			}
+		};
+
+		document.addEventListener('mousedown', handleClickOutside);
+
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, [isDropdownOpen]);
+
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node) && isDropdownOpen) {
+				setIsDropdownOpen(false);
+			}
+		};
+
+		document.addEventListener('mousedown', handleClickOutside);
+
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, [isDropdownOpen]);
 
 	const startIndex = (currentPage - 1) * itemsPerPage;
 
+	// console.log("getPriceHistory", (async () => await getPriceHistory(1, 30))()); // NOTE: remove me
+
 	return (
-        <IonPage>
-            <IonHeader>
-                <IonToolbar className="toolbar" color="primary">
-                    <div className="title-center">
-                        <IonImg
-                            src="680logocropped.png"
-                            alt="App Logo"
-                            className='headerLogo'
-                        />
-                    </div>
-                    <IonSearchbar
-                        value={query}
-                        onIonChange={(e) => setQuery(e.detail.value!)}
-                        onKeyUp={handleKeyDown}
-                        onIonBlur={handleBlur}
-                        placeholder="Search for products..."
-                        debounce={300}
-                        disabled={false}
-                        className="searchbar"
-                        onIonClear={() => setQuery('')} // Clear the query when the 'x' is clicked
-                        />
-                </IonToolbar>
-            </IonHeader>
-            <IonContent>
-            <div className="toolbar-container" >
-                <div className="categoryDropdown-container">
-                    <IonItem>
-                        <IonSelect
-                            multiple={true}
-                            value={selectedCategories}
-                            onIonChange={(e) => setSelectedCategories(e.detail.value)}
-                            label="Category"
-                            labelPlacement="floating"
-                        >
-                            <IonSelectOption value="1">Fish</IonSelectOption>
-                            <IonSelectOption value="2">Meat</IonSelectOption>
-                            <IonSelectOption value="3">Frozen</IonSelectOption>
-                            <IonSelectOption value="4">Fruit & Veg</IonSelectOption>
-                            <IonSelectOption value="5">Bakery</IonSelectOption>
-                            <IonSelectOption value="6">Deli</IonSelectOption>
-                            <IonSelectOption value="7">Drinks</IonSelectOption>
-                            <IonSelectOption value="8">Household</IonSelectOption>
-                            <IonSelectOption value="9">Health & Body</IonSelectOption>
-                            <IonSelectOption value="10">Beer & Wine</IonSelectOption>
-                            <IonSelectOption value="11">Pantry</IonSelectOption>
-                            <IonSelectOption value="12">Baby & Child</IonSelectOption>
-                        </IonSelect>
-                    </IonItem>
-                    <button type="button" onClick={handleClearSelection} className="categories-clear-button">
-                     Clear All
-                    </button>
-                </div>
-                <div className="spacer"></div>
-                <div className="sortDropdown-container" ref={dropdownRef}>
-                    <button
-                        type="button"
-                        className={`sortDropdown-toggle ${isDropdownOpen ? 'open' : ''}`}
-                        onClick={toggleDropdown}
-                    >
-                        <span className="sortDropdown-selectedLabel">
-                            {sortOptions.find((opt) => opt.value === sortValue)?.label ?? 'Most relevant'}
-                        </span>
-                        <span className="sortDropdown-chevron">&#9662;</span>
-                    </button>
-                    <div className={`sortDropdown-menu ${isDropdownOpen ? 'open' : ''}`} tabIndex={-1}>
-                        {sortOptions.map((opt) => (
-                            <div
-                                key={opt.value}
-                                className={`sortDropdown-item ${opt.value === sortValue ? 'selected' : ''}`}
-                                onClick={() => selectSortOption(opt.value)}
-                                role="button"
-                                tabIndex={0}
-                            >
-                                {opt.label}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-                <button type="button"
-                 className="clear-sort-btn"
-                 onClick={() => setSortValue('lowest-highest price')}
-                 >Default</button>
-            </div>
-                {searchAttempted && error && (
-                    <div className="error-container">
-                        <IonLabel className="error-message">{error}</IonLabel>
-                    </div>
-                )}
-                {loading ? (<LoadingContainer />) : sortedAndFilteredProducts.length === 0 ? (
-                    // Show "No results found" message if no products are returned
-                    <div className="no-results-container">
-                        <IonLabel>No results found</IonLabel>
-                    </div>
-                ) : (
-                    // Display the grid of products if results exist
-                    <div className="grid-container">
-                        <IonGrid>
-                            <IonRow>
-                                {sortedAndFilteredProducts.slice(startIndex, startIndex + itemsPerPage).map((product, index) => {
-                                    return (
-                                        <IonCol
-                                            size="6"
-                                            size-sm="4"
-                                            size-md="4"
-                                            size-lg="3"
-                                            size-xl='3'
-                                            key={index}
-                                            class="ion-no-margin"
-                                        >
-                                            <SearchProductCard
-                                                decreaseQuantity={decreaseQuantity}
-                                                increaseQuantity={increaseQuantity}
-                                                quantities={quantities}
-                                                product={product}
-                                                productID={product.products.id}
-                                                productBrand={product.products.brand}
-                                                productDetails={product.products.details}
-                                                productName={product.products.name}
-                                                productPrice={product.store_products.price}
-                                                productImage={product.products.image}
-                                                openProductDetails={openProductDetails}
-                                            />
-                                        </IonCol>
-                                    );
-                                })}
-                            </IonRow>
-                        </IonGrid>
-                    </div>
-                )}
-                {!loading && products.length > 0 && (<PaginationControls
-                    currentPage={currentPage}
-                    totalPages={Math.ceil(sortedAndFilteredProducts.length / itemsPerPage)}
-                    nextPage={nextPage}
-                    prevPage={prevPage}
-                    goToPage={goToPage}
-                />)}
-                <ProductDetailsModal
-                    decreaseQuantity={decreaseQuantity}
-                    increaseQuantity={increaseQuantity}
-                    quantities={quantities}
-                    selectedProduct={selectedProduct}
-                    showProductDetails={showProductDetails}
-                    closeProductDetails={closeProductDetails}
-                />
-            </IonContent>
-        </IonPage>
-    );
+		<IonPage>
+			<IonHeader>
+				<IonToolbar className="toolbar" color="primary">
+					<div className="title-center">
+						<IonImg
+							src="680logocropped.png"
+							alt="App Logo"
+							className='headerLogo'
+						/>
+					</div>
+					<IonSearchbar
+						value={query}
+						onIonChange={(e) => setQuery(e.detail.value!)}
+						onKeyUp={handleKeyDown}
+						onIonBlur={handleBlur}
+						placeholder="Search for products..."
+						debounce={300}
+						disabled={false}
+						className="searchbar"
+						onIonClear={() => setQuery('')} // Clear the query when the 'x' is clicked
+					/>
+				</IonToolbar>
+			</IonHeader>
+			<IonContent>
+				<div className="toolbar-container" >
+					<div className="categoryDropdown-container">
+						<IonItem>
+							<IonSelect
+								multiple={true}
+								value={selectedCategories}
+								onIonChange={(e) => setSelectedCategories(e.detail.value)}
+								label="Category"
+								labelPlacement="floating"
+							>
+								<IonSelectOption value="1">Fish</IonSelectOption>
+								<IonSelectOption value="2">Meat</IonSelectOption>
+								<IonSelectOption value="3">Frozen</IonSelectOption>
+								<IonSelectOption value="4">Fruit & Veg</IonSelectOption>
+								<IonSelectOption value="5">Bakery</IonSelectOption>
+								<IonSelectOption value="6">Deli</IonSelectOption>
+								<IonSelectOption value="7">Drinks</IonSelectOption>
+								<IonSelectOption value="8">Household</IonSelectOption>
+								<IonSelectOption value="9">Health & Body</IonSelectOption>
+								<IonSelectOption value="10">Beer & Wine</IonSelectOption>
+								<IonSelectOption value="11">Pantry</IonSelectOption>
+								<IonSelectOption value="12">Baby & Child</IonSelectOption>
+							</IonSelect>
+						</IonItem>
+						<button type="button" onClick={handleClearSelection} className="categories-clear-button">
+							Clear All
+						</button>
+					</div>
+					<div className="spacer"></div>
+					<div className="sortDropdown-container" ref={dropdownRef}>
+						<button
+							type="button"
+							className={`sortDropdown-toggle ${isDropdownOpen ? 'open' : ''}`}
+							onClick={toggleDropdown}
+						>
+							<span className="sortDropdown-selectedLabel">
+								{sortOptions.find((opt) => opt.value === sortValue)?.label ?? 'Most relevant'}
+							</span>
+							<span className="sortDropdown-chevron">&#9662;</span>
+						</button>
+						<div className={`sortDropdown-menu ${isDropdownOpen ? 'open' : ''}`} tabIndex={-1}>
+							{sortOptions.map((opt) => (
+								<div
+									key={opt.value}
+									className={`sortDropdown-item ${opt.value === sortValue ? 'selected' : ''}`}
+									onClick={() => selectSortOption(opt.value)}
+									role="button"
+									tabIndex={0}
+								>
+									{opt.label}
+								</div>
+							))}
+						</div>
+					</div>
+					<button type="button"
+						className="clear-sort-btn"
+						onClick={() => setSortValue('lowest-highest price')}
+					>Default</button>
+				</div>
+				{searchAttempted && error && (
+					<div className="error-container">
+						<IonLabel className="error-message">{error}</IonLabel>
+					</div>
+				)}
+				{loading ? (<LoadingContainer />) : sortedAndFilteredProducts.length === 0 ? (
+					// Show "No results found" message if no products are returned
+					<div className="no-results-container">
+						<IonLabel>No results found</IonLabel>
+					</div>
+				) : (
+					// Display the grid of products if results exist
+					<div className="grid-container">
+						<IonGrid>
+							<IonRow>
+								{sortedAndFilteredProducts.slice(startIndex, startIndex + itemsPerPage).map((product, index) => {
+									return (
+										<IonCol
+											size="6"
+											size-sm="4"
+											size-md="4"
+											size-lg="3"
+											size-xl='3'
+											key={index}
+											class="ion-no-margin"
+										>
+											<SearchProductCard
+												decreaseQuantity={decreaseQuantity}
+												increaseQuantity={increaseQuantity}
+												quantities={quantities}
+												product={product}
+												productID={product.products.id}
+												productBrand={product.products.brand}
+												productDetails={product.products.details}
+												productName={product.products.name}
+												productPrice={product.store_products.price}
+												productImage={product.products.image}
+												openProductDetails={openProductDetails}
+											/>
+										</IonCol>
+									);
+								})}
+							</IonRow>
+						</IonGrid>
+					</div>
+				)}
+				{!loading && products.length > 0 && (<PaginationControls
+					currentPage={currentPage}
+					totalPages={Math.ceil(sortedAndFilteredProducts.length / itemsPerPage)}
+					nextPage={nextPage}
+					prevPage={prevPage}
+					goToPage={goToPage}
+				/>)}
+				<ProductDetailsModal
+					decreaseQuantity={decreaseQuantity}
+					increaseQuantity={increaseQuantity}
+					quantities={quantities}
+					selectedProduct={selectedProduct}
+					showProductDetails={showProductDetails}
+					closeProductDetails={closeProductDetails}
+				/>
+			</IonContent>
+		</IonPage>
+	);
 };
 
 export default SearchPage;
-
