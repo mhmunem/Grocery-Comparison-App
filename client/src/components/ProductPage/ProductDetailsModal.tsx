@@ -1,11 +1,22 @@
-import { IonContent, IonHeader, IonList, IonTitle, IonToolbar, IonLabel, IonItem, IonModal, IonGrid, IonCol, IonRow, IonButtons, IonButton } from '@ionic/react';
+import {
+    IonContent, IonHeader, IonPage, IonList, IonTitle, IonToolbar, IonSearchbar, IonCard,
+    IonCardContent, IonLabel, IonItem, IonIcon, IonImg, IonModal, IonThumbnail,
+    useIonViewWillEnter, IonChip, IonGrid, IonCol, IonRow, IonCardTitle, IonButtons, IonButton
+} from '@ionic/react';
 import { ProductDetails } from '../../components/ProductPage/ProductDetails';
 import { PriceHistory } from '../../components/ProductPage/PriceHistory';
+import { useState, useEffect } from 'react';
 
-export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quantities, selectedProduct, showProductDetails, closeProductDetails }: any) {
+export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quantities, selectedProduct, showProductDetails, closeProductDetails, allPrices }: any) {
+
     if (!selectedProduct) {
         return null;
     }
+
+
+    useEffect(() => {
+        console.log('Other Stores:', allPrices); // Debug the structure of otherStores
+    }, [allPrices]);
 
     return (
         <IonModal isOpen={showProductDetails} onDidDismiss={closeProductDetails}>
@@ -39,6 +50,7 @@ export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quanti
                             {/* Price History Section */}
                             <PriceHistory
                                 product={selectedProduct}
+                                allPrices={allPrices}
                             />
                         </div>
                         {/* Additional Product Details */}
