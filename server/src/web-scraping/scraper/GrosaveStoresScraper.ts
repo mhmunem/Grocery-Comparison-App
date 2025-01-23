@@ -9,7 +9,6 @@ async function fetchGrosaveStores() {
 }
 
 async function GrosaveStoresScraper() {
-    let groSaveStoreIds = new Set();
     try {
         const storesData = await fetchGrosaveStores()
         await insertScarpedStores(storesData)

@@ -1,5 +1,5 @@
-import db from "../../db/connection/pool";
-import { category } from "../../db/schema/category";
+import db from '../../db/connection/pool'
+import { category } from '../../db/schema/category'
 
 const insertCategories = async (categoryNames: any) => {
     for (const categoryName of categoryNames) {
@@ -11,12 +11,12 @@ const insertCategories = async (categoryNames: any) => {
                     set: {
                         name: categoryName,
                     },
-                });
+                })
         } catch (error) {
-            console.error(`Error inserting category ${categoryName}:`, error);
+            console.error(`Error inserting category ${categoryName}:`, error)
         }
     }
     console.log('All categories inserted successfully.')
-};
+}
 
-export default insertCategories;
+export default insertCategories

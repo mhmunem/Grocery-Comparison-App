@@ -1,15 +1,15 @@
-import { stores } from "../../db/schema/stores";
-import { chains } from "../../db/schema/chains";
-import db from "../../db/connection/pool";
-import { Chains } from "../../types/schema";
-import { ilike } from "drizzle-orm"
+import { stores } from '../../db/schema/stores'
+import { chains } from '../../db/schema/chains'
+import db from '../../db/connection/pool'
+import { Chains } from '../../types/schema'
+import { ilike } from 'drizzle-orm'
 
 
 export async function insertScarpedStores(storesData: any): Promise<undefined> {
     try {
         for (const store of storesData) {
             if (!store.name) {
-                            console.error("Store name is undefined")
+                            console.error('Store name is undefined')
                             continue
                         }
             

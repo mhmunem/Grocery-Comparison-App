@@ -1,6 +1,6 @@
-import db from "../../db/connection/pool";
-import { chains } from "../../db/schema/chains";
-import chainLogoURl from "../constants/chainLogoUrl";
+import db from '../../db/connection/pool'
+import { chains } from '../../db/schema/chains'
+import chainLogoURl from '../constants/chainLogoUrl'
 
 const insertChains = async () => {
     for (const chain of chainLogoURl) {
@@ -12,11 +12,11 @@ const insertChains = async () => {
                                 set: {
                                     image_logo: chain.imageurl,
                                 },
-                            });
+                            })
         } catch (error) {
-            console.error(`Error inserting ${chain.name}:`, error);
+            console.error(`Error inserting ${chain.name}:`, error)
         }
     }
-};
+}
 
-export default insertChains;
+export default insertChains
