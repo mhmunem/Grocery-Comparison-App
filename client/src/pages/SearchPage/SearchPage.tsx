@@ -170,7 +170,8 @@ const SearchPage: React.FC = () => {
         updateCart(newQuantities, newAddedToCart);
     };
 
-    const decreaseQuantity = (productId: string | number) => {
+    // TODO: productId does not need a sum type
+    const decreaseQuantity = (productId: string | number) => { // TODO: decreaseQuantity, increaseQuantity, newQuantity is duplicate in the ShoppingListPage
         const storeIdStr = productId.toString();
         const currentQuantity = quantities[storeIdStr] || 0;
         const newQuantity = Math.max(currentQuantity - 1, 0);
@@ -248,10 +249,6 @@ const SearchPage: React.FC = () => {
         setShowProductDetails(false);
     };
 
-
-
-
-
     useEffect(() => {
         const total = Math.ceil(sortedAndFilteredProducts.length / itemsPerPage);
         if (currentPage > total && total > 0) {
@@ -264,9 +261,11 @@ const SearchPage: React.FC = () => {
     const nextPage = () => {
         setCurrentPage((prev) => Math.min(prev + 1, Math.ceil(sortedAndFilteredProducts.length / itemsPerPage)));
     };
+
     const prevPage = () => {
         setCurrentPage((prev) => Math.max(prev - 1, 1));
     };
+
     const goToPage = (page: number) => {
         const total = Math.ceil(sortedAndFilteredProducts.length / itemsPerPage);
         if (page >= 1 && page <= total) {
