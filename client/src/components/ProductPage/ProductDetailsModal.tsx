@@ -54,8 +54,7 @@ export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quanti
 
                             {/* Price History Section */}
                             <PriceHistory
-                                product={selectedProduct}
-                                allPrices={allPrices}
+                                allPrices={allPrices!} // BUG: this is a bug waiting to happen. we need to remove the nullability here or deal with it earlier
                             />
                         </div>
                         {/* Additional Product Details */}

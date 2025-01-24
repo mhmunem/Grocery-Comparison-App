@@ -3,12 +3,12 @@ import { Line } from 'react-chartjs-2';
 import { useState, useEffect } from 'react';
 import { Product } from '../../types/product';
 
-interface PriceHistory {
+type datePrice = {
     date: Date;
     price: number;
 }
 
-interface PriceHistoryData {
+type PriceHistoryData = {
     labels: string[];
     datasets: Array<{
         label: string;
@@ -19,18 +19,21 @@ interface PriceHistoryData {
     }>;
 }
 
+interface PriceHistory {
+    allPrices: Product[]
+}
 
 
-export function PriceHistory({ allPrices }: any) { // TODO: fix any
-    const [dailyPriceHistory, setDailyPriceHistory] = useState<PriceHistory[]>([]);
-    const [filteredPriceHistory, setFilteredPriceHistory] = useState<PriceHistory[]>([]);
+export function PriceHistory({ allPrices }: PriceHistory) {
+    const [dailyPriceHistory, setDailyPriceHistory] = useState<datePrice[]>([]);
+    const [filteredPriceHistory, setFilteredPriceHistory] = useState<datePrice[]>([]);
     const [timeRange, setTimeRange] = useState('4W');
 
 
     useEffect(() => {
         const generateDummyData = () => {
             const today = new Date();
-            const prices: PriceHistory[] = [];
+            const prices: datePrice[] = [];
             for (let i = 0; i < 365; i++) {
                 const randomPrice = 10 + Math.random() * 5;
                 prices.push({ date: new Date(today.setDate(today.getDate() - 1)), price: randomPrice });
