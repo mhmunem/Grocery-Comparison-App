@@ -1,6 +1,18 @@
 
 import { IonCard, IonCardContent, IonLabel, IonImg, IonCardTitle, IonButton } from '@ionic/react';
 import { QuantityControls } from '../../components/SearchPage/QuantityControls';
+import { Product } from '../../types/product';
+
+interface SearchProductCard {
+    decreaseQuantity: (product_id: string | number) => void
+    increaseQuantity: (product_id: string | number) => void
+    quantities: { [key: string]: number }
+    product: Product
+    productPrice: number
+    productName: string
+    productImage: string
+    openProductDetails: (product: Product) => void
+}
 
 export function SearchProductCard({
     decreaseQuantity,
@@ -11,7 +23,7 @@ export function SearchProductCard({
     productName,
     productImage,
     openProductDetails
-}: any) { // TODO: fix any
+}: SearchProductCard) {
     return (
         <IonCard className="listCard" onClick={() => {
             openProductDetails(product)
@@ -25,7 +37,7 @@ export function SearchProductCard({
 
             <IonCardContent>
 
-                <IonCardTitle className="one-line-title" onClick={() => openProductDetails(product.product)}>
+                <IonCardTitle className="one-line-title" onClick={() => openProductDetails(product)}>
                     {productName}
                 </IonCardTitle>
 

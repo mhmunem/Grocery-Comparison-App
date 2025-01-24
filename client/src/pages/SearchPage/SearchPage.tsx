@@ -170,7 +170,7 @@ const SearchPage: React.FC = () => {
         updateCart(newQuantities, newAddedToCart);
     };
 
-    // TODO: productId does not need a sum type
+    // TODO: productId does not need a sum type. Javascript implicitly converts converts these types
     const decreaseQuantity = (productId: string | number) => { // TODO: decreaseQuantity, increaseQuantity, newQuantity is duplicate in the ShoppingListPage
         const storeIdStr = productId.toString();
         const currentQuantity = quantities[storeIdStr] || 0;
@@ -472,9 +472,6 @@ const SearchPage: React.FC = () => {
                                                 increaseQuantity={increaseQuantity}
                                                 quantities={quantities}
                                                 product={product}
-                                                productID={product.products.id}
-                                                productBrand={product.products.brand}
-                                                productDetails={product.products.details}
                                                 productName={product.products.name}
                                                 productPrice={product.store_products.price}
                                                 productImage={product.products.image}

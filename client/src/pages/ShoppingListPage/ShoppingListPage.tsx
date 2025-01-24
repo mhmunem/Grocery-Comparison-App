@@ -159,9 +159,6 @@ const ShoppingListPage: React.FC = () => {
                                             increaseQuantity={increaseQuantity}
                                             quantities={quantities}
                                             product={product}
-                                            productID={product.store_products.id}
-                                            productBrand={product.products.brand}
-                                            productDetails={product.products.details}
                                             productName={product.products.name}
                                             productPrice={product.store_products.price}
                                             productImage={product.products.image}
