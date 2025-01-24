@@ -1,11 +1,10 @@
 import {
-    IonContent, IonHeader, IonPage, IonList, IonTitle, IonToolbar, IonSearchbar, IonCard,
-    IonCardContent, IonLabel, IonItem, IonIcon, IonImg, IonModal, IonThumbnail,
-    useIonViewWillEnter, IonChip, IonGrid, IonCol, IonRow, IonCardTitle, IonButtons, IonButton
+    IonContent, IonHeader, IonList, IonTitle, IonToolbar,
+    IonLabel, IonItem, IonModal,
+    IonGrid, IonCol, IonRow, IonButtons, IonButton
 } from '@ionic/react';
 import { ProductDetails } from '../../components/ProductPage/ProductDetails';
 import { PriceHistory } from '../../components/ProductPage/PriceHistory';
-import { useState, useEffect } from 'react';
 
 export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quantities, selectedProduct, showProductDetails, closeProductDetails, allPrices }: any) {
 

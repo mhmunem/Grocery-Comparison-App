@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonList, IonTitle, IonToolbar, IonSearchbar, IonCard, IonCardContent, IonLabel, IonItem, IonIcon, IonImg, IonModal, IonThumbnail, useIonViewWillEnter, IonChip, IonGrid, IonCol, IonRow, IonCardTitle, IonButtons, IonButton } from '@ionic/react';
+import { IonLabel, IonImg, IonRow, IonButton } from '@ionic/react';
 import { QuantityControls } from '../../components/SearchPage/QuantityControls';
 
 export function ProductDetails({ decreaseQuantity, increaseQuantity, quantities, selectedProduct }: any) {

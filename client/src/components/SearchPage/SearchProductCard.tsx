@@ -6,8 +6,6 @@ export function SearchProductCard({
     decreaseQuantity,
     increaseQuantity,
     quantities,
-    productBrand,
-    productID,
     product,
     productPrice,
     productName,
@@ -37,10 +35,10 @@ export function SearchProductCard({
                         <IonLabel className="brandText">{product.products.brand}</IonLabel>
                         <IonLabel className="sizeText">{product.products.amount} {product.units.name}</IonLabel>
                         <IonLabel className="sizeText">
-                        {product.units.name === 'ea'
-                            ? `` // Display price per item if unit is 'ea'
-                            : `$${(product.store_products.price / product.products.amount).toFixed(2)}/${product.units.name}`}
-                    </IonLabel>
+                            {product.units.name === 'ea'
+                                ? `` // Display price per item if unit is 'ea'
+                                : `$${(product.store_products.price / product.products.amount).toFixed(2)}/${product.units.name}`}
+                        </IonLabel>
 
                     </div>
 

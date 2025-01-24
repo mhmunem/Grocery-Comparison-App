@@ -1,5 +1,5 @@
 import './SearchPage.css';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from 'chart.js';
 import { IonCol, IonContent, IonGrid, IonHeader, IonImg, IonItem, IonLabel, IonPage, IonRow, IonSearchbar, IonSelect, IonSelectOption, IonToolbar } from '@ionic/react';
 import { LoadingContainer } from '../../components/SharedComponents/loadingContainer';
@@ -28,7 +28,7 @@ const SearchPage: React.FC = () => {
     const [showProductDetails, setShowProductDetails] = useState(false);
 
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-	const [availableCategories, setAvailableCategories] = useState<string[]>([]);
+    const [availableCategories, setAvailableCategories] = useState<string[]>([]);
 
     const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
     const [availableBrands, setAvailableBrands] = useState<string[]>([]);
@@ -61,7 +61,7 @@ const SearchPage: React.FC = () => {
                 let results: Product[] = (await getSearch('', 'name', 'ASC')) || [];
                 setProducts(results);
 
-				const categories = Array.from(new Set(results.map(product => product.category.name)));
+                const categories = Array.from(new Set(results.map(product => product.category.name)));
                 setAvailableCategories(categories);
 
                 const savedQ = localStorage.getItem('quantities');
@@ -286,7 +286,7 @@ const SearchPage: React.FC = () => {
         }
 
         if (selectedCategories.length > 0) {
-			updatedProducts = updatedProducts.filter(product =>
+            updatedProducts = updatedProducts.filter(product =>
                 selectedCategories.includes(product.category.name)
             );
         }
@@ -397,7 +397,7 @@ const SearchPage: React.FC = () => {
                                 labelPlacement="stacked"
                                 className="dropdown"
                             >
-                                 {availableCategories.map((category, index) => (
+                                {availableCategories.map((category, index) => (
                                     <IonSelectOption key={index} value={category}>
                                         {category}
                                     </IonSelectOption>
