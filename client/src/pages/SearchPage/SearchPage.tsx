@@ -348,7 +348,6 @@ const SearchPage: React.FC = () => {
 
     const startIndex = (currentPage - 1) * itemsPerPage;
 
-    // console.log("getPriceHistory", (async () => await getPriceHistory(1, 30))()); // NOTE: remove me
     const reloadProducts = () => {
         // Log all store IDs in selectedStores
         setSelectedStores(getInitialSelectedStores);
