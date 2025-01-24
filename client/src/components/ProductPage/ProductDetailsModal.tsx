@@ -9,12 +9,9 @@ import { useState, useEffect } from 'react';
 
 export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quantities, selectedProduct, showProductDetails, closeProductDetails, allPrices }: any) {
 
-
     if (!selectedProduct) {
         return null;
     }
-
-
 
     return (
         <IonModal isOpen={showProductDetails} onDidDismiss={closeProductDetails}>
@@ -55,7 +52,7 @@ export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quanti
                         <IonList>
                             <IonItem>
                                 <IonLabel>
-                                    <h1>Product Details</h1>
+                                    <h2>Product Details</h2>
                                     <p>{selectedProduct.products.details}</p>
                                 </IonLabel>
                             </IonItem>

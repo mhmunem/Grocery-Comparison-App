@@ -8,29 +8,9 @@ import { ProductDetailsModal } from '../../components/ProductPage/ProductDetails
 import { SearchProductCard } from '../../components/SearchPage/SearchProductCard';
 import { getSearch } from "../../services/InitialSetupService";
 import { useIonViewWillEnter } from '@ionic/react';
-
+import { Product } from '../../types/product';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
-
-
-type Product = {
-    products: {
-        id: number;
-        name: string;
-        brand: string;
-        details: string;
-        amount: number;
-        image: string;
-        unitID: number;
-        categoryID: number;
-    };
-    store_products: {
-        id: number;
-        storeID: number;
-        productID: number;
-        price: number;
-    };
-};
 
 const SearchPage: React.FC = () => {
     const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
@@ -237,6 +217,22 @@ const SearchPage: React.FC = () => {
         handleSearch();
     };
 
+    const getOtherPrices = (product: Product) => {
+        if (selectedStores.length <= 0) {
+            return product && products
+            .filter(
+                (prod) =>
+                    prod.store_products.productID === product.store_products.productID
+            );
+        }
+        return product && products
+            .filter(
+                (prod) =>
+                    prod.store_products.productID === product.store_products.productID &&
+                    selectedStores.includes(prod.store_products.storeID)
+            );
+    };
+
     const openProductDetails = (product: Product) => {
         setSelectedProduct(product);
         setOtherPrices(getOtherPrices(product));
@@ -247,17 +243,7 @@ const SearchPage: React.FC = () => {
         setShowProductDetails(false);
     };
 
-    const getOtherPrices = (product: Product | undefined) => {
-        return product && products
-            .filter(
-                (prod) =>
-                    prod.store_products.productID === product.store_products.productID
-            )
-            .map((prod) => ({
-                price: prod.store_products.price,
-                product: prod
-            }));
-    };
+
 
 
 
