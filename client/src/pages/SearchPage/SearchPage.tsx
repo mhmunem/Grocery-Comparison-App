@@ -220,10 +220,10 @@ const SearchPage: React.FC = () => {
     const getOtherPrices = (product: Product) => {
         if (selectedStores.length <= 0) {
             return product && products
-            .filter(
-                (prod) =>
-                    prod.store_products.productID === product.store_products.productID
-            );
+                .filter(
+                    (prod) =>
+                        prod.store_products.productID === product.store_products.productID
+                );
         }
         return product && products
             .filter(
@@ -324,6 +324,15 @@ const SearchPage: React.FC = () => {
                     return a.products.name.localeCompare(b.products.name);
                 case 'za':
                     return b.products.name.localeCompare(a.products.name);
+                case 'lowest-highest volume':
+                    return a.products.amount - b.products.amount;
+                case 'highest-lowest volume':
+                    return b.products.amount - a.products.amount;
+                case 'lowest-highest unit price':
+                    return (b.products.amount / b.store_products.price) - (a.products.amount / a.store_products.price);
+                case 'highest-lowest unit price':
+                    return (a.products.amount / a.store_products.price) - (b.products.amount / b.store_products.price);
+
                 default:
                     return 0;
             }
@@ -338,9 +347,9 @@ const SearchPage: React.FC = () => {
     const reloadProducts = () => {
         // Log all store IDs in selectedStores
         setSelectedStores(getInitialSelectedStores);
-    
+
     };
-    
+
     // Using the useIonViewWillEnter hook to reload products when the page enters
     useIonViewWillEnter(() => {
         reloadProducts();
