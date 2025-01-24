@@ -9,14 +9,12 @@ import { useState, useEffect } from 'react';
 
 export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quantities, selectedProduct, showProductDetails, closeProductDetails, allPrices }: any) {
 
+
     if (!selectedProduct) {
         return null;
     }
 
 
-    useEffect(() => {
-        console.log('Other Stores:', allPrices); // Debug the structure of otherStores
-    }, [allPrices]);
 
     return (
         <IonModal isOpen={showProductDetails} onDidDismiss={closeProductDetails}>

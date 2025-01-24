@@ -97,7 +97,7 @@ const StorePage: React.FC = () => {
                     </IonTabButton>
 
                     {chains.map(chain => (
-                        <IonTabButton key={chain.id} tab={chain.name} onClick={() => selectChain(chain.id)}>
+                        <IonTabButton key={chain.id} tab={`${chain.id}`} onClick={() => selectChain(chain.id)}>
                             <img src={chain.image_logo} alt={chain.name} style={{ width: '24px', height: '24px' }} />
                             <IonLabel>{chain.name}</IonLabel>
                         </IonTabButton>

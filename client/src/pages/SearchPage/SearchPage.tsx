@@ -7,6 +7,7 @@ import { PaginationControls } from '../../components/SearchPage/PaginationContro
 import { ProductDetailsModal } from '../../components/ProductPage/ProductDetailsModal';
 import { SearchProductCard } from '../../components/SearchPage/SearchProductCard';
 import { getSearch } from "../../services/InitialSetupService";
+import { useIonViewWillEnter } from '@ionic/react';
 
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -56,6 +57,7 @@ const SearchPage: React.FC = () => {
     const [sortValue, setSortValue] = useState('lowest-highest price');
 
     const [otherPrices, setOtherPrices] = useState<Product[]>([]);
+    const [selectedStores, setSelectedStores] = useState<number[]>([]);
 
     const sortOptions = [
         { label: 'Alphabetical A-Z', value: 'az' },
@@ -68,11 +70,12 @@ const SearchPage: React.FC = () => {
         { label: 'Volume (Descending)', value: 'highest-lowest volume' },
     ];
 
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                let results: Product[] = await getSearch('', 'name', 'ASC');
+                let results: Product[] = (await getSearch('', 'name', 'ASC')) || [];
                 setProducts(results);
 
                 const savedQ = localStorage.getItem('quantities');
@@ -103,11 +106,15 @@ const SearchPage: React.FC = () => {
         fetchData();
     }, []);
 
+
+
+
     const handleClearSelection = () => {
         setSelectedCategories([]); // Clear the selected categories
         setSelectedBrands([]);
         setSortValue('lowest-highest price');
     };
+
     useEffect(() => {
         const handleCartUpdate = () => {
             const savedQ = localStorage.getItem('quantities');
@@ -122,6 +129,26 @@ const SearchPage: React.FC = () => {
 
         return () => {
             window.removeEventListener('cartUpdated', handleCartUpdate);
+        };
+    }, []);
+
+    const getInitialSelectedStores = () => {
+        const storedSelectedStores = localStorage.getItem('selectedStores');
+        return storedSelectedStores ? JSON.parse(storedSelectedStores) : [];
+    };
+
+    useEffect(() => {
+        const handleStorageChange = (event: StorageEvent) => {
+            if (event.key === 'selectedStores') {
+                const updatedStores = event.newValue ? JSON.parse(event.newValue) : [];
+                setSelectedStores(updatedStores);
+            }
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
         };
     }, []);
 
@@ -280,6 +307,12 @@ const SearchPage: React.FC = () => {
             );
         }
 
+        if (selectedStores.length > 0) {
+            updatedProducts = updatedProducts.filter(product =>
+                selectedStores.includes(product.store_products.storeID)
+            );
+        }
+
         // Keep only unique products with the lowest price
         const uniqueProductsMap = new Map<string, Product>();
         updatedProducts.forEach(product => {
@@ -311,11 +344,22 @@ const SearchPage: React.FC = () => {
         });
 
         setSortedAndFilteredProducts(updatedProducts);
-    }, [products, sortValue, selectedCategories, selectedBrands, itemsPerPage]);
+    }, [products, sortValue, selectedCategories, selectedBrands, selectedStores, itemsPerPage]);
 
     const startIndex = (currentPage - 1) * itemsPerPage;
 
     // console.log("getPriceHistory", (async () => await getPriceHistory(1, 30))()); // NOTE: remove me
+    const reloadProducts = () => {
+        // Log all store IDs in selectedStores
+        setSelectedStores(getInitialSelectedStores);
+    
+    };
+    
+    // Using the useIonViewWillEnter hook to reload products when the page enters
+    useIonViewWillEnter(() => {
+        reloadProducts();
+    });
+
 
     return (
         <IonPage>
