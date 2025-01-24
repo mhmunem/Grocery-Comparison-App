@@ -26,4 +26,8 @@ export type Product = {
         name: string;
         image_logo: string;
     };
+    category:{
+		id: number;
+        name: string;
+	}
 };
