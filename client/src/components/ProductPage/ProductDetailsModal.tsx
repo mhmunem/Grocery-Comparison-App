@@ -5,8 +5,19 @@ import {
 } from '@ionic/react';
 import { ProductDetails } from '../../components/ProductPage/ProductDetails';
 import { PriceHistory } from '../../components/ProductPage/PriceHistory';
+import { Product } from '../../types/product';
 
-export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quantities, selectedProduct, showProductDetails, closeProductDetails, allPrices }: any) {  // TODO: fix any
+interface ProductDetailsModal {
+    decreaseQuantity: (product_id: string | number) => void
+    increaseQuantity: (product_id: string | number) => void
+    quantities: { [key: string]: number }
+    selectedProduct: Product | null
+    showProductDetails: boolean
+    closeProductDetails: () => void
+    allPrices: Product[] | null // TODO: remove null when the bug on the ShoppingListPage on line 191 is fixed
+}
+
+export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quantities, selectedProduct, showProductDetails, closeProductDetails, allPrices }: ProductDetailsModal) {
 
     if (!selectedProduct) {
         return null;
@@ -36,7 +47,7 @@ export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quanti
                                 decreaseQuantity={decreaseQuantity}
                                 increaseQuantity={increaseQuantity}
                                 quantities={quantities}
-                                selectedProduct={selectedProduct}
+                                product={selectedProduct}
                             />
                         </div>
                         <div style={{ marginTop: '30px', padding: "5px", width: "100%" }}>

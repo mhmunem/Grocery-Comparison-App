@@ -24,7 +24,7 @@ const SearchPage: React.FC = () => {
     const [error, setError] = useState<string>('');
     const [searchAttempted, setSearchAttempted] = useState<boolean>(false);
 
-    const [selectedProduct, setSelectedProduct] = useState<Product | undefined>(undefined);
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [showProductDetails, setShowProductDetails] = useState(false);
 
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);

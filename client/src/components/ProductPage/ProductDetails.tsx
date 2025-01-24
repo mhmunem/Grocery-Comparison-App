@@ -1,42 +1,50 @@
 import { IonLabel, IonImg, IonRow, IonButton } from '@ionic/react';
 import { QuantityControls } from '../../components/SearchPage/QuantityControls';
+import { Product } from '../../types/product';
 
-export function ProductDetails({ decreaseQuantity, increaseQuantity, quantities, selectedProduct }: any) { // TODO: fix any
+interface ProductDetails {
+    decreaseQuantity: (product_id: string | number) => void
+    increaseQuantity: (product_id: string | number) => void
+    quantities: { [key: string]: number }
+    product: Product
+}
+
+export function ProductDetails({ decreaseQuantity, increaseQuantity, quantities, product }: ProductDetails) {
 
     return (
         <IonRow>
-            <IonImg src={selectedProduct.image} />
+            <IonImg src={product.products.image} />
             <div className="productDetails">
                 <div>
                     <IonRow>
-                        <IonLabel className="brandText">Brand: {selectedProduct.products.brand}</IonLabel>
+                        <IonLabel className="brandText">Brand: {product.products.brand}</IonLabel>
                     </IonRow>
                     <IonLabel className="sizeText">
-                        {selectedProduct.units.name === 'ea'
+                        {product.units.name === 'ea'
                             ? '' // If the unit is 'ea', no amount or unit type is displayed
-                            : `Weight/Volume: ${selectedProduct.products.amount}${selectedProduct.units.name}`}
+                            : `Weight/Volume: ${product.products.amount}${product.units.name}`}
                     </IonLabel>
                     <IonLabel className="sizeText">Unit Price:
-                        {selectedProduct.units.name === 'ea'
-                            ? `$${selectedProduct.store_products.price.toFixed(2)} ea` // Display price per item if unit is 'ea'
-                            : `$${(selectedProduct.store_products.price / selectedProduct.products.amount).toFixed(2)} per ${selectedProduct.units.name}`}
+                        {product.units.name === 'ea'
+                            ? `$${product.store_products.price.toFixed(2)} ea` // Display price per item if unit is 'ea'
+                            : `$${(product.store_products.price / product.products.amount).toFixed(2)} per ${product.units.name}`}
                     </IonLabel>
                     <IonRow>
-                        <IonLabel className="sizeText">Category: {selectedProduct.category.name}</IonLabel>
+                        <IonLabel className="sizeText">Category: {product.category.name}</IonLabel>
                     </IonRow>
                     <IonRow>
-                        <IonLabel className="priceLabel">${selectedProduct.store_products.price}</IonLabel>
+                        <IonLabel className="priceLabel">${product.store_products.price}</IonLabel>
                     </IonRow>
 
-                    {quantities[selectedProduct.store_products.id] > 0 ? (
+                    {quantities[product.store_products.id] > 0 ? (
                         <QuantityControls
                             decreaseQuantity={decreaseQuantity}
                             increaseQuantity={increaseQuantity}
                             quantities={quantities}
-                            product={selectedProduct}
+                            product={product}
                         />
                     ) : (
-                        <IonButton className='add-to-list-button' onClick={() => increaseQuantity(selectedProduct.store_products.id)}>
+                        <IonButton className='add-to-list-button' onClick={() => increaseQuantity(product.store_products.id)}>
                             Add to List
                         </IonButton>
 
