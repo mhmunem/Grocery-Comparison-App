@@ -13,29 +13,6 @@ import { Product } from '../../types/product';
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 
-type Product = {
-    products: {
-        id: number;
-        name: string;
-        brand: string;
-        details: string;
-        amount: number;
-        image: string;
-        unitID: number;
-        categoryID: number;
-    };
-    store_products: {
-        id: number;
-        storeID: number;
-        productID: number;
-        price: number;
-    };
-	category:{
-		id: number;
-        name: string;
-	}
-};
-
 const SearchPage: React.FC = () => {
     const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
     const [addedToCart, setAddedToCart] = useState<{ [key: string]: boolean }>({});
