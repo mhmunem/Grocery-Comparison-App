@@ -44,10 +44,6 @@ export function PriceHistory({ product, allPrices }: any) {
 
 
     useEffect(() => {
-        console.log('Other Stores:', allPrices);
-    }, [allPrices]);
-
-    useEffect(() => {
         const generateDummyData = () => {
             const today = new Date();
             const prices: PriceHistory[] = [];
