@@ -1,7 +1,7 @@
 import { IonLabel, IonImg, IonRow, IonButton } from '@ionic/react';
 import { QuantityControls } from '../../components/SearchPage/QuantityControls';
 
-export function ProductDetails({ decreaseQuantity, increaseQuantity, quantities, selectedProduct }: any) {
+export function ProductDetails({ decreaseQuantity, increaseQuantity, quantities, selectedProduct }: any) { // TODO: fix any
 
     return (
         <IonRow>

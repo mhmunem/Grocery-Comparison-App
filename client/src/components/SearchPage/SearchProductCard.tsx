@@ -11,7 +11,7 @@ export function SearchProductCard({
     productName,
     productImage,
     openProductDetails
-}: any) {
+}: any) { // TODO: fix any
     return (
         <IonCard className="listCard" onClick={() => {
             openProductDetails(product)

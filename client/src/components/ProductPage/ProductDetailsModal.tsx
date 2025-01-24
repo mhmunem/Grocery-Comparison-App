@@ -6,7 +6,7 @@ import {
 import { ProductDetails } from '../../components/ProductPage/ProductDetails';
 import { PriceHistory } from '../../components/ProductPage/PriceHistory';
 
-export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quantities, selectedProduct, showProductDetails, closeProductDetails, allPrices }: any) {
+export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quantities, selectedProduct, showProductDetails, closeProductDetails, allPrices }: any) {  // TODO: fix any
 
     if (!selectedProduct) {
         return null;

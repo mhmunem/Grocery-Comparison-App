@@ -1,7 +1,7 @@
 import { IonIcon, IonButton } from '@ionic/react';
 import { add, remove } from 'ionicons/icons';
 
-export function QuantityControls({ decreaseQuantity, increaseQuantity, quantities, product }: any) {
+export function QuantityControls({ decreaseQuantity, increaseQuantity, quantities, product }: any) { // TODO: fix any
     return (
         <div className="quantityControls">
             <IonButton

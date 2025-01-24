@@ -21,7 +21,7 @@ interface PriceHistoryData {
 
 
 
-export function PriceHistory({ allPrices }: any) {
+export function PriceHistory({ allPrices }: any) { // TODO: fix any
     const [dailyPriceHistory, setDailyPriceHistory] = useState<PriceHistory[]>([]);
     const [filteredPriceHistory, setFilteredPriceHistory] = useState<PriceHistory[]>([]);
     const [timeRange, setTimeRange] = useState('4W');

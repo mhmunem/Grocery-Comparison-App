@@ -9,10 +9,10 @@ function HomePage() {
 
     useEffect(() => {
         // server connection Testing using GET on initial load
-        getInitialSetupMessage().then((response: any) => {
+        getInitialSetupMessage().then((response: any) => { // TODO: fix any
             setData(response);
         })
-            .catch((error: any) => {
+            .catch((error: any) => { // TODO: fix any
                 console.error('Error fetching GET data:', error);
             });
     }, []);
