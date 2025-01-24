@@ -16,7 +16,6 @@ const insertCategories = async (categoryNames: any) => {
             console.error(`Error inserting category ${categoryName}:`, error)
         }
     }
-    console.log('All categories inserted successfully.')
 }
 
 export default insertCategories
