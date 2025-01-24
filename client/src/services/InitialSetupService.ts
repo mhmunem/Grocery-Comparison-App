@@ -11,8 +11,8 @@ async function request(method: 'get' | 'post' | 'put' | 'delete', url: string, d
     }
 }
 
-export function getInitialSetupMessage() {
-    return request('get', `${API_URL}${API_ENDPOINTS.WELCOME_API}`);
+export function getInitialSetupMessage(): Promise<string> {
+    return (request('get', `${API_URL}${API_ENDPOINTS.WELCOME_API}`)) as Promise<string>
 }
 
 export function getInitialSetup() {

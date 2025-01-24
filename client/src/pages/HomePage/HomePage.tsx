@@ -5,14 +5,14 @@ import { getInitialSetupMessage } from '../../services/InitialSetupService';
 
 
 function HomePage() {
-    const [data, setData] = useState(null);
+    const [data, setData] = useState("");
 
     useEffect(() => {
         // server connection Testing using GET on initial load
-        getInitialSetupMessage().then((response: any) => { // TODO: fix any
+        getInitialSetupMessage().then((response: string) => {
             setData(response);
         })
-            .catch((error: any) => { // TODO: fix any
+            .catch((error: string) => {
                 console.error('Error fetching GET data:', error);
             });
     }, []);
