@@ -4,25 +4,7 @@ import { getSearch } from '../../services/InitialSetupService';
 import { SearchProductCard } from '../../components/SearchPage/SearchProductCard';
 import { ProductDetailsModal } from '../../components/ProductPage/ProductDetailsModal';
 import './ShoppingListPage.css';
-
-export type Product = {
-  products: {
-    id: number;
-    name: string;
-    brand: string;
-    details: string;
-    amount: number;
-    image: string;
-    unitID: number;
-    categoryID: number;
-  };
-  store_products: {
-    id: number;
-    storeID: number;
-    productID: number;
-    price: number;
-  };
-};
+import { Product } from '../../types/product';
 
 const ShoppingListPage: React.FC = () => {
   const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
