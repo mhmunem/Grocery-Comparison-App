@@ -30,6 +30,10 @@ type Product = {
         productID: number;
         price: number;
     };
+	category:{
+		id: number;
+        name: string;
+	}
 };
 
 const SearchPage: React.FC = () => {
@@ -47,6 +51,8 @@ const SearchPage: React.FC = () => {
     const [showProductDetails, setShowProductDetails] = useState(false);
 
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+	const [availableCategories, setAvailableCategories] = useState<string[]>([]);
+
     const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
     const [availableBrands, setAvailableBrands] = useState<string[]>([]);
 
@@ -77,6 +83,9 @@ const SearchPage: React.FC = () => {
             try {
                 let results: Product[] = (await getSearch('', 'name', 'ASC')) || [];
                 setProducts(results);
+
+				const categories = Array.from(new Set(results.map(product => product.category.name)));
+                setAvailableCategories(categories);
 
                 const savedQ = localStorage.getItem('quantities');
                 const savedC = localStorage.getItem('addedToCart');
@@ -152,11 +161,10 @@ const SearchPage: React.FC = () => {
         };
     }, []);
 
-
     useEffect(() => {
         const findBrands = async () => {
             try {
-                const brands = Array.from(new Set(products.map(product => product.products.brand)));
+                const brands = Array.from(new Set(sortedAndFilteredProducts.map(product => product.products.brand)));
                 setAvailableBrands(brands);
             } catch (error) {
                 console.error('Error fetching brands:', error);
@@ -295,8 +303,8 @@ const SearchPage: React.FC = () => {
         }
 
         if (selectedCategories.length > 0) {
-            updatedProducts = updatedProducts.filter((p) =>
-                selectedCategories.includes(p.products.categoryID.toString())
+			updatedProducts = updatedProducts.filter(product =>
+                selectedCategories.includes(product.category.name)
             );
         }
 
@@ -397,18 +405,11 @@ const SearchPage: React.FC = () => {
                                 labelPlacement="stacked"
                                 className="dropdown"
                             >
-                                <IonSelectOption value="1">Fish</IonSelectOption>
-                                <IonSelectOption value="2">Meat</IonSelectOption>
-                                <IonSelectOption value="3">Frozen</IonSelectOption>
-                                <IonSelectOption value="4">Fruit & Veg</IonSelectOption>
-                                <IonSelectOption value="5">Bakery</IonSelectOption>
-                                <IonSelectOption value="6">Deli</IonSelectOption>
-                                <IonSelectOption value="7">Drinks</IonSelectOption>
-                                <IonSelectOption value="8">Household</IonSelectOption>
-                                <IonSelectOption value="9">Health & Body</IonSelectOption>
-                                <IonSelectOption value="10">Beer & Wine</IonSelectOption>
-                                <IonSelectOption value="11">Pantry</IonSelectOption>
-                                <IonSelectOption value="12">Baby & Child</IonSelectOption>
+                                 {availableCategories.map((category, index) => (
+                                    <IonSelectOption key={index} value={category}>
+                                        {category}
+                                    </IonSelectOption>
+                                ))}
                             </IonSelect>
 
                         </IonItem>
