@@ -1,13 +1,23 @@
 import {
-    IonContent, IonHeader, IonPage, IonList, IonTitle, IonToolbar, IonSearchbar, IonCard,
-    IonCardContent, IonLabel, IonItem, IonIcon, IonImg, IonModal, IonThumbnail,
-    useIonViewWillEnter, IonChip, IonGrid, IonCol, IonRow, IonCardTitle, IonButtons, IonButton
+    IonContent, IonHeader, IonList, IonTitle, IonToolbar,
+    IonLabel, IonItem, IonModal,
+    IonGrid, IonCol, IonRow, IonButtons, IonButton
 } from '@ionic/react';
 import { ProductDetails } from '../../components/ProductPage/ProductDetails';
 import { PriceHistory } from '../../components/ProductPage/PriceHistory';
-import { useState, useEffect } from 'react';
+import { Product } from '../../types/product';
 
-export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quantities, selectedProduct, showProductDetails, closeProductDetails, allPrices }: any) {
+interface ProductDetailsModal {
+    decreaseQuantity: (product_id: string | number) => void
+    increaseQuantity: (product_id: string | number) => void
+    quantities: { [key: string]: number }
+    selectedProduct: Product | null
+    showProductDetails: boolean
+    closeProductDetails: () => void
+    allPrices: Product[] | null // TODO: remove null when the bug on the ShoppingListPage on line 191 is fixed
+}
+
+export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quantities, selectedProduct, showProductDetails, closeProductDetails, allPrices }: ProductDetailsModal) {
 
     if (!selectedProduct) {
         return null;
@@ -37,15 +47,14 @@ export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quanti
                                 decreaseQuantity={decreaseQuantity}
                                 increaseQuantity={increaseQuantity}
                                 quantities={quantities}
-                                selectedProduct={selectedProduct}
+                                product={selectedProduct}
                             />
                         </div>
                         <div style={{ marginTop: '30px', padding: "5px", width: "100%" }}>
 
                             {/* Price History Section */}
                             <PriceHistory
-                                product={selectedProduct}
-                                allPrices={allPrices}
+                                allPrices={allPrices!} // BUG: this is a bug waiting to happen. we need to remove the nullability here or deal with it earlier
                             />
                         </div>
                         {/* Additional Product Details */}
