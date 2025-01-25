@@ -1,13 +1,14 @@
 import { IonList, IonItem, IonCol, IonRow, IonButton, IonImg } from '@ionic/react';
 import { Line } from 'react-chartjs-2';
 import { useState, useEffect } from 'react';
+import { Product } from '../../types/product';
 
-interface PriceHistory {
+type datePrice = {
     date: Date;
     price: number;
 }
 
-interface PriceHistoryData {
+type PriceHistoryData = {
     labels: string[];
     datasets: Array<{
         label: string;
@@ -18,35 +19,21 @@ interface PriceHistoryData {
     }>;
 }
 
-type Product = {
-    products: {
-        id: number;
-        name: string;
-        brand: string;
-        details: string;
-        amount: number;
-        image: string;
-        unitID: number;
-        categoryID: number;
-    };
-    store_products: {
-        id: number;
-        storeID: number;
-        productID: number;
-        price: number;
-    };
+interface PriceHistory {
+    allPrices: Product[]
 }
 
-export function PriceHistory({ product, allPrices }: any) {
-    const [dailyPriceHistory, setDailyPriceHistory] = useState<PriceHistory[]>([]);
-    const [filteredPriceHistory, setFilteredPriceHistory] = useState<PriceHistory[]>([]);
+
+export function PriceHistory({ allPrices }: PriceHistory) {
+    const [dailyPriceHistory, setDailyPriceHistory] = useState<datePrice[]>([]);
+    const [filteredPriceHistory, setFilteredPriceHistory] = useState<datePrice[]>([]);
     const [timeRange, setTimeRange] = useState('4W');
 
 
     useEffect(() => {
         const generateDummyData = () => {
             const today = new Date();
-            const prices: PriceHistory[] = [];
+            const prices: datePrice[] = [];
             for (let i = 0; i < 365; i++) {
                 const randomPrice = 10 + Math.random() * 5;
                 prices.push({ date: new Date(today.setDate(today.getDate() - 1)), price: randomPrice });
@@ -91,18 +78,19 @@ export function PriceHistory({ product, allPrices }: any) {
             <IonRow>
                 <IonList style={{ width: '100%' }}>
                     {/* All available stores */}
+                    <h4>Pricing Information</h4>
                     {allPrices
-                        .sort((a: Product, b: Product) => a.price - b.price) // Sort stores by price
+                        .sort((a: Product, b: Product) => a.store_products.price - b.store_products.price)
                         .map((store: Product, index: number) => (
                             <IonItem key={index}>
                                 <IonCol size="1">
-                                    <IonImg src={store.product.chains.image_logo} />
+                                    <IonImg src={store.chains.image_logo} />
                                 </IonCol>
                                 <IonCol size="9">
-                                    {store.product.stores.name}
+                                    {store.stores.name}
                                 </IonCol>
                                 <IonCol size="2" className='priceLabel'>
-                                    ${store.price.toFixed(2)}
+                                    ${store.store_products.price.toFixed(2)}
                                 </IonCol>
                             </IonItem>
                         ))}

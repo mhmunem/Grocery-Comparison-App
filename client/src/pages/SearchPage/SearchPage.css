@@ -92,11 +92,12 @@ ion-grid {
     text-overflow: ellipsis;
     white-space: nowrap;
     align-items: left;
+    margin-bottom: 5px;
 }
 
 /* product card size text */
 .sizeText {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     display: flex;
     flex-direction: column;
     align-items: left;
@@ -113,6 +114,7 @@ ion-grid {
     margin-top: 10px;
 }
 
+
 /* product card product details (everything under the title/photo) */
 .productDetails {
     display: flex;
@@ -122,7 +124,7 @@ ion-grid {
     margin: auto;
     gap: 2px;
     font-family: 'Noto Sans';
-    height: 80px;
+    height: 90px;
 }
 
 

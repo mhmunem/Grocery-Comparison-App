@@ -1,5 +1,5 @@
 import './SearchPage.css';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from 'chart.js';
 import { IonCol, IonContent, IonGrid, IonHeader, IonImg, IonItem, IonLabel, IonPage, IonRow, IonSearchbar, IonSelect, IonSelectOption, IonToolbar } from '@ionic/react';
 import { LoadingContainer } from '../../components/SharedComponents/loadingContainer';
@@ -8,29 +8,10 @@ import { ProductDetailsModal } from '../../components/ProductPage/ProductDetails
 import { SearchProductCard } from '../../components/SearchPage/SearchProductCard';
 import { getSearch } from "../../services/InitialSetupService";
 import { useIonViewWillEnter } from '@ionic/react';
-
+import { Product } from '../../types/product';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-
-type Product = {
-    products: {
-        id: number;
-        name: string;
-        brand: string;
-        details: string;
-        amount: number;
-        image: string;
-        unitID: number;
-        categoryID: number;
-    };
-    store_products: {
-        id: number;
-        storeID: number;
-        productID: number;
-        price: number;
-    };
-};
 
 const SearchPage: React.FC = () => {
     const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
@@ -43,10 +24,12 @@ const SearchPage: React.FC = () => {
     const [error, setError] = useState<string>('');
     const [searchAttempted, setSearchAttempted] = useState<boolean>(false);
 
-    const [selectedProduct, setSelectedProduct] = useState<Product | undefined>(undefined);
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [showProductDetails, setShowProductDetails] = useState(false);
 
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+    const [availableCategories, setAvailableCategories] = useState<string[]>([]);
+
     const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
     const [availableBrands, setAvailableBrands] = useState<string[]>([]);
 
@@ -77,6 +60,9 @@ const SearchPage: React.FC = () => {
             try {
                 let results: Product[] = (await getSearch('', 'name', 'ASC')) || [];
                 setProducts(results);
+
+                const categories = Array.from(new Set(results.map(product => product.category.name)));
+                setAvailableCategories(categories);
 
                 const savedQ = localStorage.getItem('quantities');
                 const savedC = localStorage.getItem('addedToCart');
@@ -152,11 +138,10 @@ const SearchPage: React.FC = () => {
         };
     }, []);
 
-
     useEffect(() => {
         const findBrands = async () => {
             try {
-                const brands = Array.from(new Set(products.map(product => product.products.brand)));
+                const brands = Array.from(new Set(sortedAndFilteredProducts.map(product => product.products.brand)));
                 setAvailableBrands(brands);
             } catch (error) {
                 console.error('Error fetching brands:', error);
@@ -185,7 +170,8 @@ const SearchPage: React.FC = () => {
         updateCart(newQuantities, newAddedToCart);
     };
 
-    const decreaseQuantity = (productId: string | number) => {
+    // TODO: productId does not need a sum type. Javascript implicitly converts converts these types
+    const decreaseQuantity = (productId: string | number) => { // TODO: decreaseQuantity, increaseQuantity, newQuantity is duplicate in the ShoppingListPage
         const storeIdStr = productId.toString();
         const currentQuantity = quantities[storeIdStr] || 0;
         const newQuantity = Math.max(currentQuantity - 1, 0);
@@ -237,6 +223,22 @@ const SearchPage: React.FC = () => {
         handleSearch();
     };
 
+    const getOtherPrices = (product: Product) => {
+        if (selectedStores.length <= 0) {
+            return product && products
+                .filter(
+                    (prod) =>
+                        prod.store_products.productID === product.store_products.productID
+                );
+        }
+        return product && products
+            .filter(
+                (prod) =>
+                    prod.store_products.productID === product.store_products.productID &&
+                    selectedStores.includes(prod.store_products.storeID)
+            );
+    };
+
     const openProductDetails = (product: Product) => {
         setSelectedProduct(product);
         setOtherPrices(getOtherPrices(product));
@@ -246,20 +248,6 @@ const SearchPage: React.FC = () => {
     const closeProductDetails = () => {
         setShowProductDetails(false);
     };
-
-    const getOtherPrices = (product: Product | undefined) => {
-        return product && products
-            .filter(
-                (prod) =>
-                    prod.store_products.productID === product.store_products.productID
-            )
-            .map((prod) => ({
-                price: prod.store_products.price,
-                product: prod
-            }));
-    };
-
-
 
     useEffect(() => {
         const total = Math.ceil(sortedAndFilteredProducts.length / itemsPerPage);
@@ -273,9 +261,11 @@ const SearchPage: React.FC = () => {
     const nextPage = () => {
         setCurrentPage((prev) => Math.min(prev + 1, Math.ceil(sortedAndFilteredProducts.length / itemsPerPage)));
     };
+
     const prevPage = () => {
         setCurrentPage((prev) => Math.max(prev - 1, 1));
     };
+
     const goToPage = (page: number) => {
         const total = Math.ceil(sortedAndFilteredProducts.length / itemsPerPage);
         if (page >= 1 && page <= total) {
@@ -295,8 +285,8 @@ const SearchPage: React.FC = () => {
         }
 
         if (selectedCategories.length > 0) {
-            updatedProducts = updatedProducts.filter((p) =>
-                selectedCategories.includes(p.products.categoryID.toString())
+            updatedProducts = updatedProducts.filter(product =>
+                selectedCategories.includes(product.category.name)
             );
         }
 
@@ -338,6 +328,15 @@ const SearchPage: React.FC = () => {
                     return a.products.name.localeCompare(b.products.name);
                 case 'za':
                     return b.products.name.localeCompare(a.products.name);
+                case 'lowest-highest volume':
+                    return a.products.amount - b.products.amount;
+                case 'highest-lowest volume':
+                    return b.products.amount - a.products.amount;
+                case 'lowest-highest unit price':
+                    return (b.products.amount / b.store_products.price) - (a.products.amount / a.store_products.price);
+                case 'highest-lowest unit price':
+                    return (a.products.amount / a.store_products.price) - (b.products.amount / b.store_products.price);
+
                 default:
                     return 0;
             }
@@ -348,13 +347,12 @@ const SearchPage: React.FC = () => {
 
     const startIndex = (currentPage - 1) * itemsPerPage;
 
-    // console.log("getPriceHistory", (async () => await getPriceHistory(1, 30))()); // NOTE: remove me
     const reloadProducts = () => {
         // Log all store IDs in selectedStores
         setSelectedStores(getInitialSelectedStores);
-    
+
     };
-    
+
     // Using the useIonViewWillEnter hook to reload products when the page enters
     useIonViewWillEnter(() => {
         reloadProducts();
@@ -397,18 +395,11 @@ const SearchPage: React.FC = () => {
                                 labelPlacement="stacked"
                                 className="dropdown"
                             >
-                                <IonSelectOption value="1">Fish</IonSelectOption>
-                                <IonSelectOption value="2">Meat</IonSelectOption>
-                                <IonSelectOption value="3">Frozen</IonSelectOption>
-                                <IonSelectOption value="4">Fruit & Veg</IonSelectOption>
-                                <IonSelectOption value="5">Bakery</IonSelectOption>
-                                <IonSelectOption value="6">Deli</IonSelectOption>
-                                <IonSelectOption value="7">Drinks</IonSelectOption>
-                                <IonSelectOption value="8">Household</IonSelectOption>
-                                <IonSelectOption value="9">Health & Body</IonSelectOption>
-                                <IonSelectOption value="10">Beer & Wine</IonSelectOption>
-                                <IonSelectOption value="11">Pantry</IonSelectOption>
-                                <IonSelectOption value="12">Baby & Child</IonSelectOption>
+                                {availableCategories.map((category, index) => (
+                                    <IonSelectOption key={index} value={category}>
+                                        {category}
+                                    </IonSelectOption>
+                                ))}
                             </IonSelect>
 
                         </IonItem>
@@ -481,9 +472,6 @@ const SearchPage: React.FC = () => {
                                                 increaseQuantity={increaseQuantity}
                                                 quantities={quantities}
                                                 product={product}
-                                                productID={product.products.id}
-                                                productBrand={product.products.brand}
-                                                productDetails={product.products.details}
                                                 productName={product.products.name}
                                                 productPrice={product.store_products.price}
                                                 productImage={product.products.image}
