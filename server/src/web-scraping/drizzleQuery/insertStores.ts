@@ -15,9 +15,6 @@ export default async function insertOrUpdateStores(storeData: any): Promise<unde
 
             let chain: Chains | undefined
 
-            // BUG: this line assumes that every store is prefixed with the chain name
-            // better to pass the chain name in as an argument
-            // It is also hard to read
             chain = (await db.select().from(chains).where(ilike(chains.name, `${store.name.split(' ')[0]}%`)).limit(1))[0]
 
             if (!chain) {
