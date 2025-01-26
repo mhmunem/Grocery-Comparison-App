@@ -17,4 +17,4 @@ async function GroSaveCategoryScraper() {
 
 }
 
-export default GroSaveCategoryScraper()
+export default GroSaveCategoryScraper

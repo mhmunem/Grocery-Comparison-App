@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { eq } from 'drizzle-orm'
 import db from '../../db/connection/pool'
 import { products } from '../../db/schema/products'
 import { store_products } from '../../db/schema/store_products'
@@ -8,42 +7,12 @@ import { category } from '../../db/schema/category'
 import { stores } from '../../db/schema/stores'
 import { ilike } from 'drizzle-orm'
 import { price_history } from '../../db/schema/price_history'
-
+import { Dataset } from 'crawlee'
 
 async function fetchGrosaveStores() {
     const response = await axios.get('https://grosave.co.nz/api/allstores')
     return response.data.data
 }
-
-async function fetchPriceHistory(productId: number, brand: number, storeName: string, insertedProductID: number) {
-    const storeNameFormatted = storeName.replace(/\s+/g, '+')
-    const priceHistoryUrl = `https://grosave.co.nz/api/pricehistory?productId=${productId}&stores=${brand}_${storeNameFormatted}`
-
-    try {
-        const priceHistoryResponse = await axios.get(priceHistoryUrl)
-        const priceHistoryData = priceHistoryResponse.data.data.price_history
-        if (priceHistoryData) {
-            for (const historyEntry of priceHistoryData) {
-                await db.insert(price_history).values({
-                    date: historyEntry.date,
-                    price: historyEntry.price,
-                    productID: insertedProductID
-                }).onConflictDoUpdate({
-                    target: [price_history.date, price_history.productID],
-                    set: {
-                        price: historyEntry.price
-                    }
-                }).execute()
-            }
-        }else{
-          console.log(`No data found for product' ${insertedProductID}` )  
-        }
-    } catch (error) {
-        console.error(`Error fetching price history for product ${productId}:`, error)
-    }
-}
-
-
 
 async function GroSaveProductsScraper() {
     const grosaveStores = await fetchGrosaveStores()
@@ -54,8 +23,15 @@ async function GroSaveProductsScraper() {
 
         while (hasMore) {
             const url = `https://grosave.co.nz/search?page=${page}&storeId=${store.id}&cutOffOldData=true&_data=routes/search`
+            console.log(url);
             const response = await axios.get(url)
             const data = response.data
+
+            if (response.status === 429) {
+                console.log('Rate limit hit.');
+                return;
+            }
+
 
             if (data.loaderSearchResults.length === 0) {
                 hasMore = false
@@ -66,7 +42,7 @@ async function GroSaveProductsScraper() {
                 const priceDetails = Object.values(product.price_details)[0] as {
                     primary_image_url: string,
                     unit: string
-                    quantity: number
+                    quantity: string
                     original_price: number
                     original_store_categories: string[]
                 }
@@ -136,18 +112,28 @@ async function GroSaveProductsScraper() {
                             target: [store_products.storeID, store_products.productID],
                             set: { price: priceDetails.original_price }
                         }).execute()
-                        await fetchPriceHistory(product.id, store.brand.id, store.name, insertedProduct[0].id)
+                        await db.insert(price_history).values({
+                            date: new Date().toDateString(),
+                            price: priceDetails.original_price,
+                            productID: insertedProduct[0].id,
+                            storeID: dbStore[0]!.id,
+                        }).onConflictDoUpdate({
+                            target: [price_history.date, price_history.productID,price_history.storeID],
+                            set: {
+                                price: priceDetails.original_price
+                            }
+                        }).execute()
                     } else {
                         console.error(`Failed to insert store product for ${product.name}`)
                     }
 
                 }
-                console.log(`New prodcuts inserted`)
-                page++
+                console.log(`prodcuts inserted or updated`)
             }
+            page++
         }
     }
 }
 
 
-export default GroSaveProductsScraper()
+export default GroSaveProductsScraper

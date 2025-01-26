@@ -18,4 +18,4 @@ async function GrosaveStoresScraper() {
     }
 }
 
-export default GrosaveStoresScraper()
+export default GrosaveStoresScraper
