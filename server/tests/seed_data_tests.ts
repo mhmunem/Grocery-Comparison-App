@@ -1,3 +1,4 @@
+// this is the seed data to be used for unit tests for the server
 const seed_data_tests = (f: any) => ({
     products: {
         count: 3,
