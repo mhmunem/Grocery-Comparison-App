@@ -137,12 +137,12 @@ const ShoppingListPage: React.FC = () => {
     const getOtherPrices = (product: Product | null): Product[] => {
       if (!product) return [];
       if (selectedStores.length === 0) {
-          // 如果没有选中商店，则返回所有商店的价格
+          // If no stores are selected, the prices for all stores are returned
           return products.filter(
               (prod) => prod.store_products.productID === product.store_products.productID
           );
       }
-      // 仅返回被选中商店的价格
+      // Returns only the price of the selected store
       return products.filter(
           (prod) =>
               prod.store_products.productID === product.store_products.productID &&
@@ -217,7 +217,7 @@ const ShoppingListPage: React.FC = () => {
                     selectedProduct={selectedProduct}
                     showProductDetails={showProductDetails}
                     closeProductDetails={closeProductDetails}
-                    allPrices={otherPrices} // BUG: pass correct data to it. 
+                    allPrices={otherPrices}  
                 />
             </IonContent>
 
