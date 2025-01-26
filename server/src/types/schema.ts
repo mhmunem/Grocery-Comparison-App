@@ -5,6 +5,7 @@ import { units } from "../db/schema/units";
 import { store_products } from "../db/schema/store_products";
 import { customType } from "drizzle-orm/pg-core";
 import { category } from "../db/schema/category";
+import { price_history } from "../db/schema/price_history";
 
 export type Products = typeof products.$inferSelect
 export type Stores = typeof stores.$inferSelect
@@ -12,6 +13,7 @@ export type Chains = typeof chains.$inferSelect
 export type Units = typeof units.$inferSelect
 export type StoreProducts = typeof store_products.$inferSelect
 export type Category = typeof category.$inferSelect
+export type PriceHistory = typeof price_history.$inferSelect
 
 // This results from joins
 export type ProductSearchResult = {
@@ -20,6 +22,7 @@ export type ProductSearchResult = {
     category: Category
     stores: Stores
     chains: Chains
+    products: Products
 }
 
 // A custom type which solves the issue of numeric and decimal types being infered as string.

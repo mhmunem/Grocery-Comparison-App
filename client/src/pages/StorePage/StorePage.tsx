@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { star, storefront, storefrontOutline } from 'ionicons/icons';
+import { star, storefrontOutline } from 'ionicons/icons';
 import './StorePage.css';
 import { getChains, getStores } from '../../services/StoreService';
 import { IonImg, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, IonButton, IonList, IonItem, IonCheckbox, IonLabel, IonTabBar, IonTabButton, IonToast } from '@ionic/react';
@@ -97,7 +97,7 @@ const StorePage: React.FC = () => {
                     </IonTabButton>
 
                     {chains.map(chain => (
-                        <IonTabButton key={chain.id} tab={chain.name} onClick={() => selectChain(chain.id)}>
+                        <IonTabButton key={chain.id} tab={`${chain.id}`} onClick={() => selectChain(chain.id)}>
                             <img src={chain.image_logo} alt={chain.name} style={{ width: '24px', height: '24px' }} />
                             <IonLabel>{chain.name}</IonLabel>
                         </IonTabButton>

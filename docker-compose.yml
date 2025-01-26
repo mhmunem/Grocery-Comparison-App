@@ -1,7 +1,7 @@
 include:
   - ./server/docker-compose-db.yml
-  - ./server/docker-compose-db-migrate.yml
-  - ./server/docker-compose-drizzlestudio.yml
+  # - ./server/docker-compose-db-migrate.yml TODO: enable before merge request
+  # - ./server/docker-compose-drizzlestudio.yml TODO: enable before merge request
   - ./server/docker-compose-server.yml
-  - ./server/docker-compose-pgadmin.yml
+  # - ./server/docker-compose-pgadmin.yml TODO: enable before merge request
   - ./client/docker-compose-client.yml

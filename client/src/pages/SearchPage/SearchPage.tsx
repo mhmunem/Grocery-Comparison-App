@@ -1,61 +1,48 @@
-import { IonButton, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonItem, IonLabel, IonPage, IonRow, IonSearchbar, IonSelect, IonSelectOption, IonToolbar } from '@ionic/react';
-import { CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from 'chart.js';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ProductDetailsModal } from '../../components/ProductPage/ProductDetailsModal';
-import { PaginationControls } from '../../components/SearchPage/PaginationControls';
-import { SearchProductCard } from '../../components/SearchPage/SearchProductCard';
-import { LoadingContainer } from '../../components/SharedComponents/loadingContainer';
-import { getSearch } from "../../services/InitialSetupService";
 import './SearchPage.css';
-
+import React, { useEffect, useState } from 'react';
+import { CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from 'chart.js';
+import { IonCol, IonContent, IonGrid, IonHeader, IonImg, IonItem, IonLabel, IonPage, IonRow, IonSearchbar, IonSelect, IonSelectOption, IonToolbar } from '@ionic/react';
+import { LoadingContainer } from '../../components/SharedComponents/loadingContainer';
+import { PaginationControls } from '../../components/SearchPage/PaginationControls';
+import { ProductDetailsModal } from '../../components/ProductPage/ProductDetailsModal';
+import { SearchProductCard } from '../../components/SearchPage/SearchProductCard';
+import { getSearch } from "../../services/InitialSetupService";
+import { useIonViewWillEnter } from '@ionic/react';
+import { Product } from '../../types/product';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 
-type Product = {
-	products: {
-		id: number;
-		name: string;
-		brand: string;
-		details: string;
-		amount: number;
-		image: string;
-		unitID: number;
-		categoryID: number;
-	};
-	store_products: {
-		id: number; // storeProductId
-		storeID: number;
-		productID: number;
-		price: number;
-	};
-};
-
 const SearchPage: React.FC = () => {
-	const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
-	const [addedToCart, setAddedToCart] = useState<{ [key: string]: boolean }>({});
+    const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
+    const [addedToCart, setAddedToCart] = useState<{ [key: string]: boolean }>({});
 
-	const [products, setProducts] = useState<Product[]>([]);
-	const [loading, setLoading] = useState<boolean>(true);
+    const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
 
-	const [query, setQuery] = useState<string>('');
-	const [error, setError] = useState<string>('');
-	const [searchAttempted, setSearchAttempted] = useState<boolean>(false);
+    const [query, setQuery] = useState<string>('');
+    const [error, setError] = useState<string>('');
+    const [searchAttempted, setSearchAttempted] = useState<boolean>(false);
 
-	const [selectedProduct, setSelectedProduct] = useState<Product | undefined>(undefined);
-	const [showProductDetails, setShowProductDetails] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+    const [showProductDetails, setShowProductDetails] = useState(false);
 
-	const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+    const [availableCategories, setAvailableCategories] = useState<string[]>([]);
 
-	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+    const [availableBrands, setAvailableBrands] = useState<string[]>([]);
 
-	const [currentPage, setCurrentPage] = useState<number>(1);
-	const itemsPerPage = 20;
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const itemsPerPage = 20;
 
-	const [sortedAndFilteredProducts, setSortedAndFilteredProducts] = useState<Product[]>([]);
-	const [sortValue, setSortValue] = useState('lowest-highest price');
+    const [sortedAndFilteredProducts, setSortedAndFilteredProducts] = useState<Product[]>([]);
+    const [sortValue, setSortValue] = useState('lowest-highest price');
 
-	const sortOptions = [
+    const [otherPrices, setOtherPrices] = useState<Product[]>([]);
+    const [selectedStores, setSelectedStores] = useState<number[]>([]);
+
+    const sortOptions = [
         { label: 'Alphabetical A-Z', value: 'az' },
         { label: 'Alphabetical Z-A', value: 'za' },
         { label: 'Price (Ascending)', value: 'lowest-highest price' },
@@ -66,228 +53,313 @@ const SearchPage: React.FC = () => {
         { label: 'Volume (Descending)', value: 'highest-lowest volume' },
     ];
 
-	const dropdownRef = useRef<HTMLDivElement>(null);
 
-	useEffect(() => {
-		const fetchData = async () => {
-			setLoading(true);
-			try {
-				let results: Product[] = await getSearch('', 'name', 'ASC');
-				setProducts(results);
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                let results: Product[] = (await getSearch('', 'name', 'ASC')) || [];
+                setProducts(results);
 
-				const savedQ = localStorage.getItem('quantities');
-				const savedC = localStorage.getItem('addedToCart');
+                const categories = Array.from(new Set(results.map(product => product.category.name)));
+                setAvailableCategories(categories);
 
-				console.log('=== Debug localStorage ===');
-				console.log('savedQ (string):', savedQ);
-				console.log('savedC (string):', savedC);
+                const savedQ = localStorage.getItem('quantities');
+                const savedC = localStorage.getItem('addedToCart');
 
-				if (savedQ && savedC) {
-					setQuantities(JSON.parse(savedQ));
-					setAddedToCart(JSON.parse(savedC));
-				} else {
-					const initialQuantities = results.reduce(
-						(acc: { [key: string]: number }, product: Product) => {
-							const storeIdStr = product.store_products.id.toString();
-							acc[storeIdStr] = 0;
-							return acc;
-						},
-						{}
-					);
-					setQuantities(initialQuantities);
-					setAddedToCart({});
-				}
-			} catch (error) {
-				console.error('Error fetching data:', error);
-				setError('Failed to fetch products. Please try again later.');
-			} finally {
-				setLoading(false);
-			}
-		};
-		fetchData();
-	}, []);
+                if (savedQ && savedC) {
+                    setQuantities(JSON.parse(savedQ));
+                    setAddedToCart(JSON.parse(savedC));
+                } else {
+                    const initialQuantities = results.reduce(
+                        (acc: { [key: string]: number }, product: Product) => {
+                            const storeIdStr = product.store_products.id.toString();
+                            acc[storeIdStr] = 0;
+                            return acc;
+                        },
+                        {}
+                    );
+                    setQuantities(initialQuantities);
+                    setAddedToCart({});
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setError('Failed to fetch products. Please try again later.');
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+
+
 
     const handleClearSelection = () => {
         setSelectedCategories([]); // Clear the selected categories
-      };
-	useEffect(() => {
-		const handleCartUpdate = () => {
-			const savedQ = localStorage.getItem('quantities');
-			const savedC = localStorage.getItem('addedToCart');
-			if (savedQ && savedC) {
-				setQuantities(JSON.parse(savedQ));
-				setAddedToCart(JSON.parse(savedC));
-			}
-		};
+        setSelectedBrands([]);
+        setSortValue('lowest-highest price');
+    };
 
-		window.addEventListener('cartUpdated', handleCartUpdate);
+    useEffect(() => {
+        const handleCartUpdate = () => {
+            const savedQ = localStorage.getItem('quantities');
+            const savedC = localStorage.getItem('addedToCart');
+            if (savedQ && savedC) {
+                setQuantities(JSON.parse(savedQ));
+                setAddedToCart(JSON.parse(savedC));
+            }
+        };
 
-		return () => {
-			window.removeEventListener('cartUpdated', handleCartUpdate);
-		};
-	}, []);
+        window.addEventListener('cartUpdated', handleCartUpdate);
 
-	const updateCart = (newQuantities: { [key: string]: number }, newAddedToCart: { [key: string]: boolean }) => {
-		localStorage.setItem('quantities', JSON.stringify(newQuantities));
-		localStorage.setItem('addedToCart', JSON.stringify(newAddedToCart));
-		window.dispatchEvent(new Event('cartUpdated'));
-	};
+        return () => {
+            window.removeEventListener('cartUpdated', handleCartUpdate);
+        };
+    }, []);
 
-	const increaseQuantity = (productId: string | number) => {
-		const storeIdStr = productId.toString();
-		const newQuantities = { ...quantities };
-		newQuantities[storeIdStr] = (newQuantities[storeIdStr] || 0) + 1;
+    const getInitialSelectedStores = () => {
+        const storedSelectedStores = localStorage.getItem('selectedStores');
+        return storedSelectedStores ? JSON.parse(storedSelectedStores) : [];
+    };
 
-		const newAddedToCart = { ...addedToCart };
-		newAddedToCart[storeIdStr] = true;
+    useEffect(() => {
+        const handleStorageChange = (event: StorageEvent) => {
+            if (event.key === 'selectedStores') {
+                const updatedStores = event.newValue ? JSON.parse(event.newValue) : [];
+                setSelectedStores(updatedStores);
+            }
+        };
 
-		setQuantities(newQuantities);
-		setAddedToCart(newAddedToCart);
-		updateCart(newQuantities, newAddedToCart);
-	};
+        window.addEventListener('storage', handleStorageChange);
 
-	const decreaseQuantity = (productId: string | number) => {
-		const storeIdStr = productId.toString();
-		const currentQuantity = quantities[storeIdStr] || 0;
-		const newQuantity = Math.max(currentQuantity - 1, 0);
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+        };
+    }, []);
 
-		const newQuantities = { ...quantities };
-		newQuantities[storeIdStr] = newQuantity;
+    useEffect(() => {
+        const findBrands = async () => {
+            try {
+                const brands = Array.from(new Set(sortedAndFilteredProducts.map(product => product.products.brand)));
+                setAvailableBrands(brands);
+            } catch (error) {
+                console.error('Error fetching brands:', error);
+            }
+        };
+        findBrands();
+    }, [sortedAndFilteredProducts, selectedCategories]);
 
-		const newAddedToCart = { ...addedToCart };
-		newAddedToCart[storeIdStr] = newQuantity > 0;
 
-		setQuantities(newQuantities);
-		setAddedToCart(newAddedToCart);
-		updateCart(newQuantities, newAddedToCart);
-	};
+    const updateCart = (newQuantities: { [key: string]: number }, newAddedToCart: { [key: string]: boolean }) => {
+        localStorage.setItem('quantities', JSON.stringify(newQuantities));
+        localStorage.setItem('addedToCart', JSON.stringify(newAddedToCart));
+        window.dispatchEvent(new Event('cartUpdated'));
+    };
 
-	const handleSearch = async () => {
-		setSearchAttempted(true);
-		if (query.length === 0) {
-			try {
-				let results: Product[] = await getSearch('', 'name', 'ASC');
-				setProducts(results);
-				setError('');
-			} catch (error) {
-				console.error('Error searching products:', error);
-				setError('Failed to search products. Please try again later.');
-			}
-		} else if (query.length < 3 || query.length > 50) {
-			setError('Search query must be between 3 and 50 characters.');
-			return;
-		} else {
-			try {
-				let results = await getSearch(query, 'name', 'ASC');
-				setProducts(results);
-				setError('');
-			} catch (error) {
-				console.error('Error searching products:', error);
-				setError('Failed to search products. Please try again later.');
-			}
-		}
-	};
+    const increaseQuantity = (productId: string | number) => {
+        const storeIdStr = productId.toString();
+        const newQuantities = { ...quantities };
+        newQuantities[storeIdStr] = (newQuantities[storeIdStr] || 0) + 1;
 
-	const handleKeyDown = (event: React.KeyboardEvent) => {
-		if (event.key === 'Enter') {
-			event.preventDefault();
-			handleSearch();
-		}
-	};
-	const handleBlur = () => {
-		handleSearch();
-	};
+        const newAddedToCart = { ...addedToCart };
+        newAddedToCart[storeIdStr] = true;
 
-	const toggleDropdown = () => {
-		setIsDropdownOpen((prev) => !prev);
-	};
-	const selectSortOption = (value: string) => {
-		setSortValue(value);
-		setIsDropdownOpen(false);
-	};
+        setQuantities(newQuantities);
+        setAddedToCart(newAddedToCart);
+        updateCart(newQuantities, newAddedToCart);
+    };
 
-	const openProductDetails = (product: Product) => {
-		setSelectedProduct(product);
-		setShowProductDetails(true);
-	};
-	const closeProductDetails = () => {
-		setShowProductDetails(false);
-	};
+    // TODO: productId does not need a sum type. Javascript implicitly converts converts these types
+    const decreaseQuantity = (productId: string | number) => { // TODO: decreaseQuantity, increaseQuantity, newQuantity is duplicate in the ShoppingListPage
+        const storeIdStr = productId.toString();
+        const currentQuantity = quantities[storeIdStr] || 0;
+        const newQuantity = Math.max(currentQuantity - 1, 0);
 
-	useEffect(() => {
-		const total = Math.ceil(sortedAndFilteredProducts.length / itemsPerPage);
-		if (currentPage > total && total > 0) {
-			setCurrentPage(total);
-		} else if (currentPage < 1) {
-			setCurrentPage(1);
-		}
-	}, [sortedAndFilteredProducts, currentPage, itemsPerPage]);
+        const newQuantities = { ...quantities };
+        newQuantities[storeIdStr] = newQuantity;
 
-	const nextPage = () => {
-		setCurrentPage((prev) => Math.min(prev + 1, Math.ceil(sortedAndFilteredProducts.length / itemsPerPage)));
-	};
-	const prevPage = () => {
-		setCurrentPage((prev) => Math.max(prev - 1, 1));
-	};
-	const goToPage = (page: number) => {
-		const total = Math.ceil(sortedAndFilteredProducts.length / itemsPerPage);
-		if (page >= 1 && page <= total) {
-			setCurrentPage(page);
-		}
-	};
+        const newAddedToCart = { ...addedToCart };
+        newAddedToCart[storeIdStr] = newQuantity > 0;
 
-	useEffect(() => {
-		setCurrentPage(1);
+        setQuantities(newQuantities);
+        setAddedToCart(newAddedToCart);
+        updateCart(newQuantities, newAddedToCart);
+    };
 
-		let updatedProducts = [...products];
+    const handleSearch = async () => {
+        setSearchAttempted(true);
+        if (query.length === 0) {
+            try {
+                let results: Product[] = await getSearch('', 'name', 'ASC');
+                setProducts(results);
+                setError('');
+            } catch (error) {
+                console.error('Error searching products:', error);
+                setError('Failed to search products. Please try again later.');
+            }
+        } else if (query.length < 3 || query.length > 50) {
+            setError('Search query must be between 3 and 50 characters.');
+            return;
+        } else {
+            try {
+                let results = await getSearch(query, 'name', 'ASC');
+                setProducts(results);
+                setError('');
+            } catch (error) {
+                console.error('Error searching products:', error);
+                setError('Failed to search products. Please try again later.');
+            }
+        }
+    };
 
-		if (query) {
-			updatedProducts = updatedProducts.filter((p) =>
-				p.products.name.toLowerCase().includes(query.toLowerCase())
-			);
-		}
+    const handleKeyDown = (event: React.KeyboardEvent) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            handleSearch();
+        }
+    };
+    const handleBlur = () => {
+        handleSearch();
+    };
 
-		if (selectedCategories.length > 0) {
-			updatedProducts = updatedProducts.filter((p) =>
-				selectedCategories.includes(p.products.categoryID.toString())
-			);
-		}
+    const getOtherPrices = (product: Product) => {
+        if (selectedStores.length <= 0) {
+            return product && products
+                .filter(
+                    (prod) =>
+                        prod.store_products.productID === product.store_products.productID
+                );
+        }
+        return product && products
+            .filter(
+                (prod) =>
+                    prod.store_products.productID === product.store_products.productID &&
+                    selectedStores.includes(prod.store_products.storeID)
+            );
+    };
 
-		updatedProducts.sort((a, b) => {
-			switch (sortValue) {
-				case 'lowest-highest price':
-					return a.store_products.price - b.store_products.price;
-				case 'highest-lowest price':
-					return b.store_products.price - a.store_products.price;
-				case 'az':
-					return a.products.name.localeCompare(b.products.name);
-				case 'za':
-					return b.products.name.localeCompare(a.products.name);
-				default:
-					return 0;
-			}
-		});
+    const openProductDetails = (product: Product) => {
+        setSelectedProduct(product);
+        setOtherPrices(getOtherPrices(product));
+        setShowProductDetails(true);
+    };
 
-		setSortedAndFilteredProducts(updatedProducts);
-	}, [products, sortValue, selectedCategories, itemsPerPage]);
+    const closeProductDetails = () => {
+        setShowProductDetails(false);
+    };
 
-	useEffect(() => {
-		const handleClickOutside = (event: MouseEvent) => {
-		  if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node) && isDropdownOpen) {
-			setIsDropdownOpen(false);
-		  }
-		};
-	
-		document.addEventListener('mousedown', handleClickOutside);
-	
-		return () => {
-		  document.removeEventListener('mousedown', handleClickOutside);
-		};
-	  }, [isDropdownOpen]);
+    useEffect(() => {
+        const total = Math.ceil(sortedAndFilteredProducts.length / itemsPerPage);
+        if (currentPage > total && total > 0) {
+            setCurrentPage(total);
+        } else if (currentPage < 1) {
+            setCurrentPage(1);
+        }
+    }, [sortedAndFilteredProducts, currentPage, itemsPerPage]);
 
-	const startIndex = (currentPage - 1) * itemsPerPage;
+    const nextPage = () => {
+        setCurrentPage((prev) => Math.min(prev + 1, Math.ceil(sortedAndFilteredProducts.length / itemsPerPage)));
+    };
 
-	return (
+    const prevPage = () => {
+        setCurrentPage((prev) => Math.max(prev - 1, 1));
+    };
+
+    const goToPage = (page: number) => {
+        const total = Math.ceil(sortedAndFilteredProducts.length / itemsPerPage);
+        if (page >= 1 && page <= total) {
+            setCurrentPage(page);
+        }
+    };
+
+    useEffect(() => {
+        setCurrentPage(1);
+
+        let updatedProducts = [...products];
+
+        if (query) {
+            updatedProducts = updatedProducts.filter((p) =>
+                p.products.name.toLowerCase().includes(query.toLowerCase())
+            );
+        }
+
+        if (selectedCategories.length > 0) {
+            updatedProducts = updatedProducts.filter(product =>
+                selectedCategories.includes(product.category.name)
+            );
+        }
+
+        // Filter products based on selected brands
+        if (selectedBrands.length > 0) {
+            updatedProducts = updatedProducts.filter(product =>
+                selectedBrands.includes(product.products.brand)
+            );
+        }
+
+        if (selectedStores.length > 0) {
+            updatedProducts = updatedProducts.filter(product =>
+                selectedStores.includes(product.store_products.storeID)
+            );
+        }
+
+        // Keep only unique products with the lowest price
+        const uniqueProductsMap = new Map<string, Product>();
+        updatedProducts.forEach(product => {
+            const productName = product.products.name;
+            const existingProduct = uniqueProductsMap.get(productName);
+
+            if (!existingProduct || product.store_products.price < existingProduct.store_products.price) {
+                uniqueProductsMap.set(productName, product);
+            }
+        });
+
+        updatedProducts = Array.from(uniqueProductsMap.values());
+
+
+
+        updatedProducts.sort((a, b) => {
+            switch (sortValue) {
+                case 'lowest-highest price':
+                    return a.store_products.price - b.store_products.price;
+                case 'highest-lowest price':
+                    return b.store_products.price - a.store_products.price;
+                case 'az':
+                    return a.products.name.localeCompare(b.products.name);
+                case 'za':
+                    return b.products.name.localeCompare(a.products.name);
+                case 'lowest-highest volume':
+                    return a.products.amount - b.products.amount;
+                case 'highest-lowest volume':
+                    return b.products.amount - a.products.amount;
+                case 'lowest-highest unit price':
+                    return (b.products.amount / b.store_products.price) - (a.products.amount / a.store_products.price);
+                case 'highest-lowest unit price':
+                    return (a.products.amount / a.store_products.price) - (b.products.amount / b.store_products.price);
+
+                default:
+                    return 0;
+            }
+        });
+
+        setSortedAndFilteredProducts(updatedProducts);
+    }, [products, sortValue, selectedCategories, selectedBrands, selectedStores, itemsPerPage]);
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+
+    const reloadProducts = () => {
+        // Log all store IDs in selectedStores
+        setSelectedStores(getInitialSelectedStores);
+
+    };
+
+    // Using the useIonViewWillEnter hook to reload products when the page enters
+    useIonViewWillEnter(() => {
+        reloadProducts();
+    });
+
+
+    return (
         <IonPage>
             <IonHeader>
                 <IonToolbar className="toolbar" color="primary">
@@ -308,72 +380,70 @@ const SearchPage: React.FC = () => {
                         disabled={false}
                         className="searchbar"
                         onIonClear={() => {
-							setQuery('');
-							window.location.reload();
-						}} // Clear the query when the 'x' is clicked
-                        />
+                            setQuery('');
+                            window.location.reload();
+                        }} // Clear the query when the 'x' is clicked
+                    />
                 </IonToolbar>
             </IonHeader>
             <IonContent>
-            <div className="toolbar-container" >
-                <div className="categoryDropdown-container">
-                    <IonItem>
-                        <IonSelect
-                            multiple={true}
-                            value={selectedCategories}
-                            onIonChange={(e) => setSelectedCategories(e.detail.value)}
-                            label="Category"
-                            labelPlacement="floating"
-                        >
-                            <IonSelectOption value="1">Fish</IonSelectOption>
-                            <IonSelectOption value="2">Meat</IonSelectOption>
-                            <IonSelectOption value="3">Frozen</IonSelectOption>
-                            <IonSelectOption value="4">Fruit & Veg</IonSelectOption>
-                            <IonSelectOption value="5">Bakery</IonSelectOption>
-                            <IonSelectOption value="6">Deli</IonSelectOption>
-                            <IonSelectOption value="7">Drinks</IonSelectOption>
-                            <IonSelectOption value="8">Household</IonSelectOption>
-                            <IonSelectOption value="9">Health & Body</IonSelectOption>
-                            <IonSelectOption value="10">Beer & Wine</IonSelectOption>
-                            <IonSelectOption value="11">Pantry</IonSelectOption>
-                            <IonSelectOption value="12">Baby & Child</IonSelectOption>
-                        </IonSelect>
-                    </IonItem>
-                    <button type="button" onClick={handleClearSelection} className="categories-clear-button">
-                     Clear All
-                    </button>
-                </div>
-                <div className="spacer"></div>
-                <div className="sortDropdown-container" ref={dropdownRef}>
-                    <button
-                        type="button"
-                        className={`sortDropdown-toggle ${isDropdownOpen ? 'open' : ''}`}
-                        onClick={toggleDropdown}
-                    >
-                        <span className="sortDropdown-selectedLabel">
-                            {sortOptions.find((opt) => opt.value === sortValue)?.label ?? 'Most relevant'}
-                        </span>
-                        <span className="sortDropdown-chevron">&#9662;</span>
-                    </button>
-                    <div className={`sortDropdown-menu ${isDropdownOpen ? 'open' : ''}`} tabIndex={-1}>
-                        {sortOptions.map((opt) => (
-                            <div
-                                key={opt.value}
-                                className={`sortDropdown-item ${opt.value === sortValue ? 'selected' : ''}`}
-                                onClick={() => selectSortOption(opt.value)}
-                                role="button"
-                                tabIndex={0}
+                <div className="toolbar-container" >
+                    <div className="categoryDropdown-container">
+                        <IonItem>
+                            <IonSelect
+                                multiple={true}
+                                value={selectedCategories}
+                                onIonChange={(e) => setSelectedCategories(e.detail.value)}
+                                label="Category    "
+                                labelPlacement="stacked"
+                                className="dropdown"
                             >
-                                {opt.label}
-                            </div>
-                        ))}
+                                {availableCategories.map((category, index) => (
+                                    <IonSelectOption key={index} value={category}>
+                                        {category}
+                                    </IonSelectOption>
+                                ))}
+                            </IonSelect>
+
+                        </IonItem>
+                        <IonItem>
+                            <IonSelect
+                                multiple={true}
+                                value={selectedBrands}
+                                onIonChange={(e) => setSelectedBrands(e.detail.value)}
+                                label="Brand      "
+                                labelPlacement="stacked"
+                                className="dropdown"
+                            >
+                                {availableBrands.map((brand, index) => (
+                                    <IonSelectOption key={index} value={brand}>
+                                        {brand}
+                                    </IonSelectOption>
+                                ))}
+                            </IonSelect>
+                        </IonItem>
+
+                        <IonItem>
+                            <IonSelect
+                                multiple={false}
+                                value={sortValue}
+                                onIonChange={(e) => setSortValue(e.detail.value)}
+                                label="Sort by      "
+                                labelPlacement="floating"
+                                className="dropdown"
+                            >
+                                {sortOptions.map((option) => (
+                                    <IonSelectOption key={option.value} value={option.value}>
+                                        {option.label}
+                                    </IonSelectOption>
+                                ))}
+                            </IonSelect>
+                        </IonItem>
+                        <button type="button" onClick={handleClearSelection} className="categories-clear-button">
+                            Clear All
+                        </button>
                     </div>
                 </div>
-                <button type="button"
-                 className="clear-sort-btn"
-                 onClick={() => setSortValue('lowest-highest price')}
-                 >Default</button>
-            </div>
                 {searchAttempted && error && (
                     <div className="error-container">
                         <IonLabel className="error-message">{error}</IonLabel>
@@ -405,9 +475,6 @@ const SearchPage: React.FC = () => {
                                                 increaseQuantity={increaseQuantity}
                                                 quantities={quantities}
                                                 product={product}
-                                                productID={product.products.id}
-                                                productBrand={product.products.brand}
-                                                productDetails={product.products.details}
                                                 productName={product.products.name}
                                                 productPrice={product.store_products.price}
                                                 productImage={product.products.image}
@@ -434,11 +501,12 @@ const SearchPage: React.FC = () => {
                     selectedProduct={selectedProduct}
                     showProductDetails={showProductDetails}
                     closeProductDetails={closeProductDetails}
+                    allPrices={otherPrices}
                 />
+
             </IonContent>
         </IonPage>
     );
 };
 
 export default SearchPage;
-

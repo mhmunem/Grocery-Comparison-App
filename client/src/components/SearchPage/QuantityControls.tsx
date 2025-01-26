@@ -1,7 +1,15 @@
 import { IonIcon, IonButton } from '@ionic/react';
 import { add, remove } from 'ionicons/icons';
+import { Product } from "../../types/product"
 
-export function QuantityControls({ decreaseQuantity, increaseQuantity, quantities, product }: any) {
+interface QuantityControls {
+    decreaseQuantity: (product_id: string | number) => void
+    increaseQuantity: (product_id: string | number) => void
+    quantities: { [key: string]: number }
+    product: Product
+}
+
+export function QuantityControls({ decreaseQuantity, increaseQuantity, quantities, product }: QuantityControls) {
     return (
         <div className="quantityControls">
             <IonButton

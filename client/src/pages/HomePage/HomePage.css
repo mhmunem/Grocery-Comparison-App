@@ -5,34 +5,34 @@
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-  }
-  
-  .container strong {
+}
+
+.container strong {
     font-size: 20px;
     line-height: 26px;
-  }
-  
-  .container p {
+}
+
+.container p {
     font-size: 16px;
     line-height: 22px;
     color: #8c8c8c;
     margin: 0;
-  }
-  
-  .container a {
-    text-decoration: none;
-  }
+}
 
-  .headerLogo {
+.container a {
+    text-decoration: none;
+}
+
+.headerLogo {
     height: 40px;
     width: auto;
     margin: 20px 20px;
     position: absolute;
     left: 10px;
-  }
-  
-  .title-center {
+}
+
+.title-center {
     margin-left: auto;
     /* Push the centered element to the middle */
     margin-right: auto;
-  }
+}
