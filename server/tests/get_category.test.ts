@@ -33,7 +33,6 @@ describe('get_category function tests', () => {
     // API test
     test("GET /category", async () => {
         const { body: data } = await request(app).get("/category")
-
         return expect(data.length).toStrictEqual(results.length)
     })
 })
