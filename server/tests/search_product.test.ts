@@ -18,12 +18,6 @@ describe("Function tests search_product", () => {
     ]
 
     // Function tests
-    // test("all results", async () => {
-    //     return await search_product(test_db, "", "price" as SortBy, "ASC" as SortDirection).then(data => {
-    //         expect(data.map(e => e.products.name)).toStrictEqual(results)
-    //     })
-    // })
-
     test("no results", async () => {
         return await search_product(test_db, "SHOE", "price" as SortBy, "ASC" as SortDirection).then(data => {
             expect(data.map(e => e.products.name)).toStrictEqual([])
