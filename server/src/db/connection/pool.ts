@@ -22,6 +22,8 @@ async function createDatabases(pool: Pool) {
             if (res.rowCount === 0) {
                 await pool.query(`CREATE DATABASE ${dbName}`)
             }
+            console.log(`${dbName} created`);
+
         } catch (error) {
             console.error(`Error while creating database ${dbName}:`, error)
         }
