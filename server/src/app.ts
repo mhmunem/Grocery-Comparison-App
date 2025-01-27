@@ -36,7 +36,7 @@ app.use(
 )
 
 db.execute("SELECT NOW()")
-	.then(() => console.log("Database connection is succesfull"))
+	.then(() => console.log("Database connection is successful"))
 	.catch((err) => console.error("Database connection check failed:", err))
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs))

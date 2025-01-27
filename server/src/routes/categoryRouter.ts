@@ -38,7 +38,6 @@ const router = Router()
  */
 router.get('/category', async (_, res) => {
     const result = await get_category(db);
-    console.log(result)
     res.send(result);
 });
 

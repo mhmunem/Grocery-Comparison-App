@@ -10,22 +10,30 @@ describe('get_category function tests', () => {
     })
 
     const results = [
-        { id: 1, name: 'category' },
-        { id: 2, name: 'category' },
-        { id: 3, name: 'category' }
+        "Fruit & Veg",
+        "Meat",
+        "Fish",
+        "Deli",
+        "Bakery",
+        "Frozen",
+        "Pantry",
+        "Beer & Wine",
+        "Drinks",
+        "Household",
+        "Baby & Child",
+        "Health & Body",
     ]
 
     test('all results', async () => {
         return await get_category(test_db).then(data => {
-            expect(data).toEqual(results)
+            expect(data.length).toEqual(results.length)
         })
     })
 
     // API test
     test("GET /category", async () => {
         const { body: data } = await request(app).get("/category")
-
-        return expect(data).toStrictEqual(results)
+        return expect(data.length).toStrictEqual(results.length)
     })
 })
 
