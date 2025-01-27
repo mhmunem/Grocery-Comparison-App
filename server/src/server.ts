@@ -3,23 +3,12 @@ import db from "./db/connection/pool"
 import seed_data_dev from "./db/seed/seed_data_dev"
 import { reset_db, seed_db } from "./db/seed/seed"
 import schema from "./db/schema/schema"
-import seed_data_tests from "../tests/seed_data_tests"
 
 const PORT: number = process.env["PORT"] ? parseInt(process.env["PORT"], 10) : 3000
 const arg = process.argv[2]
 const env = process.env["NODE_ENV"]
 
 console.log("Running in environment:", env)
-
-let seed_data
-switch (env) {
-    case "test":
-        seed_data = seed_data_tests
-        break
-    default: // dev
-        seed_data = seed_data_dev
-        break
-}
 
 // This is to facilitate automating seeding of the dev database using docker compose
 // It allows seeding and resetting to be done indepently using packacke.json script.
@@ -32,7 +21,7 @@ if (env !== "prod" && arg === "reset") {
     })
 } else if (env !== "prod" && arg === "seed") {
     console.log(`Seeding ${env} database`)
-    seed_db(db, schema, seed_data).then(() => {
+    seed_db(db, schema, seed_data_dev).then(() => {
         console.log(`${env} database seeded`)
         process.exit(0)
     })

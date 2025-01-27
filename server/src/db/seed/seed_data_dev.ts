@@ -3,7 +3,7 @@ const products = [
     "Red Apples", "Greek Yogurt", "Chicken Breast", "Baby Spinach", "Orange Juice",
     "Pasta Sauce", "Spaghetti", "Ground Beef", "White Rice", "Black Beans",
     "Cheddar Cheese", "Butter", "Carrots", "Onions", "Garlic",
-    "Tomatoes", "Potatoes", "Sweet Potatoes", "Bell Peppers", "Olive Oil",
+    "Tomatoes", "Potatoes", "Sweet Potatoes", "Bell Peppers",
     "Salt", "Black Pepper", "Sugar", "Flour", "Baking Powder",
     "Vanilla Extract", "Honey", "Maple Syrup", "Peanut Butter", "Strawberry Jam",
     "Cereal", "Oatmeal", "Granola", "Almonds", "Walnuts",
@@ -35,42 +35,58 @@ const products = [
     "Rice Noodles", "Egg Noodles", "Ramen Noodles", "Udon Noodles", "Soba Noodles",
     "Quinoa", "Couscous", "Barley", "Lentils", "Split Peas",
     "Chickpeas", "Kidney Beans", "Pinto Beans", "Navy Beans", "Cannellini Beans",
-    "Pork Chops", "Lamb Chops", "Ribeye Steak", "Sirloin Steak", "Ground Turkey",
-    "Ground Pork", "Italian Sausage", "Bratwurst", "Hot Dogs", "Tofu",
-    "Tempeh", "Seitan", "Beyond Meat", "Impossible Burger", "Veggie Burgers",
-    "Ice Cream", "Frozen Yogurt", "Sorbet", "Popsicles", "Frozen Pizza",
-    "Frozen Vegetables", "Frozen Fruit", "Frozen Waffles", "Frozen Pancakes", "TV Dinners",
-    "Chips Ahoy", "Oreos", "Graham Crackers", "Animal Crackers", "Saltines",
-    "Ritz Crackers", "Wheat Thins", "Triscuits", "Goldfish", "Cheez-Its",
-    "M&Ms", "Snickers", "Twix", "KitKat", "Reese's Cups",
-    "Skittles", "Starburst", "Gummy Bears", "Jelly Beans", "Lifesavers",
-    "Cola", "Lemon-Lime Soda", "Root Beer", "Ginger Ale", "Club Soda",
-    "Tonic Water", "Energy Drinks", "Sports Drinks", "Sparkling Water", "Spring Water",
-    "Green Tea", "Black Tea", "Chamomile Tea", "Earl Grey Tea", "Herbal Tea",
-    "Coffee Beans", "Instant Coffee", "Coffee Filters", "Creamer", "Sugar Packets",
-    "Protein Powder", "Vitamin C", "Multivitamins", "Fish Oil", "Probiotics",
-    "Band-Aids", "Cotton Swabs", "Dental Floss", "Toothpaste", "Mouthwash",
-    "Shampoo", "Conditioner", "Body Wash", "Hand Soap", "Deodorant",
-    "Aluminum Foil", "Plastic Wrap", "Sandwich Bags", "Storage Containers", "Paper Plates",
-    "Plastic Cups", "Napkins", "Dish Sponges", "All-Purpose Cleaner", "Glass Cleaner",
-    "Cat Food", "Dog Food", "Cat Litter", "Pet Treats", "Pet Toys",
-    "Baby Formula", "Baby Food", "Diapers", "Baby Wipes", "Baby Powder",
-    "Granola Bars", "Protein Bars", "Energy Bars", "Trail Mix", "Mixed Nuts",
-    "Popcorn", "Pretzels", "Rice Cakes", "Beef Jerky", "Dried Fruit",
-    "Pickles", "Olives", "Pepperoncini", "Jalapeños", "Banana Peppers",
-    "Artichoke Hearts", "Sun-Dried Tomatoes", "Roasted Red Peppers", "Capers", "Water Chestnuts",
-    "Bamboo Shoots", "Bean Sprouts", "Baby Corn", "Palm Hearts", "Sauerkraut",
-    "Kimchi", "Miso Paste", "Tahini", "Anchovy Paste", "Horseradish",
-    "Wasabi", "Sriracha", "Hoisin Sauce", "Oyster Sauce", "Sweet Chili Sauce",
-    "Teriyaki Sauce", "Alfredo Sauce", "Pesto", "Marinara Sauce", "Vodka Sauce",
-    "Ranch Dressing", "Italian Dressing", "Caesar Dressing", "Blue Cheese Dressing", "Thousand Island",
-    "Brownie Mix", "Cake Mix", "Pancake Mix", "Muffin Mix", "Cookie Mix",
-    "Pie Crust", "Whipped Cream", "Chocolate Chips", "Sprinkles", "Food Coloring",
-    "Marshmallows", "Graham Crackers", "Gelatin", "Pudding Mix", "Frosting",
-    "Nuts & Seeds Mix", "Sunflower Seeds", "Pumpkin Seeds", "Chia Seeds", "Flax Seeds",
-    "Dried Cranberries", "Dried Apricots", "Dried Mango", "Dried Pineapple", "Raisins",
-    "Dates", "Figs", "Prunes", "Coconut Flakes", "Goji Berries",
+    // "Pork Chops", "Lamb Chops", "Ribeye Steak", "Sirloin Steak", "Ground Turkey",
+    // "Ground Pork", "Italian Sausage", "Bratwurst", "Hot Dogs", "Tofu",
+    // "Tempeh", "Seitan", "Beyond Meat", "Impossible Burger", "Veggie Burgers",
+    // "Ice Cream", "Frozen Yogurt", "Sorbet", "Popsicles", "Frozen Pizza", //
+    // "Frozen Vegetables", "Frozen Fruit", "Frozen Waffles", "Frozen Pancakes", "TV Dinners",
+    // "Chips Ahoy", "Oreos", "Animal Crackers", "Saltines",
+    // "Ritz Crackers", "Wheat Thins", "Triscuits", "Goldfish", "Cheez-Its",
+    // "M&Ms", "Snickers", "Twix", "KitKat", "Reese's Cups",
+    // "Skittles", "Starburst", "Gummy Bears", "Jelly Beans", "Lifesavers",
+    // "Cola", "Lemon-Lime Soda", "Root Beer", "Ginger Ale", "Club Soda",
+    // "Tonic Water", "Energy Drinks", "Sports Drinks", "Sparkling Water", "Spring Water",
+    // "Green Tea", "Black Tea", "Chamomile Tea", "Earl Grey Tea", "Herbal Tea",
+    // "Coffee Beans", "Instant Coffee", "Coffee Filters", "Creamer", "Sugar Packets",
+    // "Protein Powder", "Vitamin C", "Multivitamins", "Fish Oil", "Probiotics",
+    // "Band-Aids", "Cotton Swabs", "Dental Floss", "Toothpaste", "Mouthwash",
+    // "Shampoo", "Conditioner", "Body Wash", "Hand Soap", "Deodorant", //
+    // "Aluminum Foil", "Plastic Wrap", "Sandwich Bags", "Storage Containers", "Paper Plates",
+    // "Plastic Cups", "Napkins", "Dish Sponges", "All-Purpose Cleaner", "Glass Cleaner",
+    // "Cat Food", "Dog Food", "Cat Litter", "Pet Treats", "Pet Toys",
+    // "Baby Formula", "Baby Food", "Diapers", "Baby Wipes", "Baby Powder",
+    // "Granola Bars", "Protein Bars", "Energy Bars", "Trail Mix", "Mixed Nuts",
+    // "Popcorn", "Pretzels", "Rice Cakes", "Beef Jerky", "Dried Fruit",
+    // "Pickles", "Olives", "Pepperoncini", "Jalapeños", "Banana Peppers",
+    // "Artichoke Hearts", "Sun-Dried Tomatoes", "Roasted Red Peppers", "Capers", "Water Chestnuts",
+    // "Bamboo Shoots", "Bean Sprouts", "Baby Corn", "Palm Hearts", "Sauerkraut",
+    // "Kimchi", "Miso Paste", "Tahini", "Anchovy Paste", "Horseradish",
+    // "Wasabi", "Sriracha", "Hoisin Sauce", "Oyster Sauce", "Sweet Chili Sauce",
+    // "Teriyaki Sauce", "Alfredo Sauce", "Pesto", "Marinara Sauce", "Vodka Sauce",
+    // "Ranch Dressing", "Italian Dressing", "Caesar Dressing", "Blue Cheese Dressing", "Thousand Island",
+    // "Brownie Mix", "Cake Mix", "Pancake Mix", "Muffin Mix", "Cookie Mix",
+    // "Pie Crust", "Whipped Cream", "Chocolate Chips", "Sprinkles", "Food Coloring",
+    // "Marshmallows", "Graham Crackers", "Gelatin", "Pudding Mix", "Frosting",
+    // "Nuts & Seeds Mix", "Sunflower Seeds", "Pumpkin Seeds", "Chia Seeds", "Flax Seeds",
+    // "Dried Cranberries", "Dried Apricots", "Dried Mango", "Dried Pineapple", "Raisins",
+    // "Dates", "Figs", "Prunes", "Coconut Flakes", "Goji Berries",
 ]
+
+const dates = [
+    '2024-01-01', '2024-01-02', '2024-01-03',
+    '2024-01-04', '2024-01-05', '2024-01-06',
+    '2024-01-07', '2024-01-08', '2024-01-09',
+    '2024-01-10', '2024-01-11', '2024-01-12',
+    '2024-01-13', '2024-01-14', '2024-01-15',
+    '2024-01-16', '2024-01-17', '2024-01-18',
+    '2024-01-19', '2024-01-20', '2024-01-21',
+    '2024-01-22', '2024-01-23', '2024-01-24',
+    '2024-01-25', '2024-01-26', '2024-01-27',
+    '2024-01-28', '2024-01-29', '2024-01-30',
+    '2024-01-31'
+]
+
+
 const stores = [
     "Woolworths Amberley", "Woolworths Andersons Bay", "Woolworths Aotea",
     "Woolworths Ashburton", "Woolworths Ashburton South", "Woolworths Auckland Airport",
@@ -89,6 +105,7 @@ const stores = [
     "Super Value Pauanui", "Super Value Plaza", "Super Value Reefton",
     "Super Value Tinwald", "Super Value Wanganuik",
 ]
+
 const chains = [
     "New World",
     "Pak'n Save",
@@ -112,6 +129,7 @@ const category = [
     "Baby & Child",
     "Health & Body",
 ]
+
 const units = [
     "l",
     "kg",
@@ -173,7 +191,8 @@ const seed_data_dev = (f: any) => ({
         },
     },
     store_products: {
-        count: 1000,
+        // count: stores.length * chains.length * products.length,
+        count: 100,
         columns: {
             price: f.number({
                 minValue: 1,
@@ -200,20 +219,19 @@ const seed_data_dev = (f: any) => ({
             }),
         },
     },
-    price_history: {
-        columns: {
-            count: 31,
-            date: f.date({
-                minDate: "2025-01-01",
-                maxDate: "2025-01-31",
-            }),
-            price: f.number({
-                minValue: 1,
-                precision: 100,
-                maxValue: 1000,
-            }),
-        },
-    },
+    // price_history: {
+    //     columns: {
+    //         date: f.valuesFromArray({
+    //             values: dates,
+    //             isUnique: true
+    //         }),
+    //         price: f.number({
+    //             minValue: 1,
+    //             precision: 100,
+    //             maxValue: 1000,
+    //         }),
+    //     },
+    // },
     shopping_list: {
         count: 10,
         columns: {
@@ -224,5 +242,6 @@ const seed_data_dev = (f: any) => ({
         }
     },
 })
+
 
 export default seed_data_dev

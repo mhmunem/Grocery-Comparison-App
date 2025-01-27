@@ -6,8 +6,8 @@ services:
     develop:
       watch:
         - action: rebuild
-          path: ./src/db
-          target: ./src/db
+          path: ./src
+          target: ./src
           ignore:
             - node_modules/
     depends_on:
