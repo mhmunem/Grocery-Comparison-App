@@ -14,6 +14,9 @@ const ShoppingListPage: React.FC = () => {
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [showProductDetails, setShowProductDetails] = useState(false);
 
+    const [otherPrices, setOtherPrices] = useState<Product[]>([]);
+    const [selectedStores, setSelectedStores] = useState<number[]>([]);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -32,6 +35,9 @@ const ShoppingListPage: React.FC = () => {
             setQuantities(JSON.parse(savedQ));
             setAddedToCart(JSON.parse(savedC));
         }
+        const storedSelectedStores = localStorage.getItem('selectedStores');
+        setSelectedStores(storedSelectedStores ? JSON.parse(storedSelectedStores) : []);
+
     }, []);
 
     useEffect(() => {
@@ -44,10 +50,19 @@ const ShoppingListPage: React.FC = () => {
             }
         };
 
+        const handleStoreUpdate = (event: StorageEvent) => {
+          if (event.key === 'selectedStores') {
+              const updatedStores = event.newValue ? JSON.parse(event.newValue) : [];
+              setSelectedStores(updatedStores);
+          }
+        };
+
         window.addEventListener('cartUpdated', handleCartUpdate);
+        window.addEventListener('storage', handleStoreUpdate);
 
         return () => {
             window.removeEventListener('cartUpdated', handleCartUpdate);
+            window.removeEventListener('storage', handleStoreUpdate);
         };
     }, []);
 
@@ -119,8 +134,25 @@ const ShoppingListPage: React.FC = () => {
         return acc + item.store_products.price * q;
     }, 0);
 
+    const getOtherPrices = (product: Product | null): Product[] => {
+      if (!product) return [];
+      if (selectedStores.length === 0) {
+          // If no stores are selected, the prices for all stores are returned
+          return products.filter(
+              (prod) => prod.store_products.productID === product.store_products.productID
+          );
+      }
+      // Returns only the price of the selected store
+      return products.filter(
+          (prod) =>
+              prod.store_products.productID === product.store_products.productID &&
+              selectedStores.includes(prod.store_products.storeID)
+      );
+    };
+
     const openProductDetails = (p: Product) => {
         setSelectedProduct(p);
+        setOtherPrices(getOtherPrices(p));
         setShowProductDetails(true);
     };
     const closeProductDetails = () => {
@@ -185,7 +217,7 @@ const ShoppingListPage: React.FC = () => {
                     selectedProduct={selectedProduct}
                     showProductDetails={showProductDetails}
                     closeProductDetails={closeProductDetails}
-                    allPrices={null} // BUG: pass correct data to it. 
+                    allPrices={otherPrices}  
                 />
             </IonContent>
 

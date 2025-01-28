@@ -1,9 +1,9 @@
 import db from '../../db/connection/pool'
 import { chains } from '../../db/schema/chains'
-import chainLogoURl from '../constants/chainLogoUrl'
+import chainLogoGrocerURL from '../constants/chainLogoGrocerURL'
 
-const insertChains = async () => {
-    for (const chain of chainLogoURl) {
+const insertGrocerChains = async () => {
+    for (const chain of chainLogoGrocerURL) {
         try {
             await db.insert(chains)
             .values({ name: chain.name, image_logo: chain.imageurl })
@@ -19,4 +19,4 @@ const insertChains = async () => {
     }
 }
 
-export default insertChains
+export default insertGrocerChains

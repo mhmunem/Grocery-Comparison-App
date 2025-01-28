@@ -72,9 +72,13 @@ ion-grid {
 
 /* product image on search page card */
 .productImage {
-    height: 200px;
+    height: auto;
     object-fit: cover;
     border-bottom: 1px solid #e0e0e0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
+    
 }
 
 /* product card title */
@@ -434,9 +438,9 @@ ion-grid {
 
 /* Media Queries */
 @media (max-width: 761px) {
-    .listCard {
+    /* .listCard {
         height: 400px;
-    }
+    } */
     .sortDropdown-toggle,
     .sortDropdown-menu {
         width: 150px;
@@ -444,9 +448,9 @@ ion-grid {
 }
 
 @media (min-width: 761px) {
-    .listCard {
+    /* .listCard {
         height: 300px;
-    }
+    } */
 }
 
 @media (min-width: 1440px) {
@@ -454,9 +458,9 @@ ion-grid {
         max-width: 1300px;
     }
 
-    .listCard {
+    /* .listCard {
         height: 300px;
-    }
+    } */
 }
 
 @media (max-width: 767px) {
@@ -466,9 +470,9 @@ ion-grid {
 
     }
 
-    .listCard {
+    /* .listCard {
         height: 420px;
-    }
+    } */
 
     .priceAndQuantity {
         display: flex;
