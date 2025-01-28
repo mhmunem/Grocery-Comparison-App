@@ -8,7 +8,9 @@ function AccountPage() {
 
   useEffect(() => {
     const storedValue = localStorage.getItem('disableDropdown');
-    if (storedValue !== null) {
+    if (storedValue === null) {
+      localStorage.setItem('disableDropdown', JSON.stringify(false));
+    } else {
       setIsToggled(JSON.parse(storedValue));
     }
   }, []);
@@ -17,10 +19,7 @@ function AccountPage() {
     const newValue = event.detail.checked;
     setIsToggled(newValue);
     localStorage.setItem('disableDropdown', JSON.stringify(newValue));
-    if (!newValue) {
-      console.log('New Value:', newValue);
-      localStorage.setItem('searchHistory', JSON.stringify([]));
-    }
+    localStorage.setItem('searchHistory', JSON.stringify([]));
   };
 
   return (
