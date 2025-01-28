@@ -138,7 +138,9 @@
     "db:push": "npx drizzle-kit push --force --config ./drizzle.config.ts",
     "db:show": "npx drizzle-kit studio --config ./drizzle-dev.config.ts",
     "db:reset": "npx ts-node src/server.ts reset",
-    "db:seed": "npx ts-node src/server.ts seed"
+    "db:seed": "npx ts-node src/server.ts seed",
+    "db:drop": "npx ts-node src/server-db-maintenance.ts drop",
+    "db:create": "npx ts-node src/server-db-maintenance.ts create"
   },
   "repository": {
     "type": "git",
