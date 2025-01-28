@@ -3,8 +3,6 @@ import request from "supertest"
 import { test_db, test_pool } from "./test_utils"
 import { get_chain, get_stores } from "../src/query/storesQuery"
 
-// TODO: test storesRouter.ts
-// TODO: test initialsetup.ts
 
 afterAll(async () => {
     await test_pool.end()
@@ -87,8 +85,6 @@ describe('test stores', () => {
 
     test('Function test get_stores', async () => {
         const data = await get_stores(test_db)
-
-        console.log(data);
 
         return expect(data).toStrictEqual(result)
     })
