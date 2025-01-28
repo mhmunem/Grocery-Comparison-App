@@ -31,10 +31,10 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      db_migrate:
-        condition: service_completed_successfully
       client:
           condition: service_healthy
+      db_migrate:
+        condition: service_completed_successfully
     working_dir : /e2e
     volumes:
       - ./:/e2e
