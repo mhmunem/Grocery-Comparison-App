@@ -42,6 +42,7 @@ const StorePage: React.FC = () => {
 
     useEffect(() => {
         localStorage.setItem('selectedStores', JSON.stringify(selectedStores));
+        window.dispatchEvent(new Event('storesUpdated'));
     }, [selectedStores]);
 
     const selectChain = (chainId: number | string) => {
