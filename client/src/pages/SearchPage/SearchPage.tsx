@@ -1,14 +1,13 @@
-import './SearchPage.css';
-import React, { useEffect, useState } from 'react';
+import { IonCol, IonContent, IonGrid, IonHeader, IonImg, IonItem, IonLabel, IonList, IonPage, IonRow, IonSearchbar, IonSelect, IonSelectOption, IonToolbar, useIonViewWillEnter } from '@ionic/react';
 import { CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from 'chart.js';
-import { IonCol, IonContent, IonGrid, IonHeader, IonImg, IonItem, IonLabel, IonPage, IonRow, IonSearchbar, IonSelect, IonSelectOption, IonToolbar } from '@ionic/react';
-import { LoadingContainer } from '../../components/SharedComponents/loadingContainer';
-import { PaginationControls } from '../../components/SearchPage/PaginationControls';
+import React, { useEffect, useRef, useState } from 'react';
 import { ProductDetailsModal } from '../../components/ProductPage/ProductDetailsModal';
+import { PaginationControls } from '../../components/SearchPage/PaginationControls';
 import { SearchProductCard } from '../../components/SearchPage/SearchProductCard';
+import { LoadingContainer } from '../../components/SharedComponents/loadingContainer';
 import { getSearch } from "../../services/InitialSetupService";
-import { useIonViewWillEnter } from '@ionic/react';
 import { Product } from '../../types/product';
+import './SearchPage.css';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -23,6 +22,10 @@ const SearchPage: React.FC = () => {
     const [query, setQuery] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [searchAttempted, setSearchAttempted] = useState<boolean>(false);
+
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [searchHistory, setSearchHistory] = useState<string[]>([]);
+    const searchbarRef = useRef<HTMLIonSearchbarElement>(null);
 
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [showProductDetails, setShowProductDetails] = useState(false);
@@ -53,6 +56,12 @@ const SearchPage: React.FC = () => {
         { label: 'Volume (Descending)', value: 'highest-lowest volume' },
     ];
 
+    useEffect(() => {
+        const storedValue = localStorage.getItem('disableDropdown');
+        if (storedValue !== null) {
+          setShowDropdown(JSON.parse(storedValue)); 
+        }
+      }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -92,8 +101,10 @@ const SearchPage: React.FC = () => {
         fetchData();
     }, []);
 
-
-
+    useEffect(() => {
+        const savedHistory = JSON.parse(localStorage.getItem('searchHistory') || '[]');
+        setSearchHistory(savedHistory);
+      }, []);
 
     const handleClearSelection = () => {
         setSelectedCategories([]); // Clear the selected categories
@@ -209,18 +220,62 @@ const SearchPage: React.FC = () => {
             } catch (error) {
                 console.error('Error searching products:', error);
                 setError('Failed to search products. Please try again later.');
-            }
+            };
         }
     };
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
         if (event.key === 'Enter') {
             event.preventDefault();
+            setShowDropdown(false);
+            updateSearchHistory(query);
             handleSearch();
-        }
+            }
     };
+
     const handleBlur = () => {
+        setShowDropdown(false);
+        updateSearchHistory(query);
         handleSearch();
+    };
+
+    const handleFocus = () => {
+        const storedValue = localStorage.getItem('disableDropdown');
+        if (storedValue !== null) setShowDropdown(storedValue === 'true');
+    };
+
+    const handleTextClick = () => {       
+        const storedValue = localStorage.getItem('disableDropdown');
+        if (storedValue !== null) setShowDropdown(storedValue === 'true');
+    };
+
+    const updateSearchHistory = (newQuery: string) => {
+        const storedValue = localStorage.getItem('disableDropdown');
+        if (!storedValue) return; 
+        if (!newQuery.trim()|| newQuery.trim().length < 3 || newQuery.trim().length > 50) return; 
+        let updatedHistory;
+        if (searchHistory.includes(newQuery)) {
+            updatedHistory = [newQuery, ...searchHistory.filter(item => item !== newQuery)];
+        } else {
+            updatedHistory = [newQuery, ...searchHistory].slice(0, 5);
+        }
+        setSearchHistory(updatedHistory);
+        localStorage.setItem('searchHistory', JSON.stringify(updatedHistory));
+    };
+
+    const handleSelectHistoryItem = async (item: string) => {
+            setQuery(item); 
+            setTimeout(() => {
+                if (searchbarRef.current) {
+                  searchbarRef.current.setFocus(); 
+                  const searchInput = searchbarRef.current.querySelector('input');
+                  if (searchInput) {
+                    const length = item.length; 
+                    searchInput.setSelectionRange(length, length);
+                  }
+                }
+              }, 0);
+            setShowDropdown(false); 
     };
 
     const getOtherPrices = (product: Product) => {
@@ -371,20 +426,42 @@ const SearchPage: React.FC = () => {
                         />
                     </div>
                     <IonSearchbar
+                        ref={searchbarRef} 
                         value={query}
                         onIonChange={(e) => setQuery(e.detail.value!)}
                         onKeyUp={handleKeyDown}
                         onIonBlur={handleBlur}
+                        onIonFocus={handleFocus}
+                        onClick={handleTextClick} 
                         placeholder="Search for products..."
                         debounce={300}
                         disabled={false}
                         className="searchbar"
-                        onIonClear={() => setQuery('')} // Clear the query when the 'x' is clicked
+                        onIonClear={() => {setQuery(''); 
+                                          window.location.reload();
+                                        }} // Clear the query when the 'x' is clicked
                     />
                 </IonToolbar>
             </IonHeader>
             <IonContent>
                 <div className="toolbar-container" >
+                    <div className="searchHistory-container" >
+                    { showDropdown && (<IonList>
+                        {searchHistory.map((item, index) => (
+                     <IonItem
+                       key={index}
+                       button
+                       onMouseDown={(e) => e.preventDefault()}
+                       onClick={(e) => {
+                        e.stopPropagation(); // Stop bubbling
+                        handleSelectHistoryItem(item);
+                      }}
+                     >
+                      {item}
+                     </IonItem>
+                     ))}
+                     </IonList>)}
+                    </div>   
                     <div className="categoryDropdown-container">
                         <IonItem>
                             <IonSelect
