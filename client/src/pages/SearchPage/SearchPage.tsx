@@ -228,8 +228,12 @@ const SearchPage: React.FC = () => {
     const handleKeyDown = (event: React.KeyboardEvent) => {
         if (event.key === 'Enter') {
             setShowDropdown(false);
-            handleSearch();
-            updateSearchHistory(query);
+            if (searchbarRef.current) {
+                searchbarRef.current.getInputElement().then((input) => {
+                setQuery(input.value); 
+                updateSearchHistory(query);
+                });
+              }
             }
     };
 
