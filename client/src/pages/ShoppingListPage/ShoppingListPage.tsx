@@ -13,7 +13,7 @@ interface StoreInfo {
   id: number;
   chainID: number;
   name: string;
-  image_logo?: string; // store 的logo
+  image_logo?: string;
 }
 
 const ShoppingListPage: React.FC = () => {
