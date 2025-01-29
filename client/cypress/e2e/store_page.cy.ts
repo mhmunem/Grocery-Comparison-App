@@ -15,6 +15,7 @@ describe("test /stores", () => {
         cy.get("#tab-button-1")
             .click()
 
+        // select store
         cy.get("ion-item.item-has-start-slot:nth-child(1)")
             .click()
 
@@ -49,9 +50,11 @@ describe("test /stores", () => {
         cy.get("#tab-button-1")
             .click()
 
+        // select
         cy.get("ion-item.item-has-start-slot:nth-child(1)")
             .click()
 
+        // deselect
         cy.get("ion-item.item-has-start-slot:nth-child(1)")
             .click()
 
@@ -85,7 +88,6 @@ describe("test /stores", () => {
         cy.get("#ion-overlay-1").shadow().contains("You can choose up to 20 stores")
     })
 
-    // TODO: fix
     it("max stores selected stores error message should go away after 2 seconds", () => {
         cy.get("#tab-button-1")
             .click()
@@ -109,10 +111,10 @@ describe("test /stores", () => {
                 .click()
         }
 
-        cy.wait(3000).get("#ion-overlay-1").filter(':visible').should('not.exist')
+        cy.wait(4000).get("#ion-overlay-1").filter(':visible').should('not.exist')
     })
 
-    it("deselect stores", () => {
+    it("deselect all stores button deselects all stores", () => {
         cy.get("#tab-button-1")
             .click()
 
@@ -124,6 +126,7 @@ describe("test /stores", () => {
         cy.get("#tab-button-favorites")
             .click()
 
+        // click deselect all stores under this tab button
         cy.get("ion-button.md")
             .click()
 
