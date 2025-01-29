@@ -68,7 +68,7 @@
     "pg-protocol": "^1.7.0",
     "pg-types": "^2.2.0",
     "pgpass": "^1.0.5",
-    "playwright": "^1.49.1",
+    "playwright": "^1.50.0",
     "postgres-array": "^2.0.0",
     "postgres-bytea": "^1.0.0",
     "postgres-date": "^1.0.7",
@@ -92,6 +92,7 @@
     "statuses": "^2.0.1",
     "swagger-jsdoc": "^6.2.8",
     "toidentifier": "^1.0.1",
+    "ts-node": "^10.9.2",
     "type-is": "^1.6.18",
     "undici-types": "^6.20.0",
     "unpipe": "^1.0.0",
@@ -137,7 +138,9 @@
     "db:push": "npx drizzle-kit push --force --config ./drizzle.config.ts",
     "db:show": "npx drizzle-kit studio --config ./drizzle-dev.config.ts",
     "db:reset": "npx ts-node src/server.ts reset",
-    "db:seed": "npx ts-node src/server.ts seed"
+    "db:seed": "npx ts-node src/server.ts seed",
+    "db:drop": "npx ts-node src/server-db-maintenance.ts drop",
+    "db:create": "npx ts-node src/server-db-maintenance.ts create"
   },
   "repository": {
     "type": "git",

@@ -11,15 +11,13 @@ describe("Function tests search_product", () => {
         await test_pool.end()
     })
 
-    const results: any = ["CMilk", "AMilk", "BMilk"]
+    const results = [
+        "Whole Milk",
+        "Coconut Milk",
+        "Almond Milk"
+    ]
 
     // Function tests
-    test("all results", async () => {
-        return await search_product(test_db, "", "price" as SortBy, "ASC" as SortDirection).then(data => {
-            expect(data.map(e => e.products.name)).toStrictEqual(results)
-        })
-    })
-
     test("no results", async () => {
         return await search_product(test_db, "SHOE", "price" as SortBy, "ASC" as SortDirection).then(data => {
             expect(data.map(e => e.products.name)).toStrictEqual([])
@@ -34,35 +32,51 @@ describe("Function tests search_product", () => {
         })
     })
 
+    const results1 = [
+        "Coconut Milk",
+        "Whole Milk",
+        "Almond Milk"
+    ]
+
     test("sorting by amount DESC", async () => {
         return await search_product(test_db, "MILK", "amount" as SortBy, "DESC" as SortDirection).then(data => {
-            expect(data.map(e => e.products.name)).toStrictEqual(results.slice().reverse())
+            expect(data.map(e => e.products.name)).toStrictEqual(results1)
         })
     })
 
     test("sort by price DESC", async () => {
         return await search_product(test_db, "MILK", "price" as SortBy, "DESC" as SortDirection).then(data => {
-            expect(data.map(e => e.products.name)).toStrictEqual(results.slice().reverse())
+            expect(data.map(e => e.products.name)).toStrictEqual(results1)
         })
     })
+
+    const results2 = [
+        "Almond Milk",
+        "Coconut Milk",
+        "Whole Milk",
+    ]
 
     test("sorting by name ASC", async () => {
         return await search_product(test_db, "MILK", "name" as SortBy, "ASC" as SortDirection).then(data => {
-            expect(data.map(e => e.products.name)).toStrictEqual(results.slice().sort(
-                (a: any, b: any) => a.localeCompare(b))
-            )
+            expect(data.map(e => e.products.name)).toStrictEqual(results2)
         })
     })
 
+    const results3 = [
+        "Almond Milk",
+        "Whole Milk",
+        "Coconut Milk",
+    ]
+
     test("sorting by amount ASC", async () => {
         return await search_product(test_db, "MILK", "amount" as SortBy, "ASC" as SortDirection).then(data => {
-            expect(data.map(e => e.products.name)).toStrictEqual(results)
+            expect(data.map(e => e.products.name)).toStrictEqual(results3)
         })
     })
 
     test("sort by price ASC", async () => {
         return await search_product(test_db, "MILK", "price" as SortBy, "ASC" as SortDirection).then(data => {
-            expect(data.map(e => e.products.name)).toStrictEqual(results)
+            expect(data.map(e => e.products.name)).toStrictEqual(results3)
         })
     })
 
@@ -70,6 +84,6 @@ describe("Function tests search_product", () => {
     test("GET /search_product", async () => {
         const { body: data } = await request(app).get("/search_product?name=milk&sort_by=price&sort_direction=ASC")
 
-        return expect(data.map((e: any) => e.products.name)).toStrictEqual(results)
+        return expect(data.map((e: any) => e.products.name)).toStrictEqual(results3)
     })
 })

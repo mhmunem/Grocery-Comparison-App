@@ -4,7 +4,13 @@ ion-header {
 }
 
 /* search bar syling */
+
+.toolbar{
+    position: relative;
+}
+
 .searchbar {
+    position: relative;
     margin: 4px auto;
     width: 70%;
     max-width: 600px;
@@ -66,9 +72,13 @@ ion-grid {
 
 /* product image on search page card */
 .productImage {
-    height: 200px;
+    height: auto;
     object-fit: cover;
     border-bottom: 1px solid #e0e0e0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
+    
 }
 
 /* product card title */
@@ -314,7 +324,7 @@ ion-grid {
 
 .sortDropdown-menu {
     position: absolute;
-    z-index: 1000; 
+    z-index: 999; 
     top: 100%; 
     left: 0;
     width: 100%; 
@@ -398,12 +408,24 @@ ion-grid {
 
 
 .toolbar-container {
+    position: "relative";
     display: flex;
     align-items: center; /* Vertically align items */
     justify-content: space-between; /* Push left and right containers to opposite ends */
     width: 100%; /* Ensure the container spans the full width of its parent */
   }
 
+.searchHistory-container{
+    z-index: 1000;
+    margin: 20px auto;
+    width: 70%;
+    max-width: 300px;
+    position: fixed; 
+    left: 50%; 
+    transform: translateX(-50%);
+    top:  25px;
+    overflow-y: auto; 
+}
 .no-results-container {
     display: flex;
   justify-content: center;
@@ -416,9 +438,9 @@ ion-grid {
 
 /* Media Queries */
 @media (max-width: 761px) {
-    .listCard {
+    /* .listCard {
         height: 400px;
-    }
+    } */
     .sortDropdown-toggle,
     .sortDropdown-menu {
         width: 150px;
@@ -426,9 +448,9 @@ ion-grid {
 }
 
 @media (min-width: 761px) {
-    .listCard {
+    /* .listCard {
         height: 300px;
-    }
+    } */
 }
 
 @media (min-width: 1440px) {
@@ -436,9 +458,9 @@ ion-grid {
         max-width: 1300px;
     }
 
-    .listCard {
+    /* .listCard {
         height: 300px;
-    }
+    } */
 }
 
 @media (max-width: 767px) {
@@ -448,9 +470,9 @@ ion-grid {
 
     }
 
-    .listCard {
+    /* .listCard {
         height: 420px;
-    }
+    } */
 
     .priceAndQuantity {
         display: flex;
