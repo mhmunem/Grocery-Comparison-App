@@ -117,8 +117,8 @@ function chunkArray(array: any[], size: number): any[][] {
     return chunks;
 }
 async function fetchAndProcessPriceData(productIds: string[], storeIds: string[]) {
-    const productBatches = chunkArray(productIds, 10); 
-    const storeBatches = chunkArray(storeIds, 20); 
+    const productBatches = chunkArray(productIds, 10);
+    const storeBatches = chunkArray(storeIds, 20);
 
     for (const productBatch of productBatches) {
         for (const storeBatch of storeBatches) {
@@ -129,10 +129,10 @@ async function fetchAndProcessPriceData(productIds: string[], storeIds: string[]
             try {
                 //console.log(`Fetching data for products: [${productBatch}] and stores: [${storeBatch}]`);
                 const response = await axios.get(url);
-            
-                const productData = response.data; 
+
+                const productData = response.data;
                 if (productData && productData.length > 0) {
-                    await insertStoreProductsAndPriceHistory(productData); 
+                    await insertStoreProductsAndPriceHistory(productData);
                 } else {
                     console.warn(`No data found for products: [${productBatch}] and stores: [${storeBatch}]`);
                 }
@@ -147,10 +147,8 @@ async function fetchAndProcessPriceData(productIds: string[], storeIds: string[]
     const processedProducts: string[] = [];
 
     for (const product of productHits) {
-        // Add product ID
         grocerProductIds.add(product.id);
-
-        // Add associated store IDs
+        
         if (product.stores && Array.isArray(product.stores)) {
             for (const store of product.stores) {
                 grocerStoreIds.add(store);
@@ -173,6 +171,7 @@ async function insertStoreProductsAndPriceHistory(productData: any[]) {
     const storeProductData = [];
     const priceHistoryData = [];
     const today = new Date().toDateString()
+
     for (const product of productData) {
         const productID = productIdMap.get(product.name);
         if (!productID) {
@@ -203,25 +202,32 @@ async function insertStoreProductsAndPriceHistory(productData: any[]) {
             });
         }
     }
-
-    if (storeProductData.length > 0) {
-        await db.insert(store_products).values(storeProductData).onConflictDoUpdate({
+    const uniqueStoreProductData = Array.from(
+        new Map(storeProductData.map(p => [`${p.storeID}-${p.productID}`, p])).values()
+    );
+    
+    const uniquePriceHistoryData = Array.from(
+        new Map(priceHistoryData.map(p => [`${p.date}-${p.productID}-${p.storeID}`, p])).values()
+    );
+    
+    if (uniqueStoreProductData.length > 0) {
+        await db.insert(store_products).values(uniqueStoreProductData).onConflictDoUpdate({
             target: [store_products.storeID, store_products.productID],
             set: {
                 price: store_products.price,
             },
         }).execute();
-        console.log(`Inserted or updated ${storeProductData.length} store_products.`);
+        console.log(`Inserted or updated ${uniqueStoreProductData.length} store_products.`);
     }
 
-    if (priceHistoryData.length > 0) {
-        await db.insert(price_history).values(priceHistoryData).onConflictDoUpdate({
+    if (uniquePriceHistoryData.length > 0) {
+        await db.insert(price_history).values(uniquePriceHistoryData).onConflictDoUpdate({
             target: [price_history.date, price_history.productID, price_history.storeID],
             set: {
                 price: price_history.price,
             },
         }).execute();
-        console.log(`Inserted or updated ${priceHistoryData.length} price_history records.`);
+        console.log(`Inserted or updated ${uniquePriceHistoryData.length} price_history records.`);
     }
 }
 
