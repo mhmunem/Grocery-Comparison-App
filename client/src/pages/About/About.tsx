@@ -52,19 +52,19 @@ function About() {
         </ol>
 
         <h2>Supported Stores</h2>
-        <div className="row">
+        <div className="list-unstyled store-list">
           {chains.map((chain: any, index: any) => (
-            <div key={index} className="col-6 mb-3">
+            <div key={index}>
               <div className="d-flex align-items-center">
-                <img src={chain.image_logo} className="me-2" style={{ width: '30px', height: '30px' }} />
-                <span>{chain.name}</span>
+                <img src={chain.image_logo} style={{ width: '30px', height: '30px' }} />
+                <span className='store-name'>{chain.name}</span>
               </div>
             </div>
           ))}
         </div>
 
 
-        <h2>Development Team</h2>
+        <h2>Development Team Members</h2>
         <div className="row">
           <div className="col-3 mb-3">
             <a href="mailto:ajveendijk@proton.me">Anne-Jan Veendijk</a>
