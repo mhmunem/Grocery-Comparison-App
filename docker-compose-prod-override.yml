@@ -4,9 +4,14 @@ services:
     env_file:
       - ./server/.env.prod
   db_migrate:
-    command: sh -c 'npm run db:generate && npm run db:push && exit'
+    command: sh -c 'npm run db:create && npm run db:generate && npm run db:push && exit'
     env_file:
       - ./server/.env.prod
+    build:
+      dockerfile: ./server/Dockerfile.migrate
+  client:
+    ports:
+      - "5173:443"
   web_scraper:
     env_file:
       - ./server/.env.prod
