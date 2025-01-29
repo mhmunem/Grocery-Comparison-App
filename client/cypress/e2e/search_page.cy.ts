@@ -24,8 +24,7 @@ describe("test /search", () => {
 
     // AC 2: Search Action Cancelation
     it("should clear the search input and reload the page when the clear button is clicked", () => {
-        // Type "milk" into the search bar
-        cy.get(".searchbar").type("milkjkljkl");
+        cy.get(".searchbar").type("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
         // Click the clear (x) button
         cy.get("ion-searchbar .searchbar-clear-icon").click();
@@ -33,8 +32,7 @@ describe("test /search", () => {
         // Verify the search bar is cleared
         cy.get(".searchbar").should("have.value", "");
 
-
-        // Verify that the page reloads and shows all products
+        // Verify that the page reloads and shows results
         cy.get(".grid-container").children().should("have.length", 1);
     });
 
@@ -45,6 +43,7 @@ describe("test /search", () => {
         cy.get(".pagination-button");
 
     });
+
     it("shouldn't paginate product cards when fewer than 25 results are shown", () => {
         // Type a string of nonsense
         cy.get(".searchbar").type("mlkjlka{enter}")
