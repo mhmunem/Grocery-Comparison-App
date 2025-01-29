@@ -2,7 +2,7 @@ stages:
   - ok
 
 setup:
-  stage: setup
+  stage: ok
   image: alpine:3.21.2
   script:
     - echo success
