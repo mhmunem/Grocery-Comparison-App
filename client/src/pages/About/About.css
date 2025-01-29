@@ -15,7 +15,7 @@
     line-height: 1;
 }
 .store-list{
-    columns: 2;
+    /* columns: 2; */
 }
 .store-name{
     margin-left: 10px;

@@ -1,5 +1,5 @@
 import { IonIcon, IonLabel, IonTabBar, IonTabButton } from "@ionic/react";
-import { home, search, list, storefront, settings, informationCircleOutline } from "ionicons/icons";
+import { search, list, storefront, settings, informationCircleOutline } from "ionicons/icons";
 
 const BottomNavigationBar: React.FC = () => (
     <IonTabBar slot="bottom" color="primary">
@@ -9,10 +9,10 @@ const BottomNavigationBar: React.FC = () => (
             <IonLabel>Stores</IonLabel>
         </IonTabButton>
 
-        <IonTabButton tab="home" href="/home">
+        {/* <IonTabButton tab="home" href="/home">
             <IonIcon aria-hidden="true" icon={home} />
             <IonLabel>Home</IonLabel>
-        </IonTabButton>
+        </IonTabButton> */}
 
         <IonTabButton tab="search" href="/search">
             <IonIcon aria-hidden="true" icon={search} />
