@@ -12,30 +12,30 @@ async function runScrapers(): Promise<undefined> {
     /* Grocer Scraper call*/
     // Uncommented ths if we need Grocer Data and comment the grosave 
 
-    /*await GrocerChainScraper()
+    await GrocerChainScraper()
     console.log("Chain scraping completed")
 
     await GrocerStoreScraper
     console.log("Store scraping completed")
 
     await GrocerProductsScraper()
-    console.log('Products scraped completed')*/
+    console.log('Products scraped completed')
 
 
 
     /* GroSave Scraper call*/
 
-    await GrosaveChainScraper()
-    console.log("Chain scraping completed")
+    // await GrosaveChainScraper()
+    // console.log("Chain scraping completed")
 
-    await GrosaveStoresScraper()
-    console.log("Stores scraped completed")
+    // await GrosaveStoresScraper()
+    // console.log("Stores scraped completed")
 
-    await GroSaveCategoryScraper()
-    console.log('Categories scraped completed')
+    // await GroSaveCategoryScraper()
+    // console.log('Categories scraped completed')
 
-    await GroSaveProductsScraper()
-    console.log('Products scraped completed')
+    // await GroSaveProductsScraper()
+    // console.log('Products scraped completed')
 
   } catch (error) {
     console.error('Error during scraping:', error)
