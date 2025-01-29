@@ -32,6 +32,8 @@ const ShoppingListPage: React.FC = () => {
   const [showMissingModal, setShowMissingModal] = useState(false);
   const [missingProducts, setMissingProducts] = useState<string[]>([]);
 
+  const [allowedProductIds, setAllowedProductIds] = useState<Set<number>>(new Set());
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -102,14 +104,51 @@ const ShoppingListPage: React.FC = () => {
     return addedToCart[storeIdStr] && (quantities[storeIdStr] || 0) > 0;
   });
 
+  console.log('Base Cart Products =>', baseCartProducts);
+
   const filteredCartProducts = activeStoreId
-    ? baseCartProducts.filter((p) => p.store_products.storeID === activeStoreId)
+    ? baseCartProducts.filter(
+        (p) =>
+          p.store_products.storeID === activeStoreId ||
+          allowedProductIds.has(p.products.id)
+      )
     : baseCartProducts;
+
+  console.log('Filtered Cart Products (activeStoreId =', activeStoreId, ') =>', filteredCartProducts);
+
+  const getOtherPrices = (product: Product | null): Product[] => {
+    if (!product) return [];
+    if (selectedStoreIds.length === 0) {
+      return [];
+    }
+    return products.filter(
+      (prod) =>
+        prod.store_products.productID === product.store_products.productID &&
+        selectedStoreIds.includes(prod.store_products.storeID)
+    );
+  };
 
   const totalPrice = filteredCartProducts.reduce((acc, item) => {
     const storeIdStr = item.store_products.id.toString();
     const q = quantities[storeIdStr] || 0;
-    return acc + item.store_products.price * q;
+    // if no specific store is selected => just use item.store_products.price
+    // If activeStoreId is selected => find price matching storeID = activeStoreId
+    let priceToUse = item.store_products.price;// Defaults to the lowest “own-it” price first.
+  
+    if (activeStoreId) {
+      // Find the storeID === activeStoreId in getOtherPrices(item).
+      const records = getOtherPrices(item);
+      const matched = records.find(
+        (r) => r.store_products.storeID === activeStoreId
+      );
+  
+      if (matched) {
+        priceToUse = matched.store_products.price;
+      } 
+      
+    }
+  
+    return acc + priceToUse * q;
   }, 0);
 
   const updateCart = (newQuantities: { [key: string]: number }, newAddedToCart: { [key: string]: boolean }) => {
@@ -169,18 +208,6 @@ const ShoppingListPage: React.FC = () => {
     [quantities, addedToCart]
   );
 
-  const getOtherPrices = (product: Product | null): Product[] => {
-    if (!product) return [];
-    if (selectedStoreIds.length === 0) {
-      return [];
-    }
-    return products.filter(
-      (prod) =>
-        prod.store_products.productID === product.store_products.productID &&
-        selectedStoreIds.includes(prod.store_products.storeID)
-    );
-  };
-
   const openProductDetails = (p: Product) => {
     setSelectedProduct(p);
     setOtherPrices(getOtherPrices(p));
@@ -192,16 +219,48 @@ const ShoppingListPage: React.FC = () => {
   };
 
   const handleSelectStore = (storeId: number | null) => {
+    console.log('Selected storeId:', storeId);
     setActiveStoreId(storeId);
-
+  
     if (storeId) {
-      const missing = baseCartProducts
-        .filter((item) => item.store_products.storeID !== storeId)
-        .map((item) => item.products.name);
+      // Find all available product IDs first
+      const newAllowedProductIds = new Set<number>();
+      // Iterate over each item in the cart.
+      baseCartProducts.forEach((item) => {
+        const itemOtherPrices = getOtherPrices(item);
+        const anyMatch = itemOtherPrices.some(
+          (p) => p.store_products.storeID === storeId
+        );
+        // If anyMatch =>, it means the item is also available at the current storeId.
+        if (anyMatch) {
+          newAllowedProductIds.add(item.products.id);
+        }
+      });
 
+      setAllowedProductIds(newAllowedProductIds);
+      // Simultaneous calculation of missing
+      const missing = baseCartProducts
+        .filter((item) => {
+          const itemOtherPrices = getOtherPrices(item);
+          console.log('itemOtherPrices for item', item, itemOtherPrices);
+  
+          const anyMatch = itemOtherPrices.some(
+            (p) => p.store_products.storeID === storeId
+          );
+
+          console.log(
+            `Comparing item ${item.products.name} with storeId ${storeId}`,
+            'anyMatch =',
+            anyMatch
+          );
+  
+          return !anyMatch;
+        })
+        .map((item) => item.products.name);
+  
       if (missing.length > 0) {
         setMissingProducts(missing);
-        setShowMissingModal(true); 
+        setShowMissingModal(true);
       } else {
         setMissingProducts([]);
         setShowMissingModal(false);
@@ -211,7 +270,7 @@ const ShoppingListPage: React.FC = () => {
       setShowMissingModal(false);
     }
   };
-
+  // Show only stores that have been checked by the user
   const userStores = allStores.filter((st) => selectedStoreIds.includes(st.id));
 
   return (
