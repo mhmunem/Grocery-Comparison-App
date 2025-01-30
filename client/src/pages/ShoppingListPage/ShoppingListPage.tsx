@@ -85,10 +85,7 @@ const ShoppingListPage: React.FC = () => {
             }
         };
 
-        const handleStoresUpdated = () => {
-            const updated = localStorage.getItem('selectedStores');
-            setSelectedStoreIds(updated ? JSON.parse(updated) : []);
-        };
+      <IonContent className="shopping-list-content" style={{ '--padding-bottom': '200px' }}>
 
         window.addEventListener('cartUpdated', handleCartUpdate);
         window.addEventListener('storage', handleStoreUpdate);
@@ -269,7 +266,9 @@ const ShoppingListPage: React.FC = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar color="primary">
-                    <IonTitle>My Shopping List</IonTitle>
+                    <div className="title-center">
+                        <IonTitle slot="end" >Shopping List</IonTitle>
+                    </div>
                 </IonToolbar>
             </IonHeader>
 
