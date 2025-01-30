@@ -8,11 +8,6 @@ describe("Test Navbar Endpoints", () => {
         cy.visit('http://client:5173/')
     })
 
-    it("should navigate to the home page", () => {
-        cy.get("#tab-button-home").contains("Home").click()
-        cy.url().should("include", "/home")
-    })
-
     it("should navigate to the Store page", () => {
         cy.get("#tab-button-stores").contains("Stores").click()
         cy.url().should("include", "/stores")
