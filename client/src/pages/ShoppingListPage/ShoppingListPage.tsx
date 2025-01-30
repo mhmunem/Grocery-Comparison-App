@@ -85,7 +85,10 @@ const ShoppingListPage: React.FC = () => {
             }
         };
 
-      <IonContent className="shopping-list-content" style={{ '--padding-bottom': '200px' }}>
+        const handleStoresUpdated = () => {
+            const updated = localStorage.getItem('selectedStores');
+            setSelectedStoreIds(updated ? JSON.parse(updated) : []);
+        };
 
         window.addEventListener('cartUpdated', handleCartUpdate);
         window.addEventListener('storage', handleStoreUpdate);
@@ -103,6 +106,7 @@ const ShoppingListPage: React.FC = () => {
         return addedToCart[storeIdStr] && (quantities[storeIdStr] || 0) > 0;
     });
 
+    console.log('Base Cart Products =>', baseCartProducts);
 
     const filteredCartProducts = activeStoreId
         ? baseCartProducts.filter(
@@ -111,6 +115,8 @@ const ShoppingListPage: React.FC = () => {
                 allowedProductIds.has(p.products.id)
         )
         : baseCartProducts;
+
+    console.log('Filtered Cart Products (activeStoreId =', activeStoreId, ') =>', filteredCartProducts);
 
     const getOtherPrices = (product: Product | null): Product[] => {
         if (!product) return [];
@@ -215,6 +221,7 @@ const ShoppingListPage: React.FC = () => {
     };
 
     const handleSelectStore = (storeId: number | null) => {
+        console.log('Selected storeId:', storeId);
         setActiveStoreId(storeId);
 
         if (storeId) {
@@ -237,11 +244,17 @@ const ShoppingListPage: React.FC = () => {
             const missing = baseCartProducts
                 .filter((item) => {
                     const itemOtherPrices = getOtherPrices(item);
+                    console.log('itemOtherPrices for item', item, itemOtherPrices);
 
                     const anyMatch = itemOtherPrices.some(
                         (p) => p.store_products.storeID === storeId
                     );
 
+                    console.log(
+                        `Comparing item ${item.products.name} with storeId ${storeId}`,
+                        'anyMatch =',
+                        anyMatch
+                    );
 
                     return !anyMatch;
                 })
@@ -266,13 +279,11 @@ const ShoppingListPage: React.FC = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar color="primary">
-                    <div className="title-center">
-                        <IonTitle slot="end" >Shopping List</IonTitle>
-                    </div>
+                    <IonTitle>My Shopping List</IonTitle>
                 </IonToolbar>
             </IonHeader>
 
-            <IonContent className="shopping-list-content">
+            <IonContent className="shopping-list-content" style={{ '--padding-bottom': '200px' }}>
 
                 <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '8px' }}>
                     <IonItem lines="none">
