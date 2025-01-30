@@ -8,7 +8,7 @@ import { stores } from "../db/schema/stores";
 import { chains } from "../db/schema/chains";
 import { ProductSearchResult } from "../types/schema";
 
-export async function search_product(db: NodePgDatabase, name: string, sort_by: 'name' | 'price' | 'amount', sort_direction: 'ASC' | 'DESC'): Promise<ProductSearchResult[]> {
+export async function search_product_opti(db: NodePgDatabase, name: string, sort_by: 'name' | 'price' | 'amount', sort_direction: 'ASC' | 'DESC'): Promise<ProductSearchResult[]> {
     const sort = sort_direction == 'ASC' ? asc : desc
     let column
 
@@ -35,9 +35,7 @@ export async function search_product(db: NodePgDatabase, name: string, sort_by: 
         .innerJoin(chains, eq(chains.id, stores.chainID))
         .orderBy(sort(column))
 
-    // console.log(search_results);
-    console.log(search_results.length);
-
+    console.log(search_results);
 
 
     return search_results
