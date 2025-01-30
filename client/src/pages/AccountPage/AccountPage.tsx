@@ -22,15 +22,11 @@ function AccountPage() {
         localStorage.setItem('searchHistory', JSON.stringify([]));
     };
 
-    return (
-        <IonPage>
-            <IonHeader>
-                <IonToolbar color="primary">
-                    <div className="title-center">
-                        <IonTitle slot="end" >Search</IonTitle>
-                    </div>
-                </IonToolbar>
-            </IonHeader>
+  return (
+    <IonPage>
+      <IonHeader>
+        <IonToolbar color="primary">
+          <IonTitle>Settings</IonTitle>
 
             <IonContent fullscreen>
                 <IonHeader collapse="condense">

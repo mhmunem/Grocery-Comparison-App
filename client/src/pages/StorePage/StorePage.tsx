@@ -81,7 +81,7 @@ const StorePage: React.FC = () => {
             <IonHeader>
                 <IonToolbar className="toolbar" color="primary">
                     <div className="title-center">
-                        <IonTitle slot="end" >Stores</IonTitle>
+                        <IonTitle> Store Selector</IonTitle>
                     </div>
                 </IonToolbar>
             </IonHeader>

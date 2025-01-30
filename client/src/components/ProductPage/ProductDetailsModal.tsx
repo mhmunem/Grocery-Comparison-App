@@ -78,12 +78,10 @@ export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quanti
                                 <IonLabel>
                                     <h2>Nutritional Information</h2>
 
-                                    {/* Suggested Serving Size */}
                                     <IonLabel>
                                         <h3>Suggested Serving Size: 100g</h3>
                                     </IonLabel>
 
-                                    {/* Nutritional Information Table */}
                                     <IonGrid>
                                         <IonRow>
                                             <IonCol size="4"><strong>Nutrient</strong></IonCol>
@@ -91,21 +89,18 @@ export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quanti
                                             <IonCol size="4"><strong>Per 100g</strong></IonCol>
                                         </IonRow>
 
-                                        {/* Energy */}
                                         <IonRow>
                                             <IonCol size="4">Energy</IonCol>
                                             <IonCol size="4">kJ</IonCol>
                                             <IonCol size="4"> kJ</IonCol>
                                         </IonRow>
 
-                                        {/* Protein */}
                                         <IonRow>
                                             <IonCol size="4">Protein</IonCol>
                                             <IonCol size="4">g</IonCol>
                                             <IonCol size="4">g</IonCol>
                                         </IonRow>
 
-                                        {/* Carbohydrates */}
                                         <IonRow>
                                             <IonCol size="4">Carbohydrate</IonCol>
                                             <IonCol size="4">g</IonCol>
@@ -118,7 +113,6 @@ export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quanti
                                             <IonCol size="4">g</IonCol>
                                         </IonRow>
 
-                                        {/* Fats */}
                                         <IonRow>
                                             <IonCol size="4">Fat</IonCol>
                                             <IonCol size="4">g</IonCol>
