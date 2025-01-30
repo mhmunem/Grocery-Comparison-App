@@ -26,10 +26,6 @@ ion-col {
 }
 
 
-.listCard {
-  /* ... */
-}
-
 ion-col ion-button[color="danger"] {
   margin-top: 2px;
   width: 100%;

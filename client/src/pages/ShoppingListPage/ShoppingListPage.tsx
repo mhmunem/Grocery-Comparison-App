@@ -281,7 +281,7 @@ const ShoppingListPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
 
-      <IonContent className="shopping-list-content">
+      <IonContent className="shopping-list-content" style={{ '--padding-bottom': '200px' }}>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '8px' }}>
           <IonItem lines="none">
