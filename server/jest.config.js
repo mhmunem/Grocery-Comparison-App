@@ -6,4 +6,3 @@ export const transform = {
 };
 export const testMatch = ['**/?(*.)+(spec|test).[tj]s'];
 export const watchman = false;
-

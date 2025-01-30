@@ -42,7 +42,7 @@ export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quanti
                         </IonRow>
 
                         {/* Product Details Section */}
-                        <div style={{ marginLeft: "50%" }}>
+                        <div>
                             <ProductDetails
                                 decreaseQuantity={decreaseQuantity}
                                 increaseQuantity={increaseQuantity}

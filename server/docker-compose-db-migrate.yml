@@ -2,12 +2,12 @@ services:
   db_migrate:
     container_name: db_migrate
     tty: true
-    command: sh -c 'npm run db:reset && npm run db:generate && npm run db:push && npm run db:seed'
+    command: sh -c 'npm run db:drop && npm run db:create && npm run db:generate && npm run db:push && npm run db:seed'
     develop:
       watch:
         - action: rebuild
-          path: ./src/db
-          target: ./src/db
+          path: ./src
+          target: ./src
           ignore:
             - node_modules/
     depends_on:
