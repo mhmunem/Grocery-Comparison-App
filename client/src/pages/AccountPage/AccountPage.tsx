@@ -27,6 +27,8 @@ function AccountPage() {
       <IonHeader>
         <IonToolbar color="primary">
           <IonTitle>Settings</IonTitle>
+          </IonToolbar>
+          </IonHeader>
 
             <IonContent fullscreen>
                 <IonHeader collapse="condense">
