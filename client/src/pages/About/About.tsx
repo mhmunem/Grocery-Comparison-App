@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonImg } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/react';
 import { getChains } from '../../services/StoreService';
 import './About.css'
 
@@ -18,11 +18,6 @@ function About() {
             <IonHeader>
                 <IonToolbar color="primary">
                     <div className="title-center">
-                        <IonImg
-                            src="680logocropped.png"
-                            alt="App Logo"
-                            className='headerLogo'
-                        />
                         <IonTitle slot="end" >About</IonTitle>
                     </div>
                 </IonToolbar>

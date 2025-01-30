@@ -269,7 +269,9 @@ const ShoppingListPage: React.FC = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar color="primary">
-                    <IonTitle>My Shopping List</IonTitle>
+                    <div className="title-center">
+                        <IonTitle slot="end" >Shopping List</IonTitle>
+                    </div>
                 </IonToolbar>
             </IonHeader>
 

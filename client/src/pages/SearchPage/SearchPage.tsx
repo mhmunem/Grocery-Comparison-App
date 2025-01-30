@@ -23,7 +23,7 @@ const SearchPage: React.FC = () => {
     const [error, setError] = useState<string>('');
     const [searchAttempted, setSearchAttempted] = useState<boolean>(false);
 
-    const [disableDropdown,setdisableDropdown]=useState(false);
+    const [disableDropdown, setdisableDropdown] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     const [searchHistory, setSearchHistory] = useState<string[]>([]);
     const searchbarRef = useRef<HTMLIonSearchbarElement>(null);
@@ -98,7 +98,7 @@ const SearchPage: React.FC = () => {
     useEffect(() => {
         const storedValue2 = localStorage.getItem('disableDropdown');
         if (storedValue2 !== null) {
-          setdisableDropdown(JSON.parse(storedValue2)); 
+            setdisableDropdown(JSON.parse(storedValue2));
         }
     }, []);
 
@@ -230,20 +230,20 @@ const SearchPage: React.FC = () => {
             setShowDropdown(false);
             if (searchbarRef.current) {
                 searchbarRef.current.getInputElement().then((input) => {
-                setQuery(input.value); 
-                updateSearchHistory(query);
+                    setQuery(input.value);
+                    updateSearchHistory(query);
                 });
-              }
             }
+        }
     };
 
     const handleBlur = () => {
-       setShowDropdown(false);
-       if (searchbarRef.current) {
-          searchbarRef.current.getInputElement().then((input) => {
-          setQuery(input.value); 
-          updateSearchHistory(query);
-          });
+        setShowDropdown(false);
+        if (searchbarRef.current) {
+            searchbarRef.current.getInputElement().then((input) => {
+                setQuery(input.value);
+                updateSearchHistory(query);
+            });
         }
     };
 
@@ -253,20 +253,22 @@ const SearchPage: React.FC = () => {
 
         const storedValue1 = localStorage.getItem('disableDropdown');
         setdisableDropdown(storedValue1 === 'true');
-        if(disableDropdown) {setTimeout(() => {
-            setShowDropdown(true); 
-          }, 150); }
+        if (disableDropdown) {
+            setTimeout(() => {
+                setShowDropdown(true);
+            }, 150);
+        }
     };
 
-    const handleTextClick = () => {    
+    const handleTextClick = () => {
         const savedHistory = localStorage.getItem('searchHistory');
         setSearchHistory(savedHistory ? JSON.parse(savedHistory) : []);
 
         const storedValue4 = localStorage.getItem('disableDropdown');
         setdisableDropdown(storedValue4 === 'true');
         setTimeout(() => {
-            setShowDropdown(true); 
-          }, 150); 
+            setShowDropdown(true);
+        }, 150);
     };
 
     const updateSearchHistory = (newQuery: string) => {
@@ -275,10 +277,10 @@ const SearchPage: React.FC = () => {
 
         const savedHistory = localStorage.getItem('searchHistory');
         setSearchHistory(savedHistory ? JSON.parse(savedHistory) : []);
-        
-        if (!disableDropdown) return; 
-        if (!newQuery.trim()|| newQuery.trim().length < 3 || newQuery.trim().length > 50) return; 
-        
+
+        if (!disableDropdown) return;
+        if (!newQuery.trim() || newQuery.trim().length < 3 || newQuery.trim().length > 50) return;
+
         let updatedHistory: string[] = [];
         if (searchHistory.includes(newQuery)) {
             updatedHistory = [newQuery, ...searchHistory.filter(item => item !== newQuery)];
@@ -290,18 +292,18 @@ const SearchPage: React.FC = () => {
     };
 
     const handleSelectHistoryItem = async (item: string) => {
-            setTimeout(() => {
-                if (searchbarRef.current) {
-                    searchbarRef.current.setFocus();
-                    const searchInput = searchbarRef.current.querySelector('input');
-                    if (searchInput) {
-                        searchInput.value = item;
-                        const length = item.length;
-                        searchInput.setSelectionRange(length, length);
-                    }
+        setTimeout(() => {
+            if (searchbarRef.current) {
+                searchbarRef.current.setFocus();
+                const searchInput = searchbarRef.current.querySelector('input');
+                if (searchInput) {
+                    searchInput.value = item;
+                    const length = item.length;
+                    searchInput.setSelectionRange(length, length);
                 }
-            }, 0);
-            setShowDropdown(false); 
+            }
+        }, 0);
+        setShowDropdown(false);
     };
 
     const getOtherPrices = (product: Product) => {
@@ -429,7 +431,7 @@ const SearchPage: React.FC = () => {
     useEffect(() => {
         handleSearch();
         updateSearchHistory(query);
-      }, [query]);
+    }, [query]);
 
     const startIndex = (currentPage - 1) * itemsPerPage;
 
@@ -451,49 +453,50 @@ const SearchPage: React.FC = () => {
                 <IonToolbar className="toolbar" color="primary">
                     <div className="title-center">
                         <IonImg
-                            src="680logocropped.png"
-                            alt="App Logo"
+                            src="dirtyhack.jpg"
+                            alt="Search" // IonTitle does not want to behave
                             className='headerLogo'
                         />
                     </div>
                     <IonSearchbar
-                        ref={searchbarRef} 
+                        ref={searchbarRef}
                         value={query}
                         onIonChange={(e) => setQuery(e.detail.value!)}
                         onKeyUp={handleKeyDown}
                         onIonBlur={handleBlur}
                         onIonFocus={handleFocus}
-                        onClick={handleTextClick} 
+                        onClick={handleTextClick}
                         placeholder="Search for products..."
                         debounce={300}
                         disabled={false}
                         className="searchbar"
-                        onIonClear={() => {setShowDropdown(false);
-                                           setQuery(''); 
-                                           window.location.reload();
-                                        }} 
+                        onIonClear={() => {
+                            setShowDropdown(false);
+                            setQuery('');
+                            window.location.reload();
+                        }}
                     />
                 </IonToolbar>
             </IonHeader>
             <IonContent>
                 <div className="toolbar-container" >
                     <div className="searchHistory-container" >
-                    { disableDropdown && showDropdown && (<IonList>
-                        {searchHistory.map((item, index) => (
-                     <IonItem
-                       key={index}
-                       button
-                       onMouseDown={(e) => e.preventDefault()}
-                       onClick={(e) => {
-                        e.stopPropagation(); // Stop bubbling
-                        handleSelectHistoryItem(item);
-                      }}
-                     >
-                      {item}
-                     </IonItem>
-                     ))}
-                     </IonList>)}
-                    </div>   
+                        {disableDropdown && showDropdown && (<IonList>
+                            {searchHistory.map((item, index) => (
+                                <IonItem
+                                    key={index}
+                                    button
+                                    onMouseDown={(e) => e.preventDefault()}
+                                    onClick={(e) => {
+                                        e.stopPropagation(); // Stop bubbling
+                                        handleSelectHistoryItem(item);
+                                    }}
+                                >
+                                    {item}
+                                </IonItem>
+                            ))}
+                        </IonList>)}
+                    </div>
                     <div className="categoryDropdown-container">
                         <IonItem>
                             <IonSelect

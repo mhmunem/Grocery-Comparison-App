@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { star, storefrontOutline } from 'ionicons/icons';
 import './StorePage.css';
 import { getChains, getStores } from '../../services/StoreService';
-import { IonImg, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, IonButton, IonList, IonItem, IonCheckbox, IonLabel, IonTabBar, IonTabButton, IonToast } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, IonButton, IonList, IonItem, IonCheckbox, IonLabel, IonTabBar, IonTabButton, IonToast } from '@ionic/react';
 
 const StorePage: React.FC = () => {
     const [chains, setChains] = useState<Chain[]>([]);
@@ -81,12 +81,7 @@ const StorePage: React.FC = () => {
             <IonHeader>
                 <IonToolbar className="toolbar" color="primary">
                     <div className="title-center">
-                        <IonImg
-                            src="680logocropped.png"
-                            alt="App Logo"
-                            className='headerLogo'
-                        />
-                        <IonTitle slot="end" > Store Selector</IonTitle>
+                        <IonTitle slot="end" >Stores</IonTitle>
                     </div>
                 </IonToolbar>
             </IonHeader>
