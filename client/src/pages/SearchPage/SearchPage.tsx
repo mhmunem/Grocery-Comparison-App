@@ -1,4 +1,4 @@
-import { IonCol, IonContent, IonGrid, IonHeader, IonImg, IonItem, IonLabel, IonList, IonPage, IonRow, IonSearchbar, IonSelect, IonSelectOption, IonToolbar, useIonViewWillEnter } from '@ionic/react';
+import { IonCol, IonContent, IonGrid, IonHeader, IonItem, IonLabel, IonList, IonPage, IonRow, IonSearchbar, IonSelect, IonSelectOption, IonToolbar, useIonViewWillEnter } from '@ionic/react';
 import { CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from 'chart.js';
 import React, { useEffect, useRef, useState } from 'react';
 import { ProductDetailsModal } from '../../components/ProductPage/ProductDetailsModal';
@@ -23,7 +23,7 @@ const SearchPage: React.FC = () => {
     const [error, setError] = useState<string>('');
     const [searchAttempted, setSearchAttempted] = useState<boolean>(false);
 
-    const [disableDropdown,setdisableDropdown]=useState(false);
+    const [disableDropdown, setdisableDropdown] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     const [searchHistory, setSearchHistory] = useState<string[]>([]);
     const searchbarRef = useRef<HTMLIonSearchbarElement>(null);
@@ -46,6 +46,10 @@ const SearchPage: React.FC = () => {
     const [otherPrices, setOtherPrices] = useState<Product[]>([]);
     const [selectedStores, setSelectedStores] = useState<number[]>([]);
 
+    const gridContainerRef = useRef<HTMLIonContentElement>(null);
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+
     const sortOptions = [
         { label: 'Alphabetical A-Z', value: 'az' },
         { label: 'Alphabetical Z-A', value: 'za' },
@@ -57,6 +61,7 @@ const SearchPage: React.FC = () => {
         { label: 'Volume (Descending)', value: 'highest-lowest volume' },
     ];
 
+    // Fetches product data and initializes states on component mount
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
@@ -66,6 +71,11 @@ const SearchPage: React.FC = () => {
 
                 const categories = Array.from(new Set(results.map(product => product.category.name)));
                 setAvailableCategories(categories);
+
+
+                const brands = Array.from(new Set(results.map(product => product.products.brand)));
+                setAvailableBrands(brands);
+
 
                 const savedQ = localStorage.getItem('quantities');
                 const savedC = localStorage.getItem('addedToCart');
@@ -95,24 +105,24 @@ const SearchPage: React.FC = () => {
         fetchData();
     }, []);
 
+
+    // Loads and sets dropdown state from localStorage
     useEffect(() => {
         const storedValue2 = localStorage.getItem('disableDropdown');
         if (storedValue2 !== null) {
-          setdisableDropdown(JSON.parse(storedValue2)); 
+            setdisableDropdown(JSON.parse(storedValue2));
         }
     }, []);
 
+
+    // Loads and sets search history from localStorage
     useEffect(() => {
         const savedHistory = JSON.parse(localStorage.getItem('searchHistory') || '[]');
         setSearchHistory(savedHistory);
     }, []);
 
-    const handleClearSelection = () => {
-        setSelectedCategories([]); // Clear the selected categories
-        setSelectedBrands([]);
-        setSortValue('lowest-highest price');
-    };
 
+    // Listens for cart updates and syncs state with localStorage
     useEffect(() => {
         const handleCartUpdate = () => {
             const savedQ = localStorage.getItem('quantities');
@@ -130,11 +140,15 @@ const SearchPage: React.FC = () => {
         };
     }, []);
 
+
+    // Retrieves the previously selected stores from localStorage
     const getInitialSelectedStores = () => {
         const storedSelectedStores = localStorage.getItem('selectedStores');
         return storedSelectedStores ? JSON.parse(storedSelectedStores) : [];
     };
 
+
+    // Listens for changes to 'selectedStores' in localStorage and updates state accordingly
     useEffect(() => {
         const handleStorageChange = (event: StorageEvent) => {
             if (event.key === 'selectedStores') {
@@ -150,25 +164,16 @@ const SearchPage: React.FC = () => {
         };
     }, []);
 
-    useEffect(() => {
-        const findBrands = async () => {
-            try {
-                const brands = Array.from(new Set(sortedAndFilteredProducts.map(product => product.products.brand)));
-                setAvailableBrands(brands);
-            } catch (error) {
-                console.error('Error fetching brands:', error);
-            }
-        };
-        findBrands();
-    }, [sortedAndFilteredProducts, selectedCategories]);
 
-
+    // Save updated quantities and cart state to localStorage
     const updateCart = (newQuantities: { [key: string]: number }, newAddedToCart: { [key: string]: boolean }) => {
         localStorage.setItem('quantities', JSON.stringify(newQuantities));
         localStorage.setItem('addedToCart', JSON.stringify(newAddedToCart));
         window.dispatchEvent(new Event('cartUpdated'));
     };
 
+
+    // Increase quantity of an item in cart / Trigger add to cart
     const increaseQuantity = (productId: string | number) => {
         const storeIdStr = productId.toString();
         const newQuantities = { ...quantities };
@@ -182,6 +187,8 @@ const SearchPage: React.FC = () => {
         updateCart(newQuantities, newAddedToCart);
     };
 
+
+    // Decrease quantity of an item in car / Trigger remove from cart
     // TODO: productId does not need a sum type. Javascript implicitly converts converts these types
     const decreaseQuantity = (productId: string | number) => { // TODO: decreaseQuantity, increaseQuantity, newQuantity is duplicate in the ShoppingListPage
         const storeIdStr = productId.toString();
@@ -198,6 +205,7 @@ const SearchPage: React.FC = () => {
         setAddedToCart(newAddedToCart);
         updateCart(newQuantities, newAddedToCart);
     };
+
 
     const handleSearch = async () => {
         setSearchAttempted(true);
@@ -225,60 +233,82 @@ const SearchPage: React.FC = () => {
         }
     };
 
+
+    // Hides the dropdown, updates the query state with the search bar's input value,
+    // and updates search history when the Enter key is pressed.
     const handleKeyDown = (event: React.KeyboardEvent) => {
         if (event.key === 'Enter') {
             setShowDropdown(false);
             if (searchbarRef.current) {
                 searchbarRef.current.getInputElement().then((input) => {
-                setQuery(input.value); 
-                updateSearchHistory(query);
+                    setQuery(input.value);
+                    updateSearchHistory(query);
                 });
-              }
             }
-    };
-
-    const handleBlur = () => {
-       setShowDropdown(false);
-       if (searchbarRef.current) {
-          searchbarRef.current.getInputElement().then((input) => {
-          setQuery(input.value); 
-          updateSearchHistory(query);
-          });
         }
     };
 
+
+    // Hides the dropdown on blur and updates the search history with latest query
+    const handleBlur = () => {
+        setShowDropdown(false);
+        if (searchbarRef.current) {
+            searchbarRef.current.getInputElement().then((input) => {
+                setQuery(input.value);
+                updateSearchHistory(query);
+            });
+        }
+    };
+
+
+    // Retrieves search history and dropdown settings from local storage, then shows the dropdown if allowed
     const handleFocus = () => {
         const savedHistory = localStorage.getItem('searchHistory');
         setSearchHistory(savedHistory ? JSON.parse(savedHistory) : []);
 
         const storedValue1 = localStorage.getItem('disableDropdown');
         setdisableDropdown(storedValue1 === 'true');
-        if(disableDropdown) {setTimeout(() => {
-            setShowDropdown(true); 
-          }, 150); }
+        if (disableDropdown) {
+            setTimeout(() => {
+                setShowDropdown(true);
+            }, 150);
+        }
     };
 
-    const handleTextClick = () => {    
+
+    // Retrieves search history and dropdown settings from local storage, then displays dropdown
+    const handleTextClick = () => {
         const savedHistory = localStorage.getItem('searchHistory');
         setSearchHistory(savedHistory ? JSON.parse(savedHistory) : []);
 
         const storedValue4 = localStorage.getItem('disableDropdown');
         setdisableDropdown(storedValue4 === 'true');
         setTimeout(() => {
-            setShowDropdown(true); 
-          }, 150); 
+            setShowDropdown(true);
+        }, 150);
     };
 
+
+    // Clears the search query, selected categories, brands, and resets sorting
+    const handleClearSelection = () => {
+        setQuery('');
+        setSelectedCategories([]);
+        setSelectedBrands([]);
+        setSortValue('lowest-highest price');
+    };
+
+
+    // Updates search history if query is between 3 and 50 characters and dropdown is enabled
     const updateSearchHistory = (newQuery: string) => {
         const storedValue3 = localStorage.getItem('disableDropdown');
         setdisableDropdown(storedValue3 === 'true');
 
         const savedHistory = localStorage.getItem('searchHistory');
         setSearchHistory(savedHistory ? JSON.parse(savedHistory) : []);
-        
-        if (!disableDropdown) return; 
-        if (!newQuery.trim()|| newQuery.trim().length < 3 || newQuery.trim().length > 50) return; 
-        
+
+        if (!disableDropdown) return;
+        if (!newQuery.trim() || newQuery.trim().length < 3 || newQuery.trim().length > 50) return;
+
         let updatedHistory: string[] = [];
         if (searchHistory.includes(newQuery)) {
             updatedHistory = [newQuery, ...searchHistory.filter(item => item !== newQuery)];
@@ -289,21 +319,25 @@ const SearchPage: React.FC = () => {
         localStorage.setItem('searchHistory', JSON.stringify(updatedHistory));
     };
 
+
+    // Selects a history item, sets it as the search query, and places cursor at the end
     const handleSelectHistoryItem = async (item: string) => {
-            setTimeout(() => {
-                if (searchbarRef.current) {
-                    searchbarRef.current.setFocus();
-                    const searchInput = searchbarRef.current.querySelector('input');
-                    if (searchInput) {
-                        searchInput.value = item;
-                        const length = item.length;
-                        searchInput.setSelectionRange(length, length);
-                    }
+        setTimeout(() => {
+            if (searchbarRef.current) {
+                searchbarRef.current.setFocus();
+                const searchInput = searchbarRef.current.querySelector('input');
+                if (searchInput) {
+                    searchInput.value = item;
+                    const length = item.length;
+                    searchInput.setSelectionRange(length, length);
                 }
-            }, 0);
-            setShowDropdown(false); 
+            }
+        }, 0);
+        setShowDropdown(false);
     };
 
+
+    // Retrieves other prices for a product, filtered by selected stores there are any
     const getOtherPrices = (product: Product) => {
         if (selectedStores.length <= 0) {
             return product && products
@@ -320,16 +354,22 @@ const SearchPage: React.FC = () => {
             );
     };
 
+
+    // Opens product details modal and fetches other store prices for the selected product
     const openProductDetails = (product: Product) => {
         setSelectedProduct(product);
         setOtherPrices(getOtherPrices(product));
         setShowProductDetails(true);
     };
 
+
+    // Closes product details modal
     const closeProductDetails = () => {
         setShowProductDetails(false);
     };
 
+
+    // Ensures the current page is within valid bounds (not over total) when the product list changes
     useEffect(() => {
         const total = Math.ceil(sortedAndFilteredProducts.length / itemsPerPage);
         if (currentPage > total && total > 0) {
@@ -339,32 +379,51 @@ const SearchPage: React.FC = () => {
         }
     }, [sortedAndFilteredProducts, currentPage, itemsPerPage]);
 
+
+    // Automatically scroll up to the top of the results (used after page change)
+    const productScrollUp = () => {
+        return gridContainerRef.current?.scrollToTop(500);
+    };
+
+
+    // Proceed to next page of results
     const nextPage = () => {
         setCurrentPage((prev) => Math.min(prev + 1, Math.ceil(sortedAndFilteredProducts.length / itemsPerPage)));
+        productScrollUp();
     };
 
+
+    // Revert to previous page of results
     const prevPage = () => {
         setCurrentPage((prev) => Math.max(prev - 1, 1));
+        productScrollUp();
     };
 
+
+    // Go to a particular page of results
     const goToPage = (page: number) => {
         const total = Math.ceil(sortedAndFilteredProducts.length / itemsPerPage);
         if (page >= 1 && page <= total) {
             setCurrentPage(page);
+            productScrollUp();
         }
     };
 
+
+    // Filters, sorts, and updates the product list based on user selections and query
     useEffect(() => {
         setCurrentPage(1);
 
         let updatedProducts = [...products];
 
+        // Filter products based on search query
         if (query) {
             updatedProducts = updatedProducts.filter((p) =>
                 p.products.name.toLowerCase().includes(query.toLowerCase())
             );
         }
 
+        // Filter products based on selected categories
         if (selectedCategories.length > 0) {
             updatedProducts = updatedProducts.filter(product =>
                 selectedCategories.includes(product.category.name)
@@ -377,7 +436,7 @@ const SearchPage: React.FC = () => {
                 selectedBrands.includes(product.products.brand)
             );
         }
-
+        // Filter products based on selected stores
         if (selectedStores.length > 0) {
             updatedProducts = updatedProducts.filter(product =>
                 selectedStores.includes(product.store_products.storeID)
@@ -398,7 +457,7 @@ const SearchPage: React.FC = () => {
         updatedProducts = Array.from(uniqueProductsMap.values());
 
 
-
+        // Sort products based on selected sorting option
         updatedProducts.sort((a, b) => {
             switch (sortValue) {
                 case 'lowest-highest price':
@@ -426,20 +485,22 @@ const SearchPage: React.FC = () => {
         setSortedAndFilteredProducts(updatedProducts);
     }, [products, sortValue, selectedCategories, selectedBrands, selectedStores, itemsPerPage]);
 
+
+    // Handles search updates and updates search history when query changes
     useEffect(() => {
         handleSearch();
         updateSearchHistory(query);
-      }, [query]);
+    }, [query]);
 
-    const startIndex = (currentPage - 1) * itemsPerPage;
 
+    // Reloads products by resetting selected stores to initial values
     const reloadProducts = () => {
-        // Log all store IDs in selectedStores
         setSelectedStores(getInitialSelectedStores);
 
     };
 
-    // Using the useIonViewWillEnter hook to reload products when the page enters
+
+    // Reloads products whenever the page enters
     useIonViewWillEnter(() => {
         reloadProducts();
     });
@@ -449,51 +510,45 @@ const SearchPage: React.FC = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar className="toolbar" color="primary">
-                    <div className="title-center">
-                        <IonImg
-                            src="680logocropped.png"
-                            alt="App Logo"
-                            className='headerLogo'
-                        />
-                    </div>
                     <IonSearchbar
-                        ref={searchbarRef} 
+                        ref={searchbarRef}
                         value={query}
                         onIonChange={(e) => setQuery(e.detail.value!)}
                         onKeyUp={handleKeyDown}
                         onIonBlur={handleBlur}
                         onIonFocus={handleFocus}
-                        onClick={handleTextClick} 
+                        onClick={handleTextClick}
                         placeholder="Search for products..."
                         debounce={300}
                         disabled={false}
                         className="searchbar"
-                        onIonClear={() => {setShowDropdown(false);
-                                           setQuery(''); 
-                                           window.location.reload();
-                                        }} 
+                        onIonClear={() => {
+                            setShowDropdown(false);
+                            setQuery('');
+                            //window.location.reload();
+                        }}
                     />
                 </IonToolbar>
             </IonHeader>
-            <IonContent>
+            <IonContent ref={gridContainerRef}>
                 <div className="toolbar-container" >
                     <div className="searchHistory-container" >
-                    { disableDropdown && showDropdown && (<IonList>
-                        {searchHistory.map((item, index) => (
-                     <IonItem
-                       key={index}
-                       button
-                       onMouseDown={(e) => e.preventDefault()}
-                       onClick={(e) => {
-                        e.stopPropagation(); // Stop bubbling
-                        handleSelectHistoryItem(item);
-                      }}
-                     >
-                      {item}
-                     </IonItem>
-                     ))}
-                     </IonList>)}
-                    </div>   
+                        {disableDropdown && showDropdown && (<IonList>
+                            {searchHistory.map((item, index) => (
+                                <IonItem
+                                    key={index}
+                                    button
+                                    onMouseDown={(e) => e.preventDefault()}
+                                    onClick={(e) => {
+                                        e.stopPropagation(); // Stop bubbling
+                                        handleSelectHistoryItem(item);
+                                    }}
+                                >
+                                    {item}
+                                </IonItem>
+                            ))}
+                        </IonList>)}
+                    </div>
                     <div className="categoryDropdown-container">
                         <IonItem>
                             <IonSelect
@@ -521,6 +576,7 @@ const SearchPage: React.FC = () => {
                                 labelPlacement="stacked"
                                 className="dropdown"
                             >
+
                                 {availableBrands.map((brand, index) => (
                                     <IonSelectOption key={index} value={brand}>
                                         {brand}
@@ -562,7 +618,7 @@ const SearchPage: React.FC = () => {
                     </div>
                 ) : (
                     // Display the grid of products if results exist
-                    <div className="grid-container">
+                    <div className="grid-container" >
                         <IonGrid>
                             <IonRow>
                                 {sortedAndFilteredProducts.slice(startIndex, startIndex + itemsPerPage).map((product, index) => {
@@ -593,7 +649,7 @@ const SearchPage: React.FC = () => {
                         </IonGrid>
                     </div>
                 )}
-                {!loading && products.length > 0 && (<PaginationControls
+                {!loading && sortedAndFilteredProducts.length > 0 && (<PaginationControls
                     currentPage={currentPage}
                     totalPages={Math.ceil(sortedAndFilteredProducts.length / itemsPerPage)}
                     nextPage={nextPage}

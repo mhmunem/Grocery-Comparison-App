@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonHeader, IonImg, IonItem, IonLabel, IonList, IonPage, IonPopover, IonTitle, IonToggle, IonToolbar, } from '@ionic/react';
+import { IonButton, IonContent, IonHeader, IonItem, IonLabel, IonList, IonPage, IonPopover, IonTitle, IonToggle, IonToolbar, } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import './AccountPage.css';
 
@@ -26,14 +26,7 @@ function AccountPage() {
     <IonPage>
       <IonHeader>
         <IonToolbar color="primary">
-          <div className="title-center">
-            <IonImg
-              src="680logocropped.png"
-              alt="App Logo"
-              className="headerLogo"
-            />
-          </div>
-          <IonTitle>Account</IonTitle>
+          <IonTitle>Settings</IonTitle>
 
           
         </IonToolbar>
