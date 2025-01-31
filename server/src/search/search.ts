@@ -1,5 +1,5 @@
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { ilike, asc, desc, eq } from "drizzle-orm";
+import { ilike, asc, desc, eq, gte, and, ne } from "drizzle-orm";
 import { products } from "../db/schema/products";
 import { store_products } from "../db/schema/store_products";
 import { units } from "../db/schema/units";
@@ -28,7 +28,7 @@ export async function search_product(db: NodePgDatabase, name: string, sort_by: 
         .select()
         .from(products)
         .where(ilike(products.name, `%${name}%`))
-        .innerJoin(store_products, eq(products.id, store_products.productID))
+        .innerJoin(store_products,  and(eq(products.id, store_products.productID), ne(store_products.price, 0)))
         .innerJoin(units, eq(products.unitID, units.id))
         .innerJoin(category, eq(products.categoryID, category.id))
         .innerJoin(stores, eq(store_products.storeID, stores.id))
