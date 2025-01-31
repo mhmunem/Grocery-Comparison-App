@@ -17,7 +17,7 @@ function About() {
         <IonPage>
             <IonHeader>
                 <IonToolbar color="primary">
-                        <IonTitle slot="end" >About</IonTitle>
+                        <IonTitle >About</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent className="ion-padding">
