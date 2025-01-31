@@ -67,14 +67,14 @@ const SearchPage: React.FC = () => {
     // will do nicely when combined with database cleaning
     // TODO: clean the database of entries with price 0
 
-    const initial_search = 'the'
+    const default_search = ''
 
     // Fetches product data and initializes states on component mount
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                let results: Product[] = (await getSearch(initial_search, 'name', 'ASC')) || [];
+                let results: Product[] = (await getSearch(default_search, 'name', 'ASC')) || [];
                 setProducts(results);
 
                 const categories = Array.from(new Set(results.map(product => product.category.name)));
@@ -178,6 +178,8 @@ const SearchPage: React.FC = () => {
         localStorage.setItem('quantities', JSON.stringify(newQuantities));
         localStorage.setItem('addedToCart', JSON.stringify(newAddedToCart));
         window.dispatchEvent(new Event('cartUpdated'));
+        // console.log(localStorage);
+
     };
 
 
@@ -197,8 +199,7 @@ const SearchPage: React.FC = () => {
 
 
     // Decrease quantity of an item in car / Trigger remove from cart
-    // TODO: productId does not need a sum type. Javascript implicitly converts converts these types
-    const decreaseQuantity = (productId: string | number) => { // TODO: decreaseQuantity, increaseQuantity, newQuantity is duplicate in the ShoppingListPage
+    const decreaseQuantity = (productId: string | number) => {
         const storeIdStr = productId.toString();
         const currentQuantity = quantities[storeIdStr] || 0;
         const newQuantity = Math.max(currentQuantity - 1, 0);
@@ -219,7 +220,7 @@ const SearchPage: React.FC = () => {
         setSearchAttempted(true);
         if (query.length === 0) {
             try {
-                let results: Product[] = await getSearch(initial_search, 'name', 'ASC');
+                let results: Product[] = await getSearch(default_search, 'name', 'ASC');
                 setProducts(results);
                 setError('');
             } catch (error) {

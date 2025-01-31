@@ -8,9 +8,9 @@ console.log("Running in environment:", env)
 // This is to facilitate automating seeding of the dev database using docker compose
 // It allows seeding and resetting to be done indepently using packacke.json script.
 // This prevents race conditions when resestting and seeding the database in the same instance.
-if (env !== "prod" && arg === "drop") {
+if (env === "prod" && arg === "drop") {
     dropDB(pool)
-} else if (env !== "prod" && arg === "create") {
+} else if (arg === "create") {
     createDatabases(pool)
 } else {
     console.log("No commands given");
