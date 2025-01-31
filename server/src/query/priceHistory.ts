@@ -1,13 +1,25 @@
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { PriceHistory } from "../types/schema";
-import { eq, asc } from "drizzle-orm";
+import { eq, inArray, and, ne } from "drizzle-orm";
 import { price_history } from "../db/schema/price_history";
+import { stores } from "../db/schema/stores";
 
-export async function get_price_history_product(db: NodePgDatabase, product_id: number, past_n_days: number): Promise<PriceHistory[]> {
-    return await db
-        .select()
+export async function get_price_history_product(db: NodePgDatabase,product_id: number,store_ids: number[]): Promise<{ date: string; price: number | null; storeName: string }[]> {
+    const result = await db
+        .selectDistinctOn([price_history.date],{
+            date: price_history.date,
+            price: price_history.price,
+            storeName: stores.name,
+        })
         .from(price_history)
-        .limit(past_n_days)
-        .where(eq(price_history.productID, product_id))
-        .orderBy(asc(price_history.date))
+        .innerJoin(stores, eq(price_history.storeID, stores.id))
+        .where(
+            and(
+                eq(price_history.productID, product_id),
+                inArray(price_history.storeID, store_ids),
+                ne(price_history.price, 0)
+            )
+        )
+       .orderBy(price_history.date, price_history.price,stores.name)
+
+    return result;
 }
