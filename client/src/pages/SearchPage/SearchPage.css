@@ -293,7 +293,7 @@ ion-grid {
 
 .toolbar-container {
     position: "relative";
-    display: flex;
+    /* display: flex; */
     align-items: center;
     justify-content: space-between;
     width: 100%;

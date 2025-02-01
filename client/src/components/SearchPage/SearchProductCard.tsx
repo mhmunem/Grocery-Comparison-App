@@ -2,6 +2,7 @@
 import { IonCard, IonCardContent, IonLabel, IonImg, IonCardTitle, IonButton } from '@ionic/react';
 import { QuantityControls } from '../../components/SearchPage/QuantityControls';
 import { Product } from '../../types/product';
+import { useState } from 'react';
 
 interface SearchProductCard {
     decreaseQuantity: (product_id: string | number) => void
@@ -14,7 +15,7 @@ interface SearchProductCard {
     openProductDetails: (product: Product) => void
 }
 
-export function SearchProductCard({
+export function SearchProductCard(this: any, {
     decreaseQuantity,
     increaseQuantity,
     quantities,
@@ -24,15 +25,21 @@ export function SearchProductCard({
     productImage,
     openProductDetails
 }: SearchProductCard) {
+    const [imageSrc, setImageSrc] = useState(productImage);
+
+    const handleImageError = () => {
+        setImageSrc("https://a.fsimg.co.nz/product/retail/fan/image/200x200/5046659.png");
+    };
     return (
         <IonCard className="listCard" onClick={() => {
             openProductDetails(product)
 
         }}>
             <IonImg
-                src={productImage}
-                alt={productName}
+                src={imageSrc}
                 className="productImage"
+                alt={productName}
+                onIonError={handleImageError}
             />
 
             <IonCardContent>
