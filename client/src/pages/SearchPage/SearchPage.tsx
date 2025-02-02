@@ -178,8 +178,6 @@ const SearchPage: React.FC = () => {
         localStorage.setItem('quantities', JSON.stringify(newQuantities));
         localStorage.setItem('addedToCart', JSON.stringify(newAddedToCart));
         window.dispatchEvent(new Event('cartUpdated'));
-        // console.log(localStorage);
-
     };
 
 

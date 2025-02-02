@@ -35,9 +35,6 @@ export async function search_product(db: NodePgDatabase, name: string, sort_by: 
         .innerJoin(chains, eq(chains.id, stores.chainID))
         .orderBy(sort(column))
 
-    console.log(search_results.length)
-
-
 
     return search_results
 }

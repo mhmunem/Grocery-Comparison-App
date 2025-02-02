@@ -154,7 +154,7 @@ async function fetchAndProcessPriceData(productIds: string[], storeIds: string[]
 
         if (product.stores && Array.isArray(product.stores)) {
             for (const store of product.stores) {
-                if (approved_stores.includes(store)) {
+                if (approved_stores.slice().map((s: any) => s.id).includes(store)) {
                     grocerStoreIds.add(store);
                 }
             }

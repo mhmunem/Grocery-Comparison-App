@@ -11,17 +11,15 @@ const config = {
 
 export const pool = new Pool(config)
 
-export async function createDatabases(pool: Pool) {
-    const databases = ['cosc680_dev_db', 'cosc680_test_db', 'cosc680_prod_db']
-
+export async function createDatabases(pool: Pool, databases: string[]) {
     for (const dbName of databases) {
         try {
             const query = `SELECT 1 FROM pg_database WHERE datname = $1 LIMIT 1`
             const res = await pool.query(query, [dbName])
             if (res.rowCount === 0) {
                 await pool.query(`CREATE DATABASE ${dbName}`)
+                console.log(`${dbName} created`);
             }
-            console.log(`${dbName} created`);
 
         } catch (error) {
             console.error(`Error while creating database ${dbName}:`, error)
@@ -29,8 +27,10 @@ export async function createDatabases(pool: Pool) {
     }
 }
 
-export async function dropDB(pool: Pool) {
-    const databases = ['cosc680_dev_db', 'cosc680_test_db']
+export async function dropDB(pool: Pool, databases: String[]) {
+    if (process.env["NODE_ENV"] === 'prod') { // extra protection so prod is not accidentally dropped.
+        return
+    }
 
     for (const dbName of databases) {
         try {
