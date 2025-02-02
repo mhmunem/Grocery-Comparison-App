@@ -38,8 +38,10 @@ export function getSearch(name: string, sort_by: string, sort_direction: string)
     );
 }
 
-export function getPriceHistory(product_id: number, past_n_days: number) {
+export function getPriceHistory(product_id: number, store_ids: number[]) {
+    const storeIdsParam = store_ids.join(',');
     return request(
-        'get', `${API_URL}${API_ENDPOINTS.GET_PRICE_HISTORY}?product_id=${product_id}&past_n_days=${past_n_days}`
+        'get', `${API_URL}${API_ENDPOINTS.GET_PRICE_HISTORY}?product_id=${product_id}&store_ids=${storeIdsParam}`
     );
 }
+

@@ -50,7 +50,7 @@ ion-grid {
 
 /* product image on search page card */
 .productImage {
-    height: auto;
+    height: 200px;
     object-fit: cover;
     border-bottom: 1px solid #e0e0e0;
     margin-left: auto;
@@ -293,7 +293,7 @@ ion-grid {
 
 .toolbar-container {
     position: "relative";
-    display: flex;
+    /* display: flex; */
     align-items: center;
     justify-content: space-between;
     width: 100%;

@@ -9,8 +9,16 @@ const searchRouter = Router()
 
 /**
  * @swagger
+ * tags:
+ *   name: Search
+ *   description: API for managing search Product
+ */
+
+/**
+ * @swagger
  * /search_product:
  *   get:
+ *     tags: [Search]
  *     summary: Search for a product
  *     description: Retrieves a list of products filtered by name and sorted by the specified criteria.
  *     parameters:

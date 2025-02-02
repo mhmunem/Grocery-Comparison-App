@@ -3,6 +3,7 @@ import { IonCard, IonCardContent, IonLabel, IonImg, IonCardTitle, IonButton } fr
 import { QuantityControls } from '../../components/SearchPage/QuantityControls';
 import { Product } from '../../types/product';
 
+
 interface SearchProductCard {
     decreaseQuantity: (product_id: string | number) => void
     increaseQuantity: (product_id: string | number) => void
@@ -14,7 +15,7 @@ interface SearchProductCard {
     openProductDetails: (product: Product) => void
 }
 
-export function SearchProductCard({
+export function SearchProductCard(this: any, {
     decreaseQuantity,
     increaseQuantity,
     quantities,
@@ -31,8 +32,8 @@ export function SearchProductCard({
         }}>
             <IonImg
                 src={productImage}
-                alt={productName}
                 className="productImage"
+                alt={productName}
             />
 
             <IonCardContent>
