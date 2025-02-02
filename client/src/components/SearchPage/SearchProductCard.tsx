@@ -44,7 +44,7 @@ export function SearchProductCard({
                 <div className="productDetails">
 
                     <div>
-                        <IonLabel className="brandText">{product.products.brand}</IonLabel>
+                        <IonLabel className="brandText">{product.products.brand.slice(0, 12)}</IonLabel>
                         <IonLabel className="sizeText">{product.products.amount} {product.units.name}</IonLabel>
                         <IonLabel className="sizeText">
                             {product.units.name === 'ea'
