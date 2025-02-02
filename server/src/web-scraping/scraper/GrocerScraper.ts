@@ -5,6 +5,7 @@ import { units } from '../../db/schema/units';
 import { category } from '../../db/schema/category';
 import { PlaywrightCrawler } from 'crawlee';
 import { stores } from '../../db/schema/stores';
+import approved_stores from '../constants/chainGrocerVendorCodes'
 import { store_products } from '../../db/schema/store_products';
 import { price_history } from '../../db/schema/price_history';
 
@@ -99,11 +100,13 @@ async function insertProductDetails(productHits: any[]) {
 
 }
 
+// TODO: use defined type instead from the types folder
 async function getStoreIdMap() {
     const allStores = await db.select().from(stores).execute();
     return new Map(allStores.map(store => [store.name, store.id]));
 }
 
+// TODO: use defined type instead from the types folder
 async function getProductIdMap() {
     const allProducts = await db.select().from(products).execute();
     return new Map(allProducts.map(product => [product.name, product.id]));
@@ -148,10 +151,12 @@ async function fetchAndProcessPriceData(productIds: string[], storeIds: string[]
 
     for (const product of productHits) {
         grocerProductIds.add(product.id);
-        
+
         if (product.stores && Array.isArray(product.stores)) {
             for (const store of product.stores) {
-                grocerStoreIds.add(store);
+                if (approved_stores.slice().map((s: any) => s.id).includes(store)) {
+                    grocerStoreIds.add(store);
+                }
             }
         }
 
@@ -205,11 +210,11 @@ async function insertStoreProductsAndPriceHistory(productData: any[]) {
     const uniqueStoreProductData = Array.from(
         new Map(storeProductData.map(p => [`${p.storeID}-${p.productID}`, p])).values()
     );
-    
+
     const uniquePriceHistoryData = Array.from(
         new Map(priceHistoryData.map(p => [`${p.date}-${p.productID}-${p.storeID}`, p])).values()
     );
-    
+
     if (uniqueStoreProductData.length > 0) {
         await db.insert(store_products).values(uniqueStoreProductData).onConflictDoUpdate({
             target: [store_products.storeID, store_products.productID],
