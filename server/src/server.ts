@@ -1,6 +1,5 @@
 import app from "./app"
 import db from "./db/connection/pool"
-import { createDatabases, dropDB, pool } from "./db/connection/pool-maintenance"
 import seed_data_dev from "./db/seed/seed_data_dev"
 import { reset_db, seed_db } from "./db/seed/seed"
 import schema from "./db/schema/schema"
@@ -26,10 +25,6 @@ if (env !== "prod" && arg === "reset") {
         console.log(`${env} database seeded`)
         process.exit(0)
     })
-} else if (env !== "prod" && arg === "drop") {
-    dropDB(pool)
-} else if (env !== "prod" && arg === "create") {
-    createDatabases(pool)
 } else {
     let server = app.listen(PORT, "0.0.0.0", () => {
         console.log(`Server is running on port ${PORT}`)

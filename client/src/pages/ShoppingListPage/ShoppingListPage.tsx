@@ -63,6 +63,7 @@ const ShoppingListPage: React.FC = () => {
         };
         fetchData();
 
+        // TODO: add products to session storage
         const savedQ = localStorage.getItem('quantities');
         const savedC = localStorage.getItem('addedToCart');
         if (savedQ && savedC) {
