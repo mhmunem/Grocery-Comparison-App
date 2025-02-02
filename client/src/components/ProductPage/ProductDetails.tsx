@@ -1,6 +1,7 @@
 import { IonLabel, IonImg, IonRow, IonButton } from '@ionic/react';
 import { QuantityControls } from '../../components/SearchPage/QuantityControls';
 import { Product } from '../../types/product';
+import getDigitsStr from '../../utils/conversion';
 
 interface ProductDetails {
     decreaseQuantity: (product_id: string | number) => void
@@ -10,6 +11,29 @@ interface ProductDetails {
 }
 
 export function ProductDetails({ decreaseQuantity, increaseQuantity, quantities, product }: ProductDetails) {
+    // An ugly hack to deal with the fact that the front end code is a mess.
+    function getUnit(str: number): string {
+        let unit = ((str as unknown) as string)
+        if (unit[-1] === 'g') {
+            if (unit[-2] === 'k') {
+                unit = 'kg'
+            } else {
+                unit = 'g'
+            }
+        } else if (unit[-2] === 'l') {
+            if (unit[-2] === 'm') {
+                unit = 'ml'
+            } else {
+                unit = 'l'
+            }
+        } else if (unit[-1] === 'k') {
+            unit = 'pk'
+        } else {
+            unit = 'ea'
+        }
+
+        return unit
+    }
 
     return (
         <IonRow>
@@ -25,9 +49,9 @@ export function ProductDetails({ decreaseQuantity, increaseQuantity, quantities,
                             : `Weight/Volume: ${product.products.amount}${product.units.name}`}
                     </IonLabel>
                     <IonLabel className="sizeText">Unit Price:
-                        {product.units.name === 'ea'
+                        {product.units.name[0] === 'a'
                             ? `$${product.store_products.price.toFixed(2)} ea` // Display price per item if unit is 'ea'
-                            : `$${(product.store_products.price / product.products.amount).toFixed(2)} per ${product.units.name}`}
+                            : `$${(product.store_products.price / getDigitsStr(product.products.amount)).toFixed(2)} per ${getUnit(product.products.amount)}`}
                     </IonLabel>
                     <IonRow>
                         <IonLabel className="sizeText">Category: {product.category.name}</IonLabel>

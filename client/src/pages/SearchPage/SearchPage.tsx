@@ -8,6 +8,8 @@ import { LoadingContainer } from '../../components/SharedComponents/loadingConta
 import { getSearch } from "../../services/InitialSetupService";
 import { Product } from '../../types/product';
 import './SearchPage.css';
+import getDigitsStr from '../../utils/conversion';
+
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -457,23 +459,19 @@ const SearchPage: React.FC = () => {
 
         updatedProducts = Array.from(uniqueProductsMap.values());
 
-        function getDigitsStr(str: any): number {
-            let digit = ""
-            const rev_str = str.split('').reverse()
-
-            for (let i = 0; i < rev_str.length; ++i) {
-                if (!isNaN(Number(str[i]))) {
-                    digit += str[i]
-                }
-                console.log("33333", digit, str, rev_str);
-            }
-            return Number(digit)
-        }
-
         // Sort products based on selected sorting option
         updatedProducts.sort((a, b) => {
-            const amount_a = a.units.name === 'ea' ? 1 : getDigitsStr(a.products.amount)
-            const amount_b = b.units.name === 'ea' ? 1 : getDigitsStr(b.products.amount)
+            // const amount_a = ((a.products.amount as unknown) as string).includes('sheets') ? 1 : a.units.name === 'ea' ? 1 : getDigitsStr(a.products.amount)
+            // const amount_b = ((b.products.amount as unknown) as string).includes('sheets') ? 1 : b.units.name === 'ea' ? 1 : getDigitsStr(b.products.amount)
+            // let amount_a = a.products.name === 'ea' ? 1 : getDigitsStr(a.products.amount)
+            // let amount_b = b.units.name === 'ea' ? 1 : getDigitsStr(b.products.amount)
+            // amount_a = ((a.products.amount as unknown) as string).slice(-1) === 'ea' ? 1 : getDigitsStr(a.products.amount)
+            // amount_b = ((b.products.amount as unknown) as string).slice(-1) === 'ea' ? 1 : getDigitsStr(b.products.amount)
+            const amount_a = getDigitsStr(a.products.amount)
+            const amount_b = getDigitsStr(b.products.amount)
+            console.log(a.products.amount, amount_a, getDigitsStr(a.products.amount), b.products.amount, amount_b, getDigitsStr(b.products.amount));
+
+
             switch (sortValue) {
                 case 'lowest-highest price':
                     return a.store_products.price - b.store_products.price;
@@ -484,7 +482,7 @@ const SearchPage: React.FC = () => {
                 case 'za':
                     return b.products.name.localeCompare(a.products.name);
                 case 'lowest-highest volume':
-                    return amount_b - amount_a;
+                    return amount_a - amount_b;
                 case 'highest-lowest volume':
                     return amount_b - amount_a;
                 case 'lowest-highest unit price':

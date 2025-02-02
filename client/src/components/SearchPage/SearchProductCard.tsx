@@ -2,6 +2,7 @@
 import { IonCard, IonCardContent, IonLabel, IonImg, IonCardTitle, IonButton } from '@ionic/react';
 import { QuantityControls } from '../../components/SearchPage/QuantityControls';
 import { Product } from '../../types/product';
+import getDigitsStr from '../../utils/conversion';
 
 
 interface SearchProductCard {
@@ -40,20 +41,20 @@ export function SearchProductCard(this: any, {
             />
 
             <IonCardContent>
-            <div style={{ minHeight: '2.9rem' }}>
-                <IonCardTitle className="one-line-title" onClick={() => openProductDetails(product)}>
-                    {productName}
-                </IonCardTitle>
-             </div>
+                <div style={{ minHeight: '2.9rem' }}>
+                    <IonCardTitle className="one-line-title" onClick={() => openProductDetails(product)}>
+                        {productName}
+                    </IonCardTitle>
+                </div>
                 <div className="productDetails">
 
                     <div>
                         <IonLabel className="brandText">{product.products.brand.slice(0, 12)}</IonLabel>
-                        <IonLabel className="sizeText">{product.products.amount} {product.units.name}</IonLabel>
+                        <IonLabel className="sizeText">{product.products.amount}</IonLabel>
                         <IonLabel className="sizeText">
                             {product.units.name === 'ea'
                                 ? `` // Display price per item if unit is 'ea'
-                                : `$${(product.store_products.price / product.products.amount).toFixed(2)}/${product.units.name}`}
+                                : `$${(product.store_products.price / getDigitsStr(product.products.amount)).toFixed(2)}/${product.units.name}`}
                         </IonLabel>
 
                     </div>
