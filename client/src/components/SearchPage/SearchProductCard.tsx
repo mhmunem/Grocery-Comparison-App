@@ -3,6 +3,7 @@ import { IonCard, IonCardContent, IonLabel, IonImg, IonCardTitle, IonButton } fr
 import { QuantityControls } from '../../components/SearchPage/QuantityControls';
 import { Product } from '../../types/product';
 
+
 interface SearchProductCard {
     decreaseQuantity: (product_id: string | number) => void
     increaseQuantity: (product_id: string | number) => void
@@ -14,7 +15,7 @@ interface SearchProductCard {
     openProductDetails: (product: Product) => void
 }
 
-export function SearchProductCard({
+export function SearchProductCard(this: any, {
     decreaseQuantity,
     increaseQuantity,
     quantities,
@@ -31,20 +32,23 @@ export function SearchProductCard({
         }}>
             <IonImg
                 src={productImage}
-                alt={productName}
                 className="productImage"
+                alt={productName}
+                onIonError={(e) => {
+                    e.target.src = "https://a.fsimg.co.nz/product/retail/fan/image/200x200/529109";
+                }}
             />
 
             <IonCardContent>
-
+            <div style={{ minHeight: '2.9rem' }}>
                 <IonCardTitle className="one-line-title" onClick={() => openProductDetails(product)}>
                     {productName}
                 </IonCardTitle>
-
+             </div>
                 <div className="productDetails">
 
                     <div>
-                        <IonLabel className="brandText">{product.products.brand}</IonLabel>
+                        <IonLabel className="brandText">{product.products.brand.slice(0, 12)}</IonLabel>
                         <IonLabel className="sizeText">{product.products.amount} {product.units.name}</IonLabel>
                         <IonLabel className="sizeText">
                             {product.units.name === 'ea'

@@ -19,23 +19,31 @@ interface StoreInfo {
 }
 
 const ShoppingListPage: React.FC = () => {
+    // State for shopping cart data: quantities, items added, etc.
     const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
     const [addedToCart, setAddedToCart] = useState<{ [key: string]: boolean }>({});
+
     const [products, setProducts] = useState<Product[]>([]);
 
+    //For the product details modal usage
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [showProductDetails, setShowProductDetails] = useState(false);
     const [otherPrices, setOtherPrices] = useState<Product[]>([]);
 
     const [allStores, setAllStores] = useState<StoreInfo[]>([]);
     const [selectedStoreIds, setSelectedStoreIds] = useState<number[]>([]);
+    //and an "activeStoreId" used to filter cart items by single store.
     const [activeStoreId, setActiveStoreId] = useState<number | null>(null);
-
+    // Missing items modal: if some products are not in the chosen store
     const [showMissingModal, setShowMissingModal] = useState(false);
     const [missingProducts, setMissingProducts] = useState<string[]>([]);
-
+    // allowedProductIds: used to allow items that are available
+    // in the selected store, even if their storeID doesn't match directly
+    // (a user-chosen extension of filtering).
     const [allowedProductIds, setAllowedProductIds] = useState<Set<number>>(new Set());
 
+    // retrieve localStorage data for cart items (quantities, addedToCart) 
+    // and the user-chosen store IDs (selectedStores).
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -68,7 +76,8 @@ const ShoppingListPage: React.FC = () => {
             setSelectedStoreIds(JSON.parse(storedSelectedStores));
         }
     }, []);
-
+    // Listen for cartUpdated and storesUpdated events
+    // to keep local cart state and selected store IDs in sync with localStorage changes.
     useEffect(() => {
         const handleCartUpdate = () => {
             const savedQ = localStorage.getItem('quantities');
@@ -79,36 +88,29 @@ const ShoppingListPage: React.FC = () => {
             }
         };
 
-        const handleStoreUpdate = (event: StorageEvent) => {
-            if (event.key === 'selectedStores') {
-                const updatedStores = event.newValue ? JSON.parse(event.newValue) : [];
-                setSelectedStoreIds(updatedStores);
-            }
-        };
-
         const handleStoresUpdated = () => {
             const updated = localStorage.getItem('selectedStores');
             setSelectedStoreIds(updated ? JSON.parse(updated) : []);
         };
 
         window.addEventListener('cartUpdated', handleCartUpdate);
-        window.addEventListener('storage', handleStoreUpdate);
         window.addEventListener('storesUpdated', handleStoresUpdated);
 
         return () => {
             window.removeEventListener('cartUpdated', handleCartUpdate);
-            window.removeEventListener('storage', handleStoreUpdate);
             window.removeEventListener('storesUpdated', handleStoresUpdated);
         };
     }, []);
-
+    // baseCartProducts: items that the user actually put in the cart
     const baseCartProducts = products.filter((item) => {
         const storeIdStr = item.store_products.id.toString();
         return addedToCart[storeIdStr] && (quantities[storeIdStr] || 0) > 0;
     });
 
     console.log('Base Cart Products =>', baseCartProducts);
-
+    // filteredCartProducts: If a store is selected, only show items
+    // whose storeID matches or are allowed via allowedProductIds.
+    // Otherwise show all baseCartProducts.
     const filteredCartProducts = activeStoreId
         ? baseCartProducts.filter(
             (p) =>
@@ -121,9 +123,14 @@ const ShoppingListPage: React.FC = () => {
 
     const getOtherPrices = (product: Product | null): Product[] => {
         if (!product) return [];
+        // If no store was selected in StorePage, show all possible store records
         if (selectedStoreIds.length === 0) {
-            return [];
+            return products.filter(
+              (prod) =>
+                 prod.store_products.productID === product.store_products.productID
+            );
         }
+        // Otherwise only show records from the user-chosen storeIDs
         return products.filter(
             (prod) =>
                 prod.store_products.productID === product.store_products.productID &&
@@ -159,7 +166,8 @@ const ShoppingListPage: React.FC = () => {
         localStorage.setItem('addedToCart', JSON.stringify(newAddedToCart));
         window.dispatchEvent(new Event('cartUpdated'));
     };
-
+    // increaseQuantity, decreaseQuantity, removeItem: typical cart ops
+    // that update the local state + localStorage.
     const increaseQuantity = useCallback(
         (productId: string | number) => {
             const storeIdStr = productId.toString();
@@ -210,7 +218,8 @@ const ShoppingListPage: React.FC = () => {
         },
         [quantities, addedToCart]
     );
-
+    // openProductDetails: show the product detail modal
+    // by retrieving all relevant store records via getOtherPrices.
     const openProductDetails = (p: Product) => {
         setSelectedProduct(p);
         setOtherPrices(getOtherPrices(p));

@@ -1,7 +1,7 @@
 import {
-    IonContent, IonHeader, IonList, IonTitle, IonToolbar,
-    IonLabel, IonItem, IonModal,
-    IonGrid, IonCol, IonRow, IonButtons, IonButton
+    IonContent, IonHeader, IonTitle, IonToolbar,
+    IonModal,
+    IonRow, IonButtons, IonButton
 } from '@ionic/react';
 import { ProductDetails } from '../../components/ProductPage/ProductDetails';
 import { PriceHistory } from '../../components/ProductPage/PriceHistory';
@@ -58,23 +58,23 @@ export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quanti
                             />
                         </div>
                         {/* Additional Product Details */}
-                        <IonList>
+                        {/* <IonList>
                             <IonItem>
                                 <IonLabel>
                                     <h2>Product Details</h2>
                                     <p>{selectedProduct.products.details}</p>
                                 </IonLabel>
-                            </IonItem>
+                            </IonItem> */}
 
                             {/* Product Ingredients Section */}
-                            <IonItem>
+                            {/* <IonItem>
                                 <IonLabel>
                                     <h2>Ingredients</h2>
                                     <p>Butter, sugar, water, olive oil, baking powder</p>
                                 </IonLabel>
-                            </IonItem>
+                            </IonItem> */}
                             {/* Nutritional Information Section */}
-                            <IonItem>
+                            {/* <IonItem>
                                 <IonLabel>
                                     <h2>Nutritional Information</h2>
 
@@ -133,7 +133,7 @@ export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quanti
                                     </IonGrid>
                                 </IonLabel>
                             </IonItem>
-                        </IonList>
+                        </IonList> */}
                     </div>
                 ) : (
                     <p>Loading...</p>
