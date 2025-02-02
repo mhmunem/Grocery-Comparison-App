@@ -2,10 +2,12 @@ import { IonList, IonItem, IonCol, IonRow, IonButton, IonImg } from '@ionic/reac
 import { Line } from 'react-chartjs-2';
 import { useState, useEffect } from 'react';
 import { Product } from '../../types/product';
+import { getPriceHistory } from '../../services/InitialSetupService';
 
 type datePrice = {
     date: Date;
     price: number;
+    storeName: string;
 }
 
 type PriceHistoryData = {
@@ -28,20 +30,30 @@ export function PriceHistory({ allPrices }: PriceHistory) {
     const [dailyPriceHistory, setDailyPriceHistory] = useState<datePrice[]>([]);
     const [filteredPriceHistory, setFilteredPriceHistory] = useState<datePrice[]>([]);
     const [timeRange, setTimeRange] = useState('4W');
+    const getInitialSelectedStores = () => {
+        const storedSelectedStores = localStorage.getItem('selectedStores');
+        return storedSelectedStores ? JSON.parse(storedSelectedStores) : []
+    };
 
+    const [selectedStores] = useState<number[]>(getInitialSelectedStores());
 
     useEffect(() => {
-        const generateDummyData = () => {
-            const today = new Date();
-            const prices: datePrice[] = [];
-            for (let i = 0; i < 365; i++) {
-                const randomPrice = 10 + Math.random() * 5;
-                prices.push({ date: new Date(today.setDate(today.getDate() - 1)), price: randomPrice });
-            }
-            setDailyPriceHistory(prices.reverse());
-        };
-        generateDummyData();
-    }, []);
+        if (selectedStores.length > 0) {
+            console.log(selectedStores)
+            const productId = allPrices[0].products.id;
+            getPriceHistory(productId, selectedStores)
+                .then(response => {
+                    setDailyPriceHistory(response.map((item: { date: string | number | Date; price: any; storeName: string }) => ({
+                        date: new Date(item.date),
+                        price: item.price,
+                        storeName: item.storeName
+                    })));
+                })
+                .catch(error => {
+                    console.error("Error fetching data:", error);
+                });
+        }
+    }, [selectedStores, allPrices]);
 
     useEffect(() => {
         const filterDataByRange = () => {
@@ -72,12 +84,45 @@ export function PriceHistory({ allPrices }: PriceHistory) {
             },
         ],
     };
+    const options = {
+        plugins: {
+            tooltip: {
+              callbacks: {
+                label: function (context: { chart?: any; raw?: any; datasetIndex?: any; dataIndex?: any; }) {
+                    const { dataIndex } = context;
+                    const storeName = filteredPriceHistory[dataIndex]?.storeName;
+                    const price = context.raw;
+                    return `${storeName}: $${price}`;
+                },
+              },
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Date',
+                    },
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Price ($)',
+                    },
+                    ticks: {
+                        beginAtZero: false, 
+                        callback: function (value: number) {
+                            return '$' + value.toFixed(2); 
+                        }
+                    },
+                },
+            }
+          },
+        };
 
     return (
         <div>
             <IonRow>
                 <IonList style={{ width: '100%' }}>
-                    {/* All available stores */}
                     <h4>Pricing Information</h4>
                     {allPrices
                         .sort((a: Product, b: Product) => a.store_products.price - b.store_products.price)
@@ -94,24 +139,31 @@ export function PriceHistory({ allPrices }: PriceHistory) {
                                 </IonCol>
                             </IonItem>
                         ))}
-
                 </IonList>
-
             </IonRow>
-            <IonRow>
-                <Line data={priceHistoryData} />
-            </IonRow>
-            <IonRow style={{ justifyContent: 'center', marginBottom: '16px' }}>
-                {['1W', '4W', '3M', '6M'].map(range => (
-                    <IonButton
-                        key={range}
-                        color={timeRange === range ? 'primary' : 'medium'}
-                        onClick={() => setTimeRange(range)}>
-                        {range}
-                    </IonButton>
-                ))}
-            </IonRow>
-
+            {selectedStores.length > 0 ? (
+                <>
+                    <IonRow>
+                        <Line data={priceHistoryData} options={options} />
+                    </IonRow>
+                    <IonRow style={{ justifyContent: 'center', marginBottom: '16px' }}>
+                        {['1W', '4W', '3M', '6M'].map(range => (
+                            <IonButton
+                                key={range}
+                                color={timeRange === range ? 'primary' : 'medium'}
+                                onClick={() => setTimeRange(range)}>
+                                {range}
+                            </IonButton>
+                        ))}
+                    </IonRow>
+                </>
+            ) : (
+                <IonRow>
+                    <IonCol>
+                        <p>Select stores to see the price history</p>
+                    </IonCol>
+                </IonRow>
+            )}
         </div>
     )
 }
