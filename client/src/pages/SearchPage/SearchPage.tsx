@@ -460,6 +460,8 @@ const SearchPage: React.FC = () => {
 
         // Sort products based on selected sorting option
         updatedProducts.sort((a, b) => {
+            console.log(a);
+
             switch (sortValue) {
                 case 'lowest-highest price':
                     return a.store_products.price - b.store_products.price;
