@@ -461,16 +461,8 @@ const SearchPage: React.FC = () => {
 
         // Sort products based on selected sorting option
         updatedProducts.sort((a, b) => {
-            // const amount_a = ((a.products.amount as unknown) as string).includes('sheets') ? 1 : a.units.name === 'ea' ? 1 : getDigitsStr(a.products.amount)
-            // const amount_b = ((b.products.amount as unknown) as string).includes('sheets') ? 1 : b.units.name === 'ea' ? 1 : getDigitsStr(b.products.amount)
-            // let amount_a = a.products.name === 'ea' ? 1 : getDigitsStr(a.products.amount)
-            // let amount_b = b.units.name === 'ea' ? 1 : getDigitsStr(b.products.amount)
-            // amount_a = ((a.products.amount as unknown) as string).slice(-1) === 'ea' ? 1 : getDigitsStr(a.products.amount)
-            // amount_b = ((b.products.amount as unknown) as string).slice(-1) === 'ea' ? 1 : getDigitsStr(b.products.amount)
             const amount_a = getDigitsStr(a.products.amount)
             const amount_b = getDigitsStr(b.products.amount)
-            console.log(a.products.amount, amount_a, getDigitsStr(a.products.amount), b.products.amount, amount_b, getDigitsStr(b.products.amount));
-
 
             switch (sortValue) {
                 case 'lowest-highest price':

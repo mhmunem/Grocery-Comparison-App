@@ -66,15 +66,15 @@ export function ProductDetailsModal({ decreaseQuantity, increaseQuantity, quanti
                                 </IonLabel>
                             </IonItem> */}
 
-                            {/* Product Ingredients Section */}
-                            {/* <IonItem>
+                        {/* Product Ingredients Section */}
+                        {/* <IonItem>
                                 <IonLabel>
                                     <h2>Ingredients</h2>
                                     <p>Butter, sugar, water, olive oil, baking powder</p>
                                 </IonLabel>
                             </IonItem> */}
-                            {/* Nutritional Information Section */}
-                            {/* <IonItem>
+                        {/* Nutritional Information Section */}
+                        {/* <IonItem>
                                 <IonLabel>
                                     <h2>Nutritional Information</h2>
 
