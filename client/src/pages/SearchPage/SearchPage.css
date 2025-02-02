@@ -64,12 +64,13 @@ ion-grid {
     font-size: 1rem;
     margin: 8px 0;
     font-family: 'Noto Sans';
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    /* -webkit-line-clamp: 2; */
+    display: block;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
 }
+
 
 /* product card brand text */
 .brandText {
