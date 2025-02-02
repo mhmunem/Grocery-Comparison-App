@@ -20,7 +20,7 @@
     "noFallthroughCasesInSwitch": true,
     "types": []
   },
-  "include": ["src", "../../App.test.tsx"],
+  "include": ["src", "../../App.test.tsx", "bork.ts"],
   "references": [{ "path": "./tsconfig.node.json" }],
   "exclude": [
     "node_modules",
