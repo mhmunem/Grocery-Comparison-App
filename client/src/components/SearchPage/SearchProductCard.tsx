@@ -38,13 +38,13 @@ export function SearchProductCard({
             <IonCardContent>
 
                 <IonCardTitle className="one-line-title" onClick={() => openProductDetails(product)}>
-                    {productName}
+                    {productName.slice(0, 35)}
                 </IonCardTitle>
 
                 <div className="productDetails">
 
                     <div>
-                        <IonLabel className="brandText">{product.products.brand}</IonLabel>
+                        <IonLabel className="brandText">{product.products.brand.slice(0, 12)}</IonLabel>
                         <IonLabel className="sizeText">{product.products.amount} {product.units.name}</IonLabel>
                         <IonLabel className="sizeText">
                             {product.units.name === 'ea'
