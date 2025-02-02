@@ -2,7 +2,7 @@
 import { IonCard, IonCardContent, IonLabel, IonImg, IonCardTitle, IonButton } from '@ionic/react';
 import { QuantityControls } from '../../components/SearchPage/QuantityControls';
 import { Product } from '../../types/product';
-import getDigitsStr from '../../utils/conversion';
+import { getDigitsStr, getUnit } from '../../utils/conversion';
 
 
 interface SearchProductCard {
@@ -54,7 +54,7 @@ export function SearchProductCard(this: any, {
                         <IonLabel className="sizeText">
                             {product.units.name === 'ea'
                                 ? `` // Display price per item if unit is 'ea'
-                                : `$${(product.store_products.price / getDigitsStr(product.products.amount)).toFixed(2)}/${product.units.name}`}
+                                : `$${(product.store_products.price / getDigitsStr(product.products.amount)).toFixed(2)}/${getUnit(product.products.amount)}`}
                         </IonLabel>
 
                     </div>

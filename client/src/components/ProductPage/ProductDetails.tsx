@@ -1,7 +1,7 @@
 import { IonLabel, IonImg, IonRow, IonButton } from '@ionic/react';
 import { QuantityControls } from '../../components/SearchPage/QuantityControls';
 import { Product } from '../../types/product';
-import getDigitsStr from '../../utils/conversion';
+import { getDigitsStr, getUnit } from '../../utils/conversion';
 
 interface ProductDetails {
     decreaseQuantity: (product_id: string | number) => void
@@ -11,30 +11,6 @@ interface ProductDetails {
 }
 
 export function ProductDetails({ decreaseQuantity, increaseQuantity, quantities, product }: ProductDetails) {
-    // An ugly hack to deal with the fact that the front end code is a mess.
-    function getUnit(str: number): string {
-        let unit = ((str as unknown) as string)
-        if (unit[-1] === 'g') {
-            if (unit[-2] === 'k') {
-                unit = 'kg'
-            } else {
-                unit = 'g'
-            }
-        } else if (unit[-2] === 'l') {
-            if (unit[-2] === 'm') {
-                unit = 'ml'
-            } else {
-                unit = 'l'
-            }
-        } else if (unit[-1] === 'k') {
-            unit = 'pk'
-        } else {
-            unit = 'ea'
-        }
-
-        return unit
-    }
-
     return (
         <IonRow>
             <IonImg src={product.products.image} />

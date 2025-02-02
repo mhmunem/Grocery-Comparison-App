@@ -8,7 +8,7 @@ import { LoadingContainer } from '../../components/SharedComponents/loadingConta
 import { getSearch } from "../../services/InitialSetupService";
 import { Product } from '../../types/product';
 import './SearchPage.css';
-import getDigitsStr from '../../utils/conversion';
+import { getDigitsStr } from '../../utils/conversion';
 
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -57,8 +57,8 @@ const SearchPage: React.FC = () => {
         { label: 'Alphabetical Z-A', value: 'za' },
         { label: 'Price (Ascending)', value: 'lowest-highest price' },
         { label: 'Price (Descending)', value: 'highest-lowest price' },
-        { label: 'Unit Price (Ascending)', value: 'lowest-highest unit price' },
-        { label: 'Unit Price (Descending)', value: 'highest-lowest unit price' },
+        // { label: 'Unit Price (Ascending)', value: 'lowest-highest unit price' },
+        // { label: 'Unit Price (Descending)', value: 'highest-lowest unit price' },
         { label: 'Amount (Ascending)', value: 'lowest-highest volume' },
         { label: 'Amount (Descending)', value: 'highest-lowest volume' },
     ];
@@ -463,6 +463,9 @@ const SearchPage: React.FC = () => {
         updatedProducts.sort((a, b) => {
             const amount_a = getDigitsStr(a.products.amount)
             const amount_b = getDigitsStr(b.products.amount)
+            console.log(a.products.amount, amount_a, getDigitsStr(a.products.amount), b.products.amount, amount_b, getDigitsStr(b.products.amount));
+
+            console.log(a.products.name, (a.store_products.price / amount_a), b.products.name, (b.store_products.price / amount_b));
 
             switch (sortValue) {
                 case 'lowest-highest price':
@@ -477,10 +480,10 @@ const SearchPage: React.FC = () => {
                     return amount_a - amount_b;
                 case 'highest-lowest volume':
                     return amount_b - amount_a;
-                case 'lowest-highest unit price':
-                    return (a.store_products.price / amount_a) - (b.store_products.price / amount_b);
-                case 'highest-lowest unit price':
-                    return (b.store_products.price / amount_b) - (a.store_products.price / amount_a);
+                // case 'lowest-highest unit price':
+                //     return (a.store_products.price / amount_a) - (b.store_products.price / amount_b);
+                // case 'highest-lowest unit price':
+                //     return (b.store_products.price / amount_b) - (a.store_products.price / amount_a);
                 default:
                     return 0;
             }
