@@ -40,7 +40,7 @@ export function SearchProductCard(this: any, {
             />
 
             <IonCardContent>
-            <div style={{ minHeight: '2.9rem' }}>
+            <div>
                 <IonCardTitle className="one-line-title" onClick={() => openProductDetails(product)}>
                     {productName}
                 </IonCardTitle>
