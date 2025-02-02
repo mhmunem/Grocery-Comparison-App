@@ -34,6 +34,9 @@ export function SearchProductCard(this: any, {
                 src={productImage}
                 className="productImage"
                 alt={productName}
+                onIonError={(e) => {
+                    e.target.src = "https://a.fsimg.co.nz/product/retail/fan/image/200x200/529109";
+                }}
             />
 
             <IonCardContent>
