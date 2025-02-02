@@ -57,8 +57,8 @@ const SearchPage: React.FC = () => {
         { label: 'Price (Descending)', value: 'highest-lowest price' },
         { label: 'Unit Price (Ascending)', value: 'lowest-highest unit price' },
         { label: 'Unit Price (Descending)', value: 'highest-lowest unit price' },
-        { label: 'Volume (Ascending)', value: 'lowest-highest volume' },
-        { label: 'Volume (Descending)', value: 'highest-lowest volume' },
+        { label: 'Amount (Ascending)', value: 'lowest-highest volume' },
+        { label: 'Amount (Descending)', value: 'highest-lowest volume' },
     ];
 
     const default_search = 'the'
@@ -457,11 +457,23 @@ const SearchPage: React.FC = () => {
 
         updatedProducts = Array.from(uniqueProductsMap.values());
 
+        function getDigitsStr(str: any): number {
+            let digit = ""
+            const rev_str = str.split('').reverse()
+
+            for (let i = 0; i < rev_str.length; ++i) {
+                if (!isNaN(Number(str[i]))) {
+                    digit += str[i]
+                }
+                console.log("33333", digit, str, rev_str);
+            }
+            return Number(digit)
+        }
 
         // Sort products based on selected sorting option
         updatedProducts.sort((a, b) => {
-            console.log(a);
-
+            const amount_a = getDigitsStr(a.products.amount)
+            const amount_b = getDigitsStr(b.products.amount)
             switch (sortValue) {
                 case 'lowest-highest price':
                     return a.store_products.price - b.store_products.price;
@@ -472,13 +484,18 @@ const SearchPage: React.FC = () => {
                 case 'za':
                     return b.products.name.localeCompare(a.products.name);
                 case 'lowest-highest volume':
-                    return a.products.amount - b.products.amount;
+                    // return a.amount - b.products.amount;
+                    return amount_b - amount_a;
                 case 'highest-lowest volume':
-                    return b.products.amount - a.products.amount;
+                    // return b.products.amount - a.products.amount;
+                    return amount_b - amount_a;
                 case 'lowest-highest unit price':
-                    return (b.products.amount / b.store_products.price) - (a.products.amount / a.store_products.price);
+                    // console.log("1111111", (amount_a / a.store_products.price) - (amount_b / b.store_products.price));
+                    return (b.store_products.price / amount_b) - (a.store_products.price / amount_a);
                 case 'highest-lowest unit price':
-                    return (a.products.amount / a.store_products.price) - (b.products.amount / b.store_products.price);
+                    // console.log("222222", (amount_a / a.store_products.price) - (amount_b / b.store_products.price));
+
+                    return (a.store_products.price / amount_a) - (b.store_products.price / amount_b);
 
                 default:
                     return 0;
