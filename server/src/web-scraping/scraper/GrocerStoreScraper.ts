@@ -1,10 +1,16 @@
 import axios from 'axios'
 import insertOrUpdateStores from '../drizzleQuery/insertStores'
+import approved_stores from '../constants/chainGrocerVendorCodes'
 
 
 async function fetchStores() {
     const response = await axios.get('https://backend.grocer.nz/stores')
-    return response.data
+
+    const approved_stores_ids = approved_stores.slice().map(s => s.id)
+
+    const stores = response.data.filter((s: any) => approved_stores_ids.includes(s.id))
+
+    return stores
 }
 
 async function storeScraper() {
