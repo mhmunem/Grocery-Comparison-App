@@ -61,13 +61,7 @@ const SearchPage: React.FC = () => {
         { label: 'Volume (Descending)', value: 'highest-lowest volume' },
     ];
 
-    // NOTE: this is simple optimization. It will return 12 products. AKA an array of 5388 elements...
-    // The limitation of minimum of 3 letters for a search is our saving grace here.
-    // We can increase it to minimum of 4 characters if need be, but I think the `initial_search` below 
-    // will do nicely when combined with database cleaning
-    // TODO: clean the database of entries with price 0
-
-    const default_search = ''
+    const default_search = 'the'
 
     // Fetches product data and initializes states on component mount
     useEffect(() => {
