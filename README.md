@@ -10,7 +10,16 @@ E.g. `sudo docker compose -f ./docker-compose-db.yml -f ./docker-compose-server.
 However, to run the entire stack (client, server, and pgadmin) in parallel run `sudo docker compose up`.
 To automatically restart the containers in case of any changes use `--watch`. E.g. `sudo docker compose up --watch`.
 
-On Windows `sudo` is not required.
+On Windows `sudo` is not required. Make sure Docker is running.
+
+## Running Production
+
+- `sudo docker compose -f docker-compose-prod.yml -f ./docker-compose-prod-override.yml`
+    - This will run the server, client, and web scraping. Go to `http://localhost:5173/` to view the app.
+- Running tests:
+    - `sudo docker compose -f server/docker-compose-server-test.yml -f server/docker-compose-server-test-override.yml up --build`
+    - `sudo docker compose -f client/docker-compose-e2e.yml -f client/compose-override-e2e.yml  up --build`
+- In case of problems remove the containers with `sudo docker container ls -aq | xargs -i sudo docker container rm {}` and try again.
 
 ## Running Tests
 
