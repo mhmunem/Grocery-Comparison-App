@@ -42,7 +42,7 @@ export function SearchProductCard(this: any, {
             <IonCardContent>
             <div>
                 <IonCardTitle className="one-line-title" onClick={() => openProductDetails(product)}>
-                    {productName}
+                    {productName.slice(0, 35)}
                 </IonCardTitle>
              </div>
                 <div className="productDetails">
