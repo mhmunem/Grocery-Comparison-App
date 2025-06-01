@@ -1,4 +1,4 @@
-# Grocery Comparison NZ
+# Grocery Comparison Application
 
 A simple grocery comparison app to help users find the best prices for their groceries across multiple supermarkets.
 
