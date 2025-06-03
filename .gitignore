@@ -5,3 +5,5 @@
 **/drizzle/
 **/.vscode/
 **/dist/
+*.env
+*.env.e2e
