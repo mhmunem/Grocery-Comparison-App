@@ -1,8 +1,220 @@
-include:
-  - ./server/docker-compose-db.yml
-  - ./server/docker-compose-db-migrate.yml
-  # - ./server/docker-compose-webscraper.yml
-  # - ./server/docker-compose-drizzlestudio.yml
-  - ./server/docker-compose-server.yml
-  # - ./server/docker-compose-pgadmin.yml
-  - ./client/docker-compose-client.yml
+volumes:
+  grocery_data:
+
+networks:
+  project_network:
+
+services:
+  db:
+    container_name: db
+    profiles:
+      - app
+      - backend
+      - scraper
+      - e2e_test
+    build:
+      context: ./server/docker
+      dockerfile: pgsql.Dockerfile
+    tty: true
+    restart: always
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "grocery_compare", "-d", "grocery_compare"]
+      interval: 30s
+      start_interval: 1s
+      start_period: 10s
+      timeout: 10s
+      retries: 5
+    env_file:
+      - ./server/.env
+    volumes:
+      - grocery_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - project_network
+
+  migrate:
+    container_name: migrate
+    profiles:
+      - app
+      - backend
+      - migrate
+      - scraper
+    depends_on:
+      db:
+        condition: service_healthy
+    build:
+      context: ./server
+      dockerfile: ./docker/server.Dockerfile
+    command: npx drizzle-kit push --config ./drizzle.config.ts
+    tty: true
+    env_file:
+      - ./server/.env
+    networks:
+      - project_network
+
+  server:
+    container_name: server
+    profiles:
+      - app
+      - backend
+      - e2e_tes
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    build:
+      context: ./server
+      dockerfile: docker/server.Dockerfile
+    command: npx ts-node ./src/app.ts
+    tty: true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://server:5000"]
+      interval: 30s
+      start_interval: 1s
+      start_period: 10s
+      timeout: 10s
+      retries: 3
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./server/src
+          target: ./server/src
+          ignore:
+            - node_modules/
+    env_file:
+      - ./server/.env
+    volumes:
+      - /src:/src
+    ports:
+      - "5000:5000"
+    networks:
+      - project_network
+
+  # TODO: fix tests
+  test_server:
+    container_name: test_server
+    profiles:
+      - backend_test
+    depends_on:
+      db:
+        condition: service_healthy
+      server:
+        condition: service_healthy
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    command: sh -c "rm -rf dist && npm run tests"
+    tty: true
+    develop:
+      watch:
+        - action: rebuild
+          path: ./tests/
+          target: ./tests/
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./src
+          target: ./src
+          ignore:
+            - node_modules/
+    env_file:
+      - ./server/.env.e2e
+    volumes:
+      - ./src:/src
+    networks:
+      - project_network
+
+  web_scraper:
+    container_name: web_scraper
+    profiles:
+      - scraper
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    build:
+      context: ./server
+      dockerfile: docker/server.Dockerfile
+    command: npx ts-node src/web-scraping/main.ts
+    env_file:
+      - ./server/.env
+    volumes:
+      - ./server/src/web-scraping:/src/web-scraping
+    networks:
+      - project_network
+
+  client:
+    container_name: client
+    profiles:
+      - app
+      - frontend
+      - e2e_test
+    depends_on:
+      db:
+        condition: service_healthy
+      server:
+        condition: service_healthy
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    tty: true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://client:5173"]
+      interval: 30s
+      start_interval: 1s
+      start_period: 10s
+      timeout: 10s
+      retries: 3
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./client/src
+          target: ./client/src
+          ignore:
+            - node_modules/
+    env_file:
+      - ./client/.env
+    volumes:
+      - ./client/src:/src
+    ports:
+      - "5173:5173"
+    networks:
+      - project_network
+
+  # TODO: fix e2e tests
+  e2e_test:
+    container_name: e2e_test
+    profiles:
+      - e2e_test
+    depends_on:
+      db:
+        condition: service_healthy
+      server:
+        condition: service_healthy
+      client:
+        condition: service_healthy
+    build:
+      context: client
+      dockerfile: Dockerfile.e2e
+    tty: true
+    develop:
+      watch:
+        - action: rebuild
+          path: ./src
+          target: ./src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./server/src
+          target: ./server/src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./client/cypress/e2e
+          target: ./client/cypress/e2e
+          ignore:
+            - node_modules/
+    volumes:
+      - ./client:/e2e
+    working_dir: /e2e
+    networks:
+      - project_network

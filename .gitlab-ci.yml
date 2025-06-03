@@ -7,6 +7,7 @@ setup:
   script:
     - echo success
 
+# TODO: convert gitlab ci to github actions
 # stages:
 #   - setup
 #   - lint

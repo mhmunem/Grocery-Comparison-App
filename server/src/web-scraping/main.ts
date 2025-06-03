@@ -1,17 +1,17 @@
+import GrosaveChainScraper from './scraper/GroSaveChainScraper'
 import GrocerChainScraper from './scraper/GrocerChainScraper'
 import GrocerProductsScraper from './scraper/GrocerScraper'
 import GrocerStoreScraper from './scraper/GrocerStoreScraper'
-// import GrosaveChainScraper from './scraper/GroSaveChainScraper'
-// import GroSaveCategoryScraper from './scraper/GroSaveCategoryScraper'
-// import GroSaveProductsScraper from './scraper/GroSaveProductsScraper'
-// import GrosaveStoresScraper from './scraper/GrosaveStoresScraper'
+import GroSaveCategoryScraper from './scraper/GroSaveCategoryScraper'
+import GroSaveProductsScraper from './scraper/GroSaveProductsScraper'
+import GrosaveStoresScraper from './scraper/GrosaveStoresScraper'
 
 async function runScrapers(): Promise<undefined> {
     try {
 
         // TODO: This should be parametrizable from the CLI
         /* Grocer Scraper call*/
-        // Uncommented ths if we need Grocer Data and comment the grosave
+        // Uncommented ths if we need Grocer Data and comment the grosave 
 
         await GrocerChainScraper()
         console.log("Chain scraping completed")
