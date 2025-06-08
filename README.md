@@ -47,5 +47,15 @@ Available profiles:
 - Retrieve pricing data from [Grocer](https://grocer.nz/).
 - Dark mode
 
+## App UI
+
 ![search screenshot](./res/search-page.png)
+
+## Database Architecture
+
+![database-architecture](./res/database-architecture.png)
+
+## Database Schema
+
+![database-schema](./res/database-schema.png)
 
